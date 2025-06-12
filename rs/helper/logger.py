@@ -30,7 +30,15 @@ def init_run_logging(seed: str):
     global current_run_missing_events
     current_run_log_count = 0
     current_run_log_file = "runs/" + dt + "--" + seed
-    with open(ROOT_DIR + "/logs/" + current_run_log_file + ".log", 'x') as file:
+    
+    # 确保日志目录存在
+    log_dir = os.path.join(ROOT_DIR, "logs", "runs")
+    os.makedirs(log_dir, exist_ok=True)
+
+    # 修正文件路径，直接在logs目录下创建
+    log_file_path = os.path.join(ROOT_DIR, "logs", current_run_log_file + ".log")
+    
+    with open(log_file_path, 'x') as file:
         file.close()
     log("Seed: " + seed, "calculator_missing_enums")
     current_run_calculator_missing_relics = set()
@@ -46,7 +54,7 @@ def log_to_run(message: str):
 
     global current_run_log_count
     current_run_log_count += 1
-    if current_run_log_count > 10000:
+    if current_run_log_count > 100000:
         log("Dying due to this seeming to be stuck", current_run_log_file)
         raise Exception("Dying due to this seeming to be stuck...")
     log(message, current_run_log_file)
@@ -123,9 +131,15 @@ def log_new_run_sequence():
 
 
 def log(message, filename="default"):
-    f = open(ROOT_DIR + "/logs/" + filename + ".log", "a+")
-    f.write(message + "\n")
-    f.close()
+    # 如果是逐回合日志，确保路径正确
+    if filename.startswith("runs/"):
+        log_path = os.path.join(ROOT_DIR, "logs", filename + ".log")
+    else:
+        log_path = os.path.join(ROOT_DIR, "logs", filename + ".log")
+        
+    with open(log_path, "a+") as f:
+        f.write(message + "\n")
+        f.close()
 
 
 def init_log(filename="default"):
