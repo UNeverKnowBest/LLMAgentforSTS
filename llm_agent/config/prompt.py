@@ -52,6 +52,7 @@ EVENT_PROMPT_TEMPLATE = BASE_TEMPLATE + """
 ### 当前任务: 事件决策
 **情景分析:** 你遇到了一个随机事件，需要做出选择。
 **战略指令:** 仔细阅读事件描述和选项。根据你的核心战略原则（卡组质量、风险回报），权衡利弊。例如，用少量资源换取长期的巨大优势通常是值得的。指令是 `choose` 一个选项。
+？代表着可用命令中的所有选项，例如在当前事件下，可用命令是talk，那么你该输出“choose talk”
 """
 
 REST_SITE_PROMPT_TEMPLATE = BASE_TEMPLATE + """
@@ -109,9 +110,9 @@ OUTPUT_FORMAT_TEMPLATE = BASE_TEMPLATE + """
 
 ### 输出格式规范 ###
 ---
-**情景：** Agent需要结束回合。
+**情景：** 你只有talk一种指令可用。
 **合法输出:**
-end
+choose talk
 ---
 **情景：** Agent需要在篝火处选择"锻造"。
 **合法输出:**
