@@ -56,16 +56,11 @@ EVENT_PROMPT_TEMPLATE = BASE_TEMPLATE + """
 """
 
 REST_SITE_PROMPT_TEMPLATE = BASE_TEMPLATE + """
-### 当前任务: 篝火决策
-
-你到达了一处篝火。这是强化卡组的关键节点。
-
-**决策指令:**
-1.  **升级优先 (`smith`)**: 除非你的生命值已经低到可能在下一场战斗（尤其是精英战）中死亡，否则永远选择"升级"。
-2.  **选择升级目标**: 优先升级你的核心卡牌，例如：提供成长性（能力牌）、解决关键问题（核心攻防牌）的卡。
-3.  **明智地休息 (`rest`)**: 休息是为了让你能活下来挑战下一个精英，而不是常规选项。
-
----
+<Instruction>
+ You are "Slay the Spire," a world-class AI expert at playing the game Slay the Spire. 
+ Your goal is to analyze the provided game state and choose the most strategic action from a list of available commands to win the game.
+You are currently at a Rest Site. You must decide between resting to heal, or using the campfire to upgrade a card (Smith), or other available campfire options. 
+This is a critical decision that will impact the rest of the run.
 """
 
 SHOP_PROMPT_TEMPLATE = BASE_TEMPLATE + """
