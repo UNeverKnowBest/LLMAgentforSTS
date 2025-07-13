@@ -1,0 +1,28 @@
+from enum import Enum
+
+class ScreenType(str, Enum):
+    MAP = "MAP"
+    CARD_REWARD = "CARD_REWARD"
+    COMBAT_REWARD = "COMBAT_REWARD"
+    SHOP_SCREEN = "SHOP_SCREEN"
+    REST = "REST"
+    EVENT = "EVENT"
+    GRID = "GRID"
+    HAND_SELECT = "HAND_SELECT"
+    BOSS_REWARD = "BOSS_REWARD"
+    GAME_OVER = "GAME_OVER"
+    COMPLETE = "COMPLETE"
+    CHEST = "CHEST"
+    SHOP_ROOM = "SHOP_ROOM"
+    NONE = "NONE"
+
+class RoomPhase(str, Enum):
+    COMBAT = "COMBAT"
+    EVENT = "EVENT"
+    COMPLETE = "COMPLETE"
+    INCOMPLETE = "INCOMPLETE"
+    SCAFFOLDING = "SCAFFOLDING"
+
+class ActionPhase(str, Enum):
+    WAITING_ON_USER = "WAITING_ON_USER"
+    EXECUTING_ACTIONS = "EXECUTING_ACTIONS"
