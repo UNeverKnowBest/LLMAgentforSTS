@@ -30,7 +30,7 @@ class LLMClient:
                 "top_p": 0.3,
             }
             
-            action_command = "wait"  # Default action
+            action_command = "wait"
             max_retries = 10
             
             for attempt in range(max_retries):
