@@ -11,4 +11,4 @@ SIMPLE_COMMAND_MAP: Dict[ScreenType, str] = {
 def _get_simple_command(screen_type: ScreenType) -> str:
     return SIMPLE_COMMAND_MAP.get(screen_type)
 
-def _get
+

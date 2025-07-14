@@ -6,10 +6,12 @@ from src.config import(
     PRIMARY_MODEL_TYPE
 )
 
-local_llm = ChatOllama(
-    model=PRIMARY_MODEL_NAME,
-    temperature=PRIMARY_MODEL_TEMPERATURE
-)
+def get_llm():
+    if PRIMARY_MODEL_TYPE == 'local':
+        return ChatOllama(
+            model=PRIMARY_MODEL_NAME,
+            temperature=PRIMARY_MODEL_TEMPERATURE
+        )
 
-if PRIMARY_MODEL_TYPE == 'local':
-    llm = local_llm
+    else:
+        raise ValueError(f"Unsupported model type: {PRIMARY_MODEL_TYPE}")

@@ -1,7 +1,7 @@
 from langgraph.graph import MessagesState
-from typing import List, TypedDict, Annotated
+from pydantic import BaseModel
 
-class GameState(TypedDict):
+class GameState(BaseModel):
     game_state_json: str
     think_process: str
     final_command: str

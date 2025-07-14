@@ -15,6 +15,7 @@ class ScreenType(str, Enum):
     CHEST = "CHEST"
     SHOP_ROOM = "SHOP_ROOM"
     NONE = "NONE"
+    COMBAT = "COMBAT"
 
 class RoomPhase(str, Enum):
     COMBAT = "COMBAT"
@@ -22,7 +23,3 @@ class RoomPhase(str, Enum):
     COMPLETE = "COMPLETE"
     INCOMPLETE = "INCOMPLETE"
     SCAFFOLDING = "SCAFFOLDING"
-
-class ActionPhase(str, Enum):
-    WAITING_ON_USER = "WAITING_ON_USER"
-    EXECUTING_ACTIONS = "EXECUTING_ACTIONS"
