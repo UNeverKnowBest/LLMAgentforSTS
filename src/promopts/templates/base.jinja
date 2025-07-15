@@ -1,0 +1,146 @@
+{% set game_state = game_state_json.game_state %}
+{% set screen_state = game_state.screen_state %}
+{% set screen_type = game_state.screen_type %}
+{% set player_deck = game_state.deck %}
+
+
+{% set archetypes = {
+    "IRONCLAD": [
+        {
+            "name": "Strength Build",
+            "core_synergy": "Gain Strength, then multiply it with multi-hit or scaling attacks.",
+            "key_cards": ["Inflame", "Spot Weakness", "Demon Form", "Limit Break"],
+            "payoff_cards": ["Heavy Blade", "Whirlwind", "Reaper", "Twin Strike"]
+        },
+        {
+            "name": "Barricade/Block Build",
+            "core_synergy": "Use Barricade to make Block permanent, then generate massive amounts of it.",
+            "key_cards": ["Barricade", "Entrench", "Feel No Pain", "Impervious"],
+            "payoff_cards": ["Body Slam"]
+        },
+        {
+            "name": "Exhaust Build",
+            "core_synergy": "Benefit from exhausting cards, often creating powerful card draw and energy engines.",
+            "key_cards": ["Corruption", "Feel No Pain", "Dark Embrace"],
+            "payoff_cards": ["Dead Branch (Relic)", "Fiend Fire", "Sever Soul"]
+        }
+    ],
+    "SILENT": [
+        {
+            "name": "Poison Build",
+            "core_synergy": "Apply stacks of Poison for damage-over-time, then multiply it for a burst finish.",
+            "key_cards": ["Noxious Fumes", "Deadly Poison", "Bouncing Flask", "Corpse Explosion"],
+            "payoff_cards": ["Catalyst"]
+        },
+        {
+            "name": "Shiv Build",
+            "core_synergy": "Generate numerous 0-cost Shivs to enable 'on-attack' effects from powers and relics.",
+            "key_cards": ["Blade Dance", "Cloak and Dagger", "Infinite Blades", "Accuracy"],
+            "payoff_cards": ["Wrist Blade (Relic)", "Shuriken (Relic)", "Kunai (Relic)", "After Image", "Finisher"]
+        },
+        {
+            "name": "Discard Build",
+            "core_synergy": "Use discard outlets to trigger effects, gain resources, and cycle through the deck quickly.",
+            "key_cards": ["Acrobatics", "Dagger Throw", "Survivor", "Tools of the Trade"],
+            "payoff_cards": ["Tactician", "Reflex", "Eviscerate"]
+        }
+    ],
+    "DEFECT": [
+        {
+            "name": "Frost/Focus Build (The Turtle)",
+            "core_synergy": "Generate Frost orbs for passive block and scale their effectiveness with Focus.",
+            "key_cards": ["Defragment", "Consume", "Coolheaded", "Glacier"],
+            "payoff_cards": ["Biased Cognition", "Blizzard", "Loop"]
+        },
+        {
+            "name": "Lightning/Claw Build",
+            "core_synergy": "Generate Lightning orbs for damage while playing many low-cost cards, scaling Claw's damage.",
+            "key_cards": ["Claw", "Go for the Eyes", "Ball Lightning", "Electrodynamics"],
+            "payoff_cards": ["All for One", "Rebound"]
+        },
+        {
+            "name": "Dark Orb Build",
+            "core_synergy": "Generate Dark orbs and passively charge them up to unleash a massive damage burst.",
+            "key_cards": ["Doom and Gloom", "Hologram", "Recursion"],
+            "payoff_cards": ["Darkness", "Multicast"]
+        }
+    ],
+    "WATCHER": [
+        {
+            "name": "Stance Dance Infinite",
+            "core_synergy": "Create a loop of entering and exiting stances to generate infinite energy and card draw.",
+            "key_cards": ["Rushdown", "Eruption", "Inner Peace", "Fear No Evil"],
+            "payoff_cards": ["Mental Fortress", "Talk to the Hand", "(any attack)"]
+        },
+        {
+            "name": "Retain/Mantra Build",
+            "core_synergy": "Retain cards to build up a powerful hand, then unleash a devastating turn with Divinity.",
+            "key_cards": ["Establishment", "Worship", "Prostrate", "Devotion"],
+            "payoff_cards": ["Blasphemy", "Brilliance", "Ragnarok"]
+        }
+    ]
+} %}
+
+# [OVERVIEW]
+- **Class:** {{ game_state.class }} (Ascension {{ game_state.ascension_level }})
+- **Health:** {{ game_state.current_hp }} / {{ game_state.max_hp }}
+- **Gold:** {{ game_state.gold }}
+- **Floor:** {{ game_state.floor }} (Act {{ game_state.act }})
+- **Act Boss:** {{ game_state.act_boss }}
+- **Relics:**
+  {% for relic in game_state.relics %}
+  - **{{ relic.name }}**{% if relic.counter != -1 %} (Counter: {{ relic.counter }}){% endif %}
+  {% endfor %}
+- **Potions:**
+  {% for potion in game_state.potions %}
+  - {{ potion.name }} (ID: {{ potion.id }}) | Usable: {{ potion.can_use }}, Discardable: {{ potion.can_discard }}
+  {% else %}
+  - (None)
+  {% endfor %}
+- **Deck Size:** {{ player_deck | length }} cards
+
+# [CURRENT TASKS]
+You are currently at the **{{ screen_type }}** screen.
+Your objective is to analyze the following detailed context and select the optimal action based on established Spire-slaying principles and a clear deckbuilding strategy.
+
+{%- block screen_details -%}
+{% switch screen_type %}
+    {% case "COMBAT" %}
+        {% include 'combat_template.jinja' %}
+    {% case "CARD_REWARD" %}
+        {% include 'card_reward_template.jinja' %}
+    {% case "BOSS_REWARD" %}
+        {% include 'boss_reward_template.jinja' %}
+    {% case "SHOP_SCREEN" %}
+        {% include 'shop_screen_template.jinja' %}
+    {% case "REST" %}
+        {% include 'rest_template.jinja' %}
+    {% case "EVENT" %}
+        {% include 'event_template.jinja' %}
+    {% case "GRID" %}
+        {% include 'grid_select_template.jinja' %}
+    {% case "HAND_SELECT" %}
+        {% include 'hand_select_template.jinja' %}
+    {% case "BOSS_REWARD" %}
+        {% include 'boss_reward_template.jinja' %}
+    {% case "GAME_OVER" %}
+        {% include 'game_over_template.jinja' %}
+    {% case "MAP" %}
+        {% include 'map_template.jinja' %}
+    {% case "COMBAT_REWARD" %}
+        <p>You have defeated the enemy. Collect your rewards. The standard command is `proceed`.</p>
+    {% default %}
+        <p>This is a generic screen. Analyze the available commands and choose the most logical one to proceed. Your command is likely `proceed` or `choose [index]`.</p>
+{% endswitch %}
+{%- endblock -%}
+
+# [AVAILABLE ACTIONS]
+You must choose one of the following commands to execute:
+`{{ game_state_json.available_commands | join(', ') }}`
+
+# [INSTURCTIONS]
+1.  **Objective Identification:** What is my primary goal? (e.g., Survive this fight, advance my chosen deck archetype, hunt an Elite).
+2.  **Information Analysis:** Review my Deck Archetype Analysis. Am I committed to a build? Review enemy intents. Review key relics.
+3.  **Generate Options:** Based on my hand, energy, and available commands, what are my possible moves?
+4.  **Evaluate Options:** Which option best advances my archetype or solves the immediate problem? For example, if I'm building a Poison deck, is it better to apply 4 poison now or play a block card to survive and apply 10 poison next turn?
+5.  **Final Decision:** Select the best option and formulate the precise command to execute it.

@@ -1,0 +1,25 @@
+{%- macro game_over_template() -%}
+## [RUN SUMMARY & SCORE ANALYSIS]
+**Objective:** Analyze the run's performance, focusing on metrics for high-score chasing. This is a separate game from simply winning. [42]
+
+**Score Breakdown:**
+- **Floors Climbed:** {{ screen_state.score }}
+- **Bonuses:**
+  {% for bonus in screen_state.bonuses %}
+  - **{{ bonus.name }}:** {{ bonus.value }} points
+  {% endfor %}
+
+**High-Score Strategy Checklist:**
+- **Champion / Perfect / Beyond Perfect:** Did I defeat Elites/Bosses without taking damage? This is a huge point source and requires overwhelming offense or defense. [42]
+- **Highlander (No duplicates):** A consistent way to get +100 points. [42]
+- **Collector (4+ copies of a card):** Higher scoring ceiling than Highlander, often requires specific daily modifiers or shop luck. [42]
+- **Deck Size Bonuses (Librarian/Encyclopedian):** Did I build a large deck (35+ or 50+ cards)? This is contrary to a "good" deck but necessary for score.
+- **Curses!:** Did I finish with 5+ curses? A risky but rewarding strategy. [42]
+- **Speed Bonuses (Light Speed/Speedster):** Did I finish in under 45/60 minutes? Requires fast play. [67]
+
+**Analysis:**
+1.  **Identify Primary Scoring Strategy:** Was this run geared towards Highlander or Collector?
+2.  **Evaluate Performance Bonuses:** How many Perfect/Champion bonuses were achieved? Where could damage have been avoided?
+3.  **Review Pathing:** Did my pathing maximize Elite fights for Champion bonuses?
+4.  **Conclusion for Next Run:** Based on this performance, what scoring strategy should be prioritized in the future? (e.g., "Need to conserve potions more effectively to achieve 'Beyond Perfect'").
+{%- endmacro -%}

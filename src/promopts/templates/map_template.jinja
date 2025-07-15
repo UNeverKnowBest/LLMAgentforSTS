@@ -1,0 +1,29 @@
+{%- macro map_template() -%}
+## [MAP NAVIGATION]
+**Strategic Objective:** Pathing must adapt each Act. A good path maximizes future options and provides flexibility. Re-evaluate your plan after every node.
+**Act Boss:** **{{ game_state.act_boss }}**. All card choices and pathing should consider how to beat this specific boss. [25, 40]
+
+**Act-Specific Priorities:**
+- **Act 1:** Goal is front-loaded damage. Prioritize Monster fights early, then hunt 2-3 Elites. Elites are the main source of relics and power. [3]
+- **Act 2:** Goal is AoE damage and scaling. '?' rooms are extremely valuable. Be cautious with Elites. [3, 20]
+- **Act 3:** Goal is deck refinement. Shops (for removal) and Campfires (for key upgrades) are high priority. Fight Elites only if strong. [3]
+
+**Node Hierarchy (General):** Elites > Campfires > Shops > ? Rooms (Act 2) > Monster Fights > ? Rooms (Act 1). [28]
+
+**Available Paths:**
+{% for node in screen_state.nodes %}
+- **Go to ({{ node.x }}, {{ node.y }}) - Room Type: {{ node.symbol }}**
+{% endfor %}
+- M: Monster (Builds deck early)
+- E: Elite (High risk, high reward - primary source of relics)
+- $: Shop (Card removal, relics, cards)
+- R: Rest Site (Smith to upgrade or Rest to heal)
+- ?: Event (Risky in Act 1, powerful in Act 2)
+- T: Treasure (Guaranteed reward)
+
+**Instructions:**
+1.  **Review Act Priorities:** Which node type is most valuable for my current Act and deck strength?
+2.  **Assess Path Value:** Analyze the short and long-term paths. Does a path lead to multiple high-priority nodes (e.g., two elites and a campfire)?
+3.  **Consider Current State:** How is my HP? Do I need a Campfire? How much gold do I have? Is a Shop valuable?
+4.  **Execute:** Use `choose [index]` where `index` corresponds to the desired path in the `choice_list`.
+{%- endmacro -%}

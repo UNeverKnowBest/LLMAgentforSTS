@@ -34,11 +34,12 @@ def read_state(state: GameState):
 def advice_on_command(state: GameState):
     game_infos = state["game_state"] 
     promopt_generator = PromptGenerator(game_infos)
-    if command:
+    prompt = promopt_generator.generate_prompt_based_on_state()
+    if prompt:
         return {"final_command" : command}
     else:
         response = llm.invoke(
-
+            prompt
         )
 
 

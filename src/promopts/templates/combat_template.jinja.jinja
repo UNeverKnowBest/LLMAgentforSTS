@@ -1,0 +1,42 @@
+{%- macro combat_template() -%}
+## [COMBAT ANALYSIS - Turn {{ game_state.combat_state.turn }}]
+**Tactical Goal:** View Health as a resource. Check enemy intents first. Execute your deck's core combo if possible. [1, 3]
+
+**Potential Combos & High-Damage Plays:**
+{% set current_archetypes = archetypes[game_state.class] %}
+{% for build in current_archetypes %}
+    {% set build_cards_in_deck = [] %}
+    {% for card in player_deck %}{% if card.id in build.key_cards or card.id in build.payoff_cards %}{{ build_cards_in_deck.append(card.id) }}{% endif %}{% endfor %}
+    {% if build_cards_in_deck | length > 2 %}
+- **{{ build.name }} Combo Detected:**
+    {% if build.name == "Poison Build" %}**TACTIC:** Prioritize applying poison stacks with cards like `Noxious Fumes` or `Deadly Poison`. Once an enemy has significant poison, use `Catalyst` to multiply it for a massive damage burst. This is your win condition.
+    {% elif build.name == "Strength Build" %}**TACTIC:** Play `Inflame` or `Demon Form` as early as possible. Once Strength is high, use `Whirlwind` for AoE or `Heavy Blade` for single-target damage. Use `Reaper` to heal to full.
+    {% elif build.name == "Barricade/Block Build" %}**TACTIC:** Survive until you can play `Barricade`. Then, use cards like `Entrench` to build a massive, permanent block wall. Your finisher is `Body Slam`.
+    {% elif build.name == "Shiv Build" %}**TACTIC:** Play `Blade Dance` or `Cloak and Dagger` to generate Shivs. This will trigger relics like `Shuriken`/`Kunai` and powers like `Accuracy`. Focus on playing many attacks per turn.
+    {% endif %}
+    {% endif %}
+{% endfor %}
+
+**Player State:**
+- **HP:** {{ game_state.combat_state.player.current_hp }} / {{ game_state.combat_state.player.max_hp }}
+- **Block:** {{ game_state.combat_state.player.block }}
+- **Energy:** {{ game_state.combat_state.player.energy }} / {{ game_state.max_hp }}
+- **Hand ({{ game_state.combat_state.hand | length }} cards):**
+  {% for card in game_state.combat_state.hand %}
+  - **{{ card.name }}** ({{ card.cost }} E) | ID: {{ card.id }} | Playable: {{ card.is_playable }}{% if card.has_target %} [TARGETED]{% endif %}{% if card.upgrades > 0 %} (+{{ card.upgrades }}){% endif %}
+    *{{ card.description }}*
+  {% endfor %}
+{# ... other combat details ... #}
+**Enemy State:**
+{# ... enemy details ... #}
+
+**Instructions (Turn Execution Framework):**
+1.  **Assess Lethal:** Can I win this turn?
+2.  **Assess Defense:** Can I block all incoming damage?
+3.  **Execute Combo:** Is a key combo available this turn (e.g., `Catalyst` on a poisoned enemy)? If so, calculate if it's safe to execute.
+4.  **Advance Game Plan:** If no combo, use remaining energy to further your archetype's goal (stack strength, apply poison, etc.).
+5.  **Execute:** Formulate your action as a command. E.g., `play 1 0`. Use `end` to finish your turn.
+{%- endmacro -%}
+
+{# card_reward_template.jinja #}
+{%- macro card_reward_template() -%}

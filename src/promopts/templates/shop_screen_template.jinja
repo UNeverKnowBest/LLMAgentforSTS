@@ -1,0 +1,32 @@
+{%- macro shop_screen_template() -%}
+## [MERCHANT SHOP]
+**Objective:** Spend gold to strategically increase power. Do not hoard gold. [40]
+
+**Shop Priority List:**
+1.  **Card Removal ({{ screen_state.purge_cost }}g):** The best investment. Removing basic Strikes/Defends improves every future hand. This should be your first consideration. [20, 21]
+2.  **Powerful Relics:** Check the relics for sale. A relic that synergizes with your build is a top-tier purchase and a permanent upgrade. [27]
+3.  **Key Cards:** Only buy a card if it is an essential, build-defining piece you have been unable to find otherwise. Relics and removals are usually better value. [27]
+4.  **Potions:** A good purchase if you need a specific tactical advantage for an upcoming Elite or Boss fight. [33]
+
+**Wares:**
+- **Cards:**
+  {% for card in screen_state.cards %}
+  - {{ card.name }} ({{ card.price }}g)
+  {% endfor %}
+- **Relics:**
+  {% for relic in screen_state.relics %}
+  - {{ relic.name }} ({{ relic.price }}g)
+  {% endfor %}
+- **Card Removal:** Cost: {{ screen_state.purge_cost }}g
+
+**Instructions:**
+1.  **Assess Gold vs. Priorities:** How much gold do I have?
+2.  **Can I Remove a Card?** Do I have enough gold to remove a card? If so, this is likely the best play. Remove a basic Strike first, then a Defend.
+3.  **Are Relics Affordable and Synergistic?** Is there a relic that dramatically improves my deck? Can I afford it?
+4.  **Is a Card Essential?** Is there a card for sale that I absolutely need for my strategy to function?
+5.  **Prepare for a Fight:** If I have leftover gold, should I buy a potion for the next tough fight?
+6.  **Execute:** Use `buy [card/relic_id]` or `purge` to make your purchase.
+{%- endmacro -%}
+
+{# rest_template.jinja #}
+{%- macro rest_template() -%}

@@ -1,0 +1,53 @@
+{%- macro hand_select_template() -%}
+## [HAND SELECTION]
+**Objective:** {{ screen_state.prompt }} (Select up to {{ screen_state.max_cards }} card(s))
+**Analysis:** You must select card(s) from your hand. The correct choice depends on *why* you are selecting them.
+
+{% set prompt_text = screen_state.prompt | lower %}
+
+{# --- SCENARIO 1: DISCARDING cards (e.g., Gambler's Brew, Calculated Gamble) --- #}
+{% if "discard" in prompt_text %}
+**Strategic Goal:** Use the discard to your advantage by getting rid of useless cards or activating beneficial effects.
+**Discard Priority List:**
+1.  **Positive Discard Effects:** Select cards that give you a bonus when discarded, like `Tactician` (gain energy) or `Reflex` (draw cards). This is a net gain.
+2.  **Useless Cards:** Select any Curses (`Curse:*`) or Status cards (`Wound`, `Burn`, `Daze`, `Slimed`) to clear them from your hand.
+3.  **Lowest Value Cards:** If the above are not options, choose your least impactful cards. This is almost always a basic `Strike` or `Defend`.
+
+{# --- SCENARIO 2: RETAINING cards (e.g., end of turn with Equilibrium, Well-Laid Plans) --- #}
+{% elif "retain" in prompt_text or "end of turn" in prompt_text %}
+**Strategic Goal:** Keep the most valuable cards for the next turn to set up a powerful play.
+**Retain Priority List:**
+1.  **Key Powers or Payoffs:** Retain your most critical cards, like a `Demon Form` you couldn't afford to play, a `Catalyst` for a kill next turn, or a powerful AoE for a multi-enemy wave.
+2.  **High-Cost Cards:** Keep expensive, high-impact cards that you are more likely to be able to play next turn with full energy.
+3.  **Strong Synergies:** Keep cards that work well together (e.g., a vulnerable applier and a high-damage attack).
+4.  **Cards with Innate Retain:** If a card has Retain built-in, you don't need to waste a choice on it unless you have extra selections.
+
+{# --- SCENARIO 3: EXHAUSTING cards (e.g., Second Wind) --- #}
+{% elif "exhaust" in prompt_text %}
+**Strategic Goal:** Choose cards to exhaust that either provide a benefit on exhaust or are the least useful to keep.
+**Exhaust Priority List:**
+1.  **Positive Exhaust Effects:** If you have `Feel No Pain` or the `Dead Branch` relic, exhausting *any* card is good. Prioritize exhausting Skills if you have `Corruption` active.
+2.  **Useless Cards:** Exhaust Curses and Status cards to permanently remove them from the combat.
+3.  **Lowest Value Cards:** Exhaust basic `Strikes` and `Defends`.
+
+{# --- SCENARIO 4: UPGRADING a card in hand (e.g., Armaments) --- #}
+{% elif "upgrade" in prompt_text %}
+**Strategic Goal:** Upgrade the card in your hand that gains the most benefit, similar to a campfire upgrade.
+**Upgrade Priority List:**
+1.  **Archetype Payoffs:** `Catalyst`, `Body Slam`, etc.
+2.  **Cost Reduction:** Any card that will cost less energy after upgrading.
+3.  **Functionality Change:** A card that gains a critical new ability (e.g., applies more Vulnerable).
+
+{% endif %}
+
+**Your Hand (Cards to choose from):**
+{% for card in screen_state.hand %}
+- **[Option {{ loop.index0 }}] {{ card.name }}**{% if card.upgrades > 0 %} (+{{ card.upgrades }}){% endif %}
+  *{{ card.description }}*
+{% endfor %}
+
+**Instructions:**
+1.  Identify the scenario (Discard, Retain, etc.) from the prompt.
+2.  Follow the prioritized list to determine the best card(s) to select.
+3.  Formulate the command: `choose [index]`. If you can select multiple, you may need multiple commands.
+{%- endmacro -%}
