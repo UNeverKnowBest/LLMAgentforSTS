@@ -1,15 +1,14 @@
-{%- macro boss_reward_template() -%}
 ## [BOSS RELIC SELECTION]
 **Objective:** Select one powerful Boss Relic. This choice will fundamentally alter your strategy for the next Act.
-**Primary Goal:** Gaining a 4th energy is a massive power spike and should be prioritized unless the downside is crippling for your specific deck. [30]
+**Primary Goal:** Gaining a 4th energy is a massive power spike and should be prioritized unless the downside is crippling for your specific deck.
 
 **Common Energy Relic Analysis:**
 - **Cursed Key:** (Gain 1 energy. Get a Curse when opening non-boss chests). Generally the best. Downside is manageable/avoidable.
-- **Coffee Dripper:** (Gain 1 energy. Can no longer Rest). Excellent if you have other healing (Reaper) or strong enough defense. Makes HP a more precious resource. [32]
-- **Fusion Hammer:** (Gain 1 energy. Can no longer Smith). Strong if key cards are already upgraded or you have Apotheosis. [32]
-- **Sozu:** (Gain 1 energy. Can no longer obtain potions). A very steep price. A last resort for energy, as potions are vital. [57]
-- **Snecko Eye:** (Draw 2 extra cards. Card costs are randomized). Can be game-winning with a deck of high-cost cards. Risky, but incredibly powerful. [8]
-- **Runic Pyramid:** (At end of turn, don't discard your hand). Unparalleled strategic control, but risks clogging your hand with statuses/curses. [38]
+- **Coffee Dripper:** (Gain 1 energy. Can no longer Rest). Excellent if you have other healing (Reaper) or strong enough defense. Makes HP a more precious resource.
+- **Fusion Hammer:** (Gain 1 energy. Can no longer Smith). Strong if key cards are already upgraded or you have Apotheosis.
+- **Sozu:** (Gain 1 energy. Can no longer obtain potions). A very steep price. A last resort for energy, as potions are vital.
+- **Snecko Eye:** (Draw 2 extra cards. Card costs are randomized). Can be game-winning with a deck of high-cost cards. Risky, but incredibly powerful.
+- **Runic Pyramid:** (At end of turn, don't discard your hand). Unparalleled strategic control, but risks clogging your hand with statuses/curses.
 
 **Relic Choices:**
 {% for relic in screen_state.relics %}
@@ -22,4 +21,3 @@
 3.  **Consider Non-Energy Options:** If the energy relic downsides are too severe, or if no energy relic is offered, which of the other relics provides the most power or synergy for my deck's specific strategy?
 4.  **Adapt Future Strategy:** After choosing, fully commit to the new reality. If you take Coffee Dripper, you must now path to avoid damage. If you take Ectoplasm, shops are no longer a priority.
 5.  **Execute:** Use `choose X` (where X is relic index 0-2).
-{%- endmacro -%}

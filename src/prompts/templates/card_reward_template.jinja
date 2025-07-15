@@ -1,4 +1,5 @@
-**The Golden Rule:** Build the deck the Spire gives you. Adapt to your relics and offered cards. Commit to a powerful archetype when possible. [27]
+## [CARD REWARD SELECTION - ARCHETYPE ALIGNMENT]
+**The Golden Rule:** Build the deck the Spire gives you. Adapt to your relics and offered cards. Commit to a powerful archetype when possible.
 
 ### **Deck Archetype Analysis**
 Below are the powerful builds for a {{ game_state.class }}. Let's see which one your deck is closest to.
@@ -42,7 +43,7 @@ Below are the powerful builds for a {{ game_state.class }}. Let's see which one 
   {% endfor %}
 {% endfor %}
 {% if screen_state.skip_available %}
-- **[Option skip] Skip Card:** **Crucial for avoiding deck bloat.** If no card strongly supports your chosen archetype or solves a pressing problem, **SKIP**. [20, 29]
+- **[Option skip] Skip Card:** **Crucial for avoiding deck bloat.** If no card strongly supports your chosen archetype or solves a pressing problem, **SKIP**.
 {% endif %}
 
 **Instructions:**
@@ -51,5 +52,4 @@ Below are the powerful builds for a {{ game_state.class }}. Let's see which one 
 3.  **If No Fit, Solve a Problem:** If no card fits, does it solve a critical problem (AoE, Block, Draw)?
 4.  **When in Doubt, Skip:** If you are committed to a build and no offered card helps it, skipping is the best choice.
 5.  **Execute:** Use `choose X` (where X is card index 0-2) or `choose skip`.
-{%- endmacro -%}
 

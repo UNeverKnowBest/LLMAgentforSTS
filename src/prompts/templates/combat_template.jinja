@@ -1,4 +1,3 @@
-{%- macro combat_template() -%}
 ## [COMBAT ANALYSIS - Turn {{ game_state.combat_state.turn }}]
 **Core Philosophy:** Health is a resource. Perfect information enables perfect decisions. Every action should maximize expected value.
 
@@ -85,7 +84,3 @@ Current Turn Analysis:
 - `end` (to finish turn)
 - `potion use X` or `potion discard X` (where X is potion slot 0-4)
 - `potion use X Y` (for targeted potions, Y is monster index 0-2)
-{%- endmacro -%}
-
-{# card_reward_template.jinja #}
-{%- macro card_reward_template() -%}

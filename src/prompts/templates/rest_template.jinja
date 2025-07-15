@@ -1,14 +1,13 @@
-{%- macro rest_template() -%}
 ## [REST SITE]
 **Objective:** Make the choice between short-term survival (Rest) and long-term power (Smith).
-**Heuristic:** Always Smith (upgrade) if your health is above ~70%. Smithing makes future fights easier, saving more HP in the long run. Rest as infrequently as possible. [3, 30]
+**Heuristic:** Always Smith (upgrade) if your health is above ~70%. Smithing makes future fights easier, saving more HP in the long run. Rest as infrequently as possible.
 
 **Upgrade Priorities (when Smithing):**
 1.  Cards that reduce in cost (e.g., Corruption, Eruption).
 2.  Cards whose core function is improved (e.g., Catalyst, Entrench).
 3.  Cards that apply more stacks of a key debuff (e.g., Bash).
 4.  Your most-played attacks or block cards.
-(Never upgrade a basic Strike or Defend unless you have no other choice). [18]
+(Never upgrade a basic Strike or Defend unless you have no other choice).
 
 **Options:**
 - **Rest:** Heal for {{ screen_state.heal_amount }} HP.
@@ -23,4 +22,3 @@
 3.  **Default to Smith:** If health is high and the path is manageable, choose Smith.
 4.  **Select Upgrade Target:** If Smithing, choose the card that provides the most strategic value based on the priority list.
 5.  **Execute:** Use `choose rest`, `choose smith`, `choose dig`, `choose lift`, or `choose toke` (followed by `choose X` for card selection if smithing).
-{%- endmacro -%}

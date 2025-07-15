@@ -4,4 +4,5 @@ langchain-community
 langchain-core
 typing-extensions
 ipython
-tavily-python 
+tavily-python
+jinja2 

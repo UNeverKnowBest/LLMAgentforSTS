@@ -1,4 +1,3 @@
-{%- macro shop_screen_template() -%}
 ## [MERCHANT SHOP - ECONOMIC ANALYSIS]
 **Core Principle:** Gold is a finite resource that must be optimally allocated. Every purchase should provide maximum run-advancing value.
 **Current Economic State:** {{ game_state.gold }}g available
@@ -96,7 +95,3 @@ Priority Tier 4: Tactical Potions
 - `choose [relic_name]` - Purchase specific relic by name (e.g., "choose bag of preparation")  
 - `choose purge` - Remove a card for {{ screen_state.purge_cost }}g
 - `leave` - Exit shop without purchases
-{%- endmacro -%}
-
-{# rest_template.jinja #}
-{%- macro rest_template() -%}
