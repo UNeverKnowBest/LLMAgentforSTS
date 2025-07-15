@@ -1,9 +1,11 @@
-from langgraph.graph import MessagesState
 from pydantic import BaseModel
+from typing import Dict, Optional, Any
 
 class GameState(BaseModel):
-    game_state_json: str
-    think_process: str
-    final_command: str
-    feedback: str
-    game_state: str
+    game_state_json: Optional[Dict[str, Any]] = None
+    thinking_process: Optional[str] = None
+    final_command: Optional[str] = None
+    command_success: Optional[bool] = None
+    error_message: Optional[str] = None
+    is_game_over: Optional[bool] = None
+    state_valid: Optional[bool] = None
