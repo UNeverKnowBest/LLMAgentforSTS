@@ -1,31 +1,101 @@
 {%- macro shop_screen_template() -%}
-## [MERCHANT SHOP]
-**Objective:** Spend gold to strategically increase power. Do not hoard gold. [40]
+## [MERCHANT SHOP - ECONOMIC ANALYSIS]
+**Core Principle:** Gold is a finite resource that must be optimally allocated. Every purchase should provide maximum run-advancing value.
+**Current Economic State:** {{ game_state.gold }}g available
 
-**Shop Priority List:**
-1.  **Card Removal ({{ screen_state.purge_cost }}g):** The best investment. Removing basic Strikes/Defends improves every future hand. This should be your first consideration. [20, 21]
-2.  **Powerful Relics:** Check the relics for sale. A relic that synergizes with your build is a top-tier purchase and a permanent upgrade. [27]
-3.  **Key Cards:** Only buy a card if it is an essential, build-defining piece you have been unable to find otherwise. Relics and removals are usually better value. [27]
-4.  **Potions:** A good purchase if you need a specific tactical advantage for an upcoming Elite or Boss fight. [33]
+## **PURCHASE VALUE ANALYSIS FRAMEWORK:**
 
-**Wares:**
-- **Cards:**
-  {% for card in screen_state.cards %}
-  - {{ card.name }} ({{ card.price }}g)
-  {% endfor %}
-- **Relics:**
-  {% for relic in screen_state.relics %}
-  - {{ relic.name }} ({{ relic.price }}g)
-  {% endfor %}
-- **Card Removal:** Cost: {{ screen_state.purge_cost }}g
+**Investment Priority Matrix:**
+```
+Priority Tier 1: Card Removal ({{ screen_state.purge_cost }}g)
+├── Value: Improves every future hand for the entire run
+├── ROI: ~5-10% deck improvement per removal
+└── Cost Analysis: "Is {{ screen_state.purge_cost }}g worth making every future hand slightly better?"
 
-**Instructions:**
-1.  **Assess Gold vs. Priorities:** How much gold do I have?
-2.  **Can I Remove a Card?** Do I have enough gold to remove a card? If so, this is likely the best play. Remove a basic Strike first, then a Defend.
-3.  **Are Relics Affordable and Synergistic?** Is there a relic that dramatically improves my deck? Can I afford it?
-4.  **Is a Card Essential?** Is there a card for sale that I absolutely need for my strategy to function?
-5.  **Prepare for a Fight:** If I have leftover gold, should I buy a potion for the next tough fight?
-6.  **Execute:** Use `buy [card/relic_id]` or `purge` to make your purchase.
+Priority Tier 2: Synergistic Relics
+├── Value: Permanent passive benefits that compound
+├── ROI: Depends on synergy with current deck
+└── Cost Analysis: "Does this relic enable new strategies worth its gold cost?"
+
+Priority Tier 3: Key Missing Cards  
+├── Value: Fills critical gaps in deck strategy
+├── ROI: Enables deck archetype completion
+└── Cost Analysis: "Is this card essential enough to justify the gold expenditure?"
+
+Priority Tier 4: Tactical Potions
+├── Value: Solves immediate upcoming challenges
+├── ROI: Survival value for next difficult fight
+└── Cost Analysis: "Is surviving the next fight worth this gold?"
+```
+
+**Deep Economic Decision Framework:**
+
+**For Each Potential Purchase:**
+1. **Immediate Value Calculation:**
+   - "If I spend [X]g on [item], I get [specific benefit]"
+   - "This costs [percentage]% of my total gold"
+   - "Remaining gold: [remaining amount] for future opportunities"
+
+2. **Opportunity Cost Analysis:**
+   - "If I don't buy this now, what else could I buy later with this gold?"
+   - "Are there better shops coming up based on my map path?"
+   - "What's the probability I'll find a better use for this gold?"
+
+3. **Strategic Fit Assessment:**
+   - "How well does this item advance my deck's primary win condition?"
+   - "Does this solve a critical weakness or amplify a strength?"
+   - "What's the expected value boost to my overall run success?"
+
+**Specific Purchase Scenarios:**
+
+**Card Removal Decision Tree:**
+- "{{ screen_state.purge_cost }}g for removal vs. keeping gold"
+- **If I remove a basic Strike:** "Every future hand has a [percentage]% better chance of containing useful cards"
+- **If I remove a Curse:** "I permanently eliminate a dead draw that hurts every shuffle"
+- **Economic comparison:** "This improvement lasts the entire run. Is long-term consistency worth {{ screen_state.purge_cost }}g now?"
+
+**Relic Purchase Analysis:**
+{% for relic in screen_state.relics %}
+- **{{ relic.name }} ({{ relic.price }}g):**
+  **Value Proposition Analysis:**
+  - "This relic costs {{ relic.price }}g out of my {{ game_state.gold }}g total ({{ (relic.price / game_state.gold * 100) | round(1) }}%)"
+  - "Expected benefit: [Analyze based on current deck and game state]"
+  - "Synergy rating: [High/Medium/Low] with my current strategy"
+  - "Alternative use: I could instead buy [other options] with this gold"
+{% endfor %}
+
+**Card Purchase Analysis:**
+{% for card in screen_state.cards %}
+- **{{ card.name }} ({{ card.price }}g):**
+  **Strategic Investment Evaluation:**
+  - "This fills the gap: [specific deck weakness it addresses]"
+  - "Without this card: [consequence of not having it]"
+  - "With this card: [enhanced capability it provides]"
+  - "Cost efficiency: [card power] for {{ card.price }}g vs. [alternative uses]"
+{% endfor %}
+
+**Multi-Purchase Scenarios:**
+- **Combination A:** "Remove card ({{ screen_state.purge_cost }}g) + Buy [item] ([price]g) = [total]g"
+- **Combination B:** "Buy [different item] ([price]g) only, save [remaining]g"
+- **Analysis:** "Combination A gives [benefits] but leaves [remaining gold]. Combination B gives [different benefits] but preserves more economic flexibility."
+
+**Future Planning Considerations:**
+- **Upcoming Path Analysis:** "Based on my map, I expect [X shops/events] coming up"
+- **Boss Preparation:** "{{ game_state.act_boss }} requires [specific counters]. Do I need to buy preparation now?"
+- **Act Transition:** "If this is Act {{ game_state.act }}, what will I need for Act {{ game_state.act + 1 }}?"
+
+**Final Economic Decision Template:**
+"I will spend [amount]g on [purchase] because:
+- **Immediate value:** [What I gain right now]
+- **Long-term value:** [How this helps for the rest of the run]
+- **Opportunity cost:** [What I'm giving up] is worth it because [reasoning]
+- **Alternative rejected:** [Other option] because [specific economic reasoning]"
+
+## **EXECUTION COMMANDS:**
+- `choose [card_name]` - Purchase specific card by name (e.g., "choose strike")
+- `choose [relic_name]` - Purchase specific relic by name (e.g., "choose bag of preparation")  
+- `choose purge` - Remove a card for {{ screen_state.purge_cost }}g
+- `leave` - Exit shop without purchases
 {%- endmacro -%}
 
 {# rest_template.jinja #}

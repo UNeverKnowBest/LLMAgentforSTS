@@ -104,43 +104,71 @@ You are currently at the **{{ screen_type }}** screen.
 Your objective is to analyze the following detailed context and select the optimal action based on established Spire-slaying principles and a clear deckbuilding strategy.
 
 {%- block screen_details -%}
-{% switch screen_type %}
-    {% case "COMBAT" %}
-        {% include 'combat_template.jinja' %}
-    {% case "CARD_REWARD" %}
-        {% include 'card_reward_template.jinja' %}
-    {% case "BOSS_REWARD" %}
-        {% include 'boss_reward_template.jinja' %}
-    {% case "SHOP_SCREEN" %}
-        {% include 'shop_screen_template.jinja' %}
-    {% case "REST" %}
-        {% include 'rest_template.jinja' %}
-    {% case "EVENT" %}
-        {% include 'event_template.jinja' %}
-    {% case "GRID" %}
-        {% include 'grid_select_template.jinja' %}
-    {% case "HAND_SELECT" %}
-        {% include 'hand_select_template.jinja' %}
-    {% case "BOSS_REWARD" %}
-        {% include 'boss_reward_template.jinja' %}
-    {% case "GAME_OVER" %}
-        {% include 'game_over_template.jinja' %}
-    {% case "MAP" %}
-        {% include 'map_template.jinja' %}
-    {% case "COMBAT_REWARD" %}
-        <p>You have defeated the enemy. Collect your rewards. The standard command is `proceed`.</p>
-    {% default %}
-        <p>This is a generic screen. Analyze the available commands and choose the most logical one to proceed. Your command is likely `proceed` or `choose [index]`.</p>
-{% endswitch %}
+{% if screen_type == "COMBAT" %}
+    {% include 'combat_template.jinja' %}
+{% elif screen_type == "CARD_REWARD" %}
+    {% include 'card_reward_template.jinja' %}
+{% elif screen_type == "BOSS_REWARD" %}
+    {% include 'boss_reward_template.jinja' %}
+{% elif screen_type == "SHOP_SCREEN" %}
+    {% include 'shop_screen_template.jinja' %}
+{% elif screen_type == "REST" %}
+    {% include 'rest_template.jinja' %}
+{% elif screen_type == "EVENT" %}
+    {% include 'event_template.jinja' %}
+{% elif screen_type == "GRID" %}
+    {% include 'grid_select_template.jinja' %}
+{% elif screen_type == "HAND_SELECT" %}
+    {% include 'hand_select_template.jinja' %}
+{% elif screen_type == "GAME_OVER" %}
+    {% include 'game_over_template.jinja' %}
+{% elif screen_type == "MAP" %}
+    {% include 'map_template.jinja' %}
+{% elif screen_type == "COMBAT_REWARD" %}
+    <p>You have defeated the enemy. Collect your rewards. The standard command is `proceed`.</p>
+{% else %}
+    <p>This is a generic screen. Analyze the available commands and choose the most logical one to proceed. Your command is likely `proceed` or `choose X` (where X is choice index).</p>
+{% endif %}
 {%- endblock -%}
 
 # [AVAILABLE ACTIONS]
 You must choose one of the following commands to execute:
 `{{ game_state_json.available_commands | join(', ') }}`
 
-# [INSTURCTIONS]
-1.  **Objective Identification:** What is my primary goal? (e.g., Survive this fight, advance my chosen deck archetype, hunt an Elite).
-2.  **Information Analysis:** Review my Deck Archetype Analysis. Am I committed to a build? Review enemy intents. Review key relics.
-3.  **Generate Options:** Based on my hand, energy, and available commands, what are my possible moves?
-4.  **Evaluate Options:** Which option best advances my archetype or solves the immediate problem? For example, if I'm building a Poison deck, is it better to apply 4 poison now or play a block card to survive and apply 10 poison next turn?
-5.  **Final Decision:** Select the best option and formulate the precise command to execute it.
+# [INSTRUCTIONS]
+## **STRATEGIC DECISION FRAMEWORK (Tree of Thoughts Analysis):**
+
+**Step 1 - Situation Assessment:**
+- What is my immediate tactical goal? (Survive this turn, maximize damage, gain resources, etc.)
+- What is my strategic long-term goal? (Complete archetype combo, prepare for boss, deck refinement, etc.)
+- What constraints do I have? (Health, energy, hand composition, available commands)
+
+**Step 2 - Option Generation:**
+- List ALL viable choices available to me
+- For each option, identify the immediate effect and long-term consequence
+- Consider multi-step sequences (e.g., "If I do A now, then I can do B next turn")
+
+**Step 3 - Deep Comparative Analysis:**
+- **For each option, analyze:**
+  - **Immediate gains:** What do I get right now?
+  - **Immediate costs:** What do I give up or risk?
+  - **Future opportunities:** What does this enable later?
+  - **Future restrictions:** What does this prevent or make harder?
+  - **Risk assessment:** What could go wrong with this choice?
+
+**Step 4 - Weighted Decision Making:**
+- **Example reasoning pattern:** "If I choose option A, I gain [specific benefit] but lose [specific cost]. If I choose option B, I gain [different benefit] and avoid [risk], but miss the opportunity to [future gain]. Option A is better because [weighted reasoning]."
+- Compare the total value (immediate + future) of each option
+- Consider probability of success and failure scenarios
+- Account for the current game state context (Act, health, deck strength)
+
+**Step 5 - Execute with Confidence:**
+- Select the option with the highest expected value
+- Formulate the precise command to execute it
+- **CRITICAL:** Always provide your reasoning in the format: "I choose [option] because [immediate reasoning] and [strategic reasoning], while rejecting [alternative] because [specific drawback]."
+
+## **META-COGNITIVE PROMPTS:**
+- "What am I not considering?" 
+- "What would happen if my assumption is wrong?"
+- "Is there a creative combination I'm missing?"
+- "Am I being too greedy/conservative for the current situation?"

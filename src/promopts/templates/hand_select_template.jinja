@@ -1,53 +1,89 @@
 {%- macro hand_select_template() -%}
-## [HAND SELECTION]
+## [HAND SELECTION - DEEP ANALYSIS]
 **Objective:** {{ screen_state.prompt }} (Select up to {{ screen_state.max_cards }} card(s))
-**Analysis:** You must select card(s) from your hand. The correct choice depends on *why* you are selecting them.
+**Strategic Imperative:** Every card selection should be a calculated decision with clear reasoning about immediate and future consequences.
 
 {% set prompt_text = screen_state.prompt | lower %}
 
 {# --- SCENARIO 1: DISCARDING cards (e.g., Gambler's Brew, Calculated Gamble) --- #}
 {% if "discard" in prompt_text %}
-**Strategic Goal:** Use the discard to your advantage by getting rid of useless cards or activating beneficial effects.
-**Discard Priority List:**
-1.  **Positive Discard Effects:** Select cards that give you a bonus when discarded, like `Tactician` (gain energy) or `Reflex` (draw cards). This is a net gain.
-2.  **Useless Cards:** Select any Curses (`Curse:*`) or Status cards (`Wound`, `Burn`, `Daze`, `Slimed`) to clear them from your hand.
-3.  **Lowest Value Cards:** If the above are not options, choose your least impactful cards. This is almost always a basic `Strike` or `Defend`.
+**Strategic Goal:** Transform the discard requirement into a tactical advantage.
+
+**Deep Analysis Framework for Discard Decisions:**
+**Step 1:** Identify cards with **positive discard effects** (highest priority)
+**Step 2:** Identify **harmful cards** that you want to remove (curses, statuses)
+**Step 3:** Compare **opportunity costs** among remaining cards
+
+**Discard Priority Analysis:**
+1.  **Positive Discard Effects (BEST CHOICE):**
+   - `Tactician`: "If I discard this, I gain 1 energy. This energy could let me play an extra card worth more value than Tactician itself."
+   - `Reflex`: "If I discard this, I draw 2 cards. This replaces the lost card AND gives me an extra card, making it pure value."
+   
+2.  **Harmful Cards (SECOND PRIORITY):**
+   - Curses: "Discarding a Curse permanently removes a dead draw from my deck."
+   - Status cards: "These provide no value, so discarding them costs me nothing."
+   
+3.  **Opportunity Cost Comparison (CAREFUL ANALYSIS REQUIRED):**
+   - **Example Deep Reasoning:** "If I discard Strike (4 damage), I lose 4 damage potential. If I discard Defend (5 block), I lose 5 block potential. But if I keep my Catalyst and discard Strike instead, I can multiply my poison next turn for potentially 20+ damage. The Strike is less valuable than the future Catalyst play."
+   - **Another Example:** "I could discard Card A for 1 energy, or discard Card B which costs 2 energy to play. If I discard Card A, I net +1 energy. If I discard Card B, I save 2 energy I would have spent. Discarding Card B gives me more effective energy."
 
 {# --- SCENARIO 2: RETAINING cards (e.g., end of turn with Equilibrium, Well-Laid Plans) --- #}
 {% elif "retain" in prompt_text or "end of turn" in prompt_text %}
-**Strategic Goal:** Keep the most valuable cards for the next turn to set up a powerful play.
-**Retain Priority List:**
-1.  **Key Powers or Payoffs:** Retain your most critical cards, like a `Demon Form` you couldn't afford to play, a `Catalyst` for a kill next turn, or a powerful AoE for a multi-enemy wave.
-2.  **High-Cost Cards:** Keep expensive, high-impact cards that you are more likely to be able to play next turn with full energy.
-3.  **Strong Synergies:** Keep cards that work well together (e.g., a vulnerable applier and a high-damage attack).
-4.  **Cards with Innate Retain:** If a card has Retain built-in, you don't need to waste a choice on it unless you have extra selections.
+**Strategic Goal:** Optimize next turn's potential by keeping the most valuable cards.
+
+**Retention Value Analysis:**
+1.  **Setup Cards for Combos:**
+   - "If I retain Catalyst, I can triple my poison damage next turn. If I don't retain it, I lose the opportunity for a massive damage spike."
+   - "If I retain this expensive Power card, I guarantee I can play it next turn with full energy, rather than risk drawing it at an awkward time."
+
+2.  **High-Cost, High-Impact Cards:**
+   - "This 3-cost card is hard to play with other cards. If I retain it, I can plan my entire next turn around it."
+   - "If I don't retain this expensive card, I might draw it when I only have 1 energy left."
+
+3.  **Situational Power Cards:**
+   - "This card is perfect for the next enemy phase. If I retain it, I guarantee the perfect counter. If I discard it, I might not redraw it when I need it."
 
 {# --- SCENARIO 3: EXHAUSTING cards (e.g., Second Wind) --- #}
 {% elif "exhaust" in prompt_text %}
-**Strategic Goal:** Choose cards to exhaust that either provide a benefit on exhaust or are the least useful to keep.
-**Exhaust Priority List:**
-1.  **Positive Exhaust Effects:** If you have `Feel No Pain` or the `Dead Branch` relic, exhausting *any* card is good. Prioritize exhausting Skills if you have `Corruption` active.
-2.  **Useless Cards:** Exhaust Curses and Status cards to permanently remove them from the combat.
-3.  **Lowest Value Cards:** Exhaust basic `Strikes` and `Defends`.
+**Strategic Goal:** Turn the exhaust requirement into a deck improvement opportunity.
+
+**Exhaust Value Calculation:**
+1.  **Synergistic Exhaustion:**
+   - "With Feel No Pain active, exhausting any card gives me 3 block. Even exhausting a Strike nets me value."
+   - "With Dead Branch, exhausting this card will generate a random card, potentially more valuable than what I'm losing."
+
+2.  **Deck Pollution Removal:**
+   - "Exhausting this Curse/Status permanently improves my deck quality. This is better than card removal at a shop."
+   - "If I exhaust this basic Strike, my future draws become statistically better."
 
 {# --- SCENARIO 4: UPGRADING a card in hand (e.g., Armaments) --- #}
 {% elif "upgrade" in prompt_text %}
-**Strategic Goal:** Upgrade the card in your hand that gains the most benefit, similar to a campfire upgrade.
-**Upgrade Priority List:**
-1.  **Archetype Payoffs:** `Catalyst`, `Body Slam`, etc.
-2.  **Cost Reduction:** Any card that will cost less energy after upgrading.
-3.  **Functionality Change:** A card that gains a critical new ability (e.g., applies more Vulnerable).
+**Strategic Goal:** Maximize the power increase from the upgrade investment.
+
+**Upgrade Impact Analysis:**
+1.  **Cost Reduction Upgrades:**
+   - "Upgrading this 2-cost card to 1-cost effectively gives me +1 energy every time I draw it for the rest of the run."
+   
+2.  **Archetype Enablers:**
+   - "Upgrading Catalyst from double to triple poison transforms my entire damage output. This upgrade could be worth 50+ damage per use."
 
 {% endif %}
 
-**Your Hand (Cards to choose from):**
+**Your Hand (Detailed Analysis):**
 {% for card in screen_state.hand %}
 - **[Option {{ loop.index0 }}] {{ card.name }}**{% if card.upgrades > 0 %} (+{{ card.upgrades }}){% endif %}
   *{{ card.description }}*
+  **Value Assessment:** [Analyze this card's immediate value vs. alternative choices]
 {% endfor %}
 
-**Instructions:**
-1.  Identify the scenario (Discard, Retain, etc.) from the prompt.
-2.  Follow the prioritized list to determine the best card(s) to select.
-3.  Formulate the command: `choose [index]`. If you can select multiple, you may need multiple commands.
+**Decision Framework:**
+1.  **Map out consequences:** "If I choose Card X, then..."
+2.  **Compare alternatives:** "Instead of X, if I choose Y, then..."
+3.  **Consider timing:** "Is this the optimal time to make this choice?"
+4.  **Evaluate setup:** "Does this enable a more powerful follow-up action?"
+
+**Final Decision Format:** 
+"I choose [card] because [immediate benefit] and [strategic benefit], while rejecting [alternative] because [specific reason why it's inferior]."
+
+**Execute Command:** `choose X` (where X is the card index 0-9)
 {%- endmacro -%}
