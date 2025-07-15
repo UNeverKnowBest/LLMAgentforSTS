@@ -1,6 +1,7 @@
 from langchain_community.chat_models import ChatOllama
+from langchain_google_genai import ChatGoogleGenerativeAI
 from pydantic import BaseModel
-from langchain_core.output_parsers import PydanticOutputParser
+import os
 
 from src.config import(
     PRIMARY_MODEL_NAME,
@@ -18,12 +19,17 @@ def get_llm():
             model=PRIMARY_MODEL_NAME,
             temperature=PRIMARY_MODEL_TEMPERATURE
         )
+    elif PRIMARY_MODEL_TYPE == 'gemini':
+        return ChatGoogleGenerativeAI(
+            model=PRIMARY_MODEL_NAME,
+            temperature=PRIMARY_MODEL_TEMPERATURE,
+            google_api_key=os.getenv("GOOGLE_API_KEY")
+        )
     else:
         raise ValueError(f"Unsupported model type: {PRIMARY_MODEL_TYPE}")
 
 def get_structured_llm():
     base_llm = get_llm()
-    parser = PydanticOutputParser(pydantic_object=LLMResponse)
-    return base_llm, parser
+    return base_llm.with_structured_output(LLMResponse)
 
-llm, output_parser = get_structured_llm()
+llm = get_structured_llm()

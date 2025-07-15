@@ -1,16 +1,11 @@
 import sys
 import json
 import time
-from langchain_core.agents import AgentAction, AgentFinish
-from langchain.agents import create_tool_calling_agent
-from langgraph.prebuilt import ToolExecutor
-from langchain_core.messages import HumanMessage, SystemMessage
 
 from .states import GameState
 from src.config import PRIMARY_CHARACTER
-from src.core.llms import llm, output_parser, LLMResponse
+from src.core.llms import llm
 from src.prompts.prompt_generator import PromptGenerator
-from src.game.commands import _get_simple_command
 
 def initial_game(state: GameState):
     print("ready", flush=True)
@@ -37,12 +32,10 @@ def advice_on_command(state: GameState):
         return {"final_command": command}
     elif prompt:
         try:
-            prompt_with_format = f"{prompt}\n\n{output_parser.get_format_instructions()}"
-            response = llm.invoke(prompt_with_format)
-            parsed_response = output_parser.parse(response.content)
+            response = llm.invoke(prompt)
             return {
-                "thinking_process": parsed_response.think,
-                "final_command": parsed_response.command
+                "thinking_process": response.think,
+                "final_command": response.command
             }
         except Exception as e:
             print(f"Error invoking LLM or parsing response: {e}", file=sys.stderr)
