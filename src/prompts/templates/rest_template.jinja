@@ -1,24 +1,113 @@
-## [REST SITE]
-**Objective:** Make the choice between short-term survival (Rest) and long-term power (Smith).
-**Heuristic:** Always Smith (upgrade) if your health is above ~70%. Smithing makes future fights easier, saving more HP in the long run. Rest as infrequently as possible.
+## [REST SITE - TREE OF THOUGHTS ANALYSIS]
+**Core Philosophy:** Every rest decision is a choice between immediate safety and long-term power. Optimal decisions require analyzing both immediate needs and strategic deck building goals.
 
-**Upgrade Priorities (when Smithing):**
-1.  Cards that reduce in cost (e.g., Corruption, Eruption).
-2.  Cards whose core function is improved (e.g., Catalyst, Entrench).
-3.  Cards that apply more stacks of a key debuff (e.g., Bash).
-4.  Your most-played attacks or block cards.
-(Never upgrade a basic Strike or Defend unless you have no other choice).
+**Current Status Analysis:**
+- **Health:** {{ game_state.current_hp }}/{{ game_state.max_hp }} ({{ (game_state.current_hp / game_state.max_hp * 100) | round(1) }}%)
+- **Floor:** {{ game_state.floor }} (Act {{ game_state.act }})
+- **Gold:** {{ game_state.gold }}
+- **Upcoming Boss:** {{ game_state.act_boss }}
 
-**Options:**
-- **Rest:** Heal for {{ screen_state.heal_amount }} HP.
-- **Smith:** Upgrade a card.
-{% if screen_state.has_dig %} - **Dig:** Obtain a random relic. {% endif %}
-{% if screen_state.has_lift %} - **Lift:** Gain permanent strength. {% endif %}
-{% if screen_state.has_toke %} - **Toke:** Remove a card from your deck. {% endif %}
+**Available Options:**
+{% for option in screen_state.rest_options %}
+- **{{ option.title() }}**{% if option == "rest" %}: Heal for up to 30% of your max HP.{% elif option == "smith" %}: Upgrade a card permanently.{% elif option == "dig" %}: Obtain a random relic (Shovel relic).{% elif option == "lift" %}: Gain permanent strength (Girya relic).{% elif option == "toke" %}: Remove a card from your deck (Peace Pipe relic).{% endif %}
+{% endfor %}
 
-**Instructions:**
-1.  **Check Health:** Is my current HP below ~70% of my max HP?
-2.  **Analyze Upcoming Path:** Is there a dangerous Elite or Boss fight next? If so, Resting might be necessary even with higher HP.
-3.  **Default to Smith:** If health is high and the path is manageable, choose Smith.
-4.  **Select Upgrade Target:** If Smithing, choose the card that provides the most strategic value based on the priority list.
-5.  **Execute:** Use `choose rest`, `choose smith`, `choose dig`, `choose lift`, or `choose toke` (followed by `choose X` for card selection if smithing).
+**Deck Analysis for Upgrade Consideration:**
+{% if "smith" in screen_state.rest_options %}
+**Key Upgrade Targets in Your Deck:**
+{% for card in game_state.deck %}
+- `{{ card.name }}`{% if card.upgrades > 0 %}+{{ card.upgrades }}{% endif %} (Cost: {{ card.cost }}) 
+  **Upgrade Value:** {% if card.cost >= 2 %}High (Cost reduction from {{ card.cost }} to {{ card.cost - 1 }}){% elif card.name in ["Catalyst", "Limit Break", "Entrench", "Double Tap"] %}Very High (Core scaling effect){% elif card.type == "ATTACK" and card.cost <= 1 %}Medium (Damage scaling){% elif card.type == "SKILL" and card.cost <= 1 %}Medium (Effect improvement){% else %}Low (Minor improvement){% endif %}
+{% endfor %}
+
+**Archetype-Specific Upgrade Priorities:**
+{% set current_archetypes = archetypes[game_state.class] %}
+{% for build in current_archetypes %}
+    {% set build_cards_in_deck = [] %}
+    {% for card in game_state.deck %}{% if card.name in build.key_cards or card.name in build.payoff_cards %}{{ build_cards_in_deck.append(card.name) }}{% endif %}{% endfor %}
+    {% if build_cards_in_deck | length >= 2 %}
+**{{ build.name }} Detected ({{ build_cards_in_deck | length }} synergy cards):**
+- **Priority Upgrades:** {{ build.key_cards | join(", ") }}
+- **Strategy:** {{ build.core_synergy }}
+    {% endif %}
+{% endfor %}
+{% endif %}
+
+**Map Context Analysis:**
+{% if game_state.map %}
+**Upcoming Path Assessment:**
+{% set upcoming_elites = 0 %}
+{% set upcoming_monsters = 0 %}
+{% set upcoming_shops = 0 %}
+{% for node in game_state.map %}
+    {% if node.y == (game_state.floor + 1) %}
+        {% if node.symbol == "E" %}{% set upcoming_elites = upcoming_elites + 1 %}
+        {% elif node.symbol == "M" %}{% set upcoming_monsters = upcoming_monsters + 1 %}
+        {% elif node.symbol == "$" %}{% set upcoming_shops = upcoming_shops + 1 %}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+- **Next Floor Options:** {{ upcoming_elites }} Elite(s), {{ upcoming_monsters }} Monster(s), {{ upcoming_shops }} Shop(s)
+- **Danger Assessment:** {% if upcoming_elites > 0 %}High (Elite fights ahead){% elif game_state.floor >= 45 %}High (Act 3 scaling){% elif game_state.current_hp < (game_state.max_hp * 0.5) %}Medium (Low health){% else %}Low (Safe pathing){% endif %}
+{% endif %}
+
+## **TREE OF THOUGHTS DECISION FRAMEWORK:**
+
+### **Branch 1: REST Analysis**
+**Immediate Effect:** Heal {{ (game_state.max_hp * 0.3) | round(0) }} HP (bringing HP to {{ [game_state.current_hp + (game_state.max_hp * 0.3), game_state.max_hp] | min | round(0) }})
+**Strategic Cost:** Lose opportunity for permanent deck improvement
+**Optimal When:**
+- Current HP < 50% of max HP
+- Dangerous fights ahead (Elite/Boss) 
+- Already have strong upgraded cards
+
+### **Branch 2: SMITH Analysis**
+{% if "smith" in screen_state.rest_options %}
+**Immediate Effect:** Permanently upgrade one card
+**Strategic Value:** Compound benefit for entire run
+**Top 3 Upgrade Targets:**
+1. **Cost Reduction Cards:** Any 2+ cost card becomes permanently more playable
+2. **Scaling Cards:** Catalyst, Limit Break, etc. - exponential value increase
+3. **Core Archetype Cards:** Cards that enable your primary strategy
+
+**Value Calculation:**
+- **High Value (Choose Smith):** HP > 70%, have key upgrade targets, safe path ahead
+- **Medium Value (Situational):** HP 50-70%, decent upgrade targets, mixed path
+- **Low Value (Choose Rest):** HP < 50%, dangerous fights ahead, poor upgrade options
+{% endif %}
+
+### **Branch 3: Special Options Analysis**
+{% if "dig" in screen_state.rest_options %}
+**DIG Option:** Random relic for permanent passive benefit
+- **When Optimal:** Strong HP, weak relic pool, need game-changing effect
+{% endif %}
+{% if "toke" in screen_state.rest_options %}
+**TOKE Option:** Remove any card permanently  
+- **When Optimal:** Have dead cards (Curse, basic Strike/Defend), deck consistency issues
+{% endif %}
+{% if "lift" in screen_state.rest_options %}
+**LIFT Option:** Gain permanent Strength
+- **When Optimal:** Strength-based deck, multiple Strength synergies
+{% endif %}
+
+### **Multi-Step Reasoning:**
+**Step 1 - Threat Assessment:**
+"Given my {{ (game_state.current_hp / game_state.max_hp * 100) | round(1) }}% HP and upcoming path, what's my survival probability?"
+
+**Step 2 - Value Comparison:**
+"If I Rest: +{{ (game_state.max_hp * 0.3) | round(0) }} HP vs If I Smith: Permanent card improvement"
+
+**Step 3 - Long-term Impact:**
+"How does this choice affect my ability to handle {{ game_state.act_boss }} and future Acts?"
+
+**Step 4 - Synergy Evaluation:**
+"Does upgrading key cards enable powerful combos or just incremental improvement?"
+
+### **Final Decision Template:**
+"I choose [OPTION] because:
+- **Immediate reasoning:** [Current HP/threat situation justification]
+- **Strategic reasoning:** [Long-term deck building consideration]  
+- **Alternative rejected:** [Other option] fails because [specific weakness]
+- **Expected outcome:** [How this advances my run win condition]"
+
+**Execute Command:** `choose [option_name]` (rest/smith/dig/lift/toke)

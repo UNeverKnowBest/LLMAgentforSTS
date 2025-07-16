@@ -1,86 +1,171 @@
-## [COMBAT ANALYSIS - Turn {{ game_state.combat_state.turn }}]
-**Core Philosophy:** Health is a resource. Perfect information enables perfect decisions. Every action should maximize expected value.
+{% set combat_state = game_state.combat_state %}
+{% set total_enemy_hp = combat_state.monsters | sum(attribute='current_hp') %}
+{% set total_incoming_damage = 0 %}
+{% for enemy in combat_state.monsters %}
+    {% if enemy.intent == "ATTACK" or enemy.intent == "ATTACK_BUFF" or enemy.intent == "ATTACK_DEBUFF" %}
+        {% set total_incoming_damage = total_incoming_damage + (enemy.move_adjusted_damage|default(0) * enemy.move_hits|default(1)) %}
+    {% endif %}
+{% endfor %}
 
-**Potential Combos & High-Damage Plays:**
+## [COMBAT ANALYSIS - Turn {{ combat_state.turn }} - TREE OF THOUGHTS]
+**Core Philosophy:** Health is a resource. Perfect information enables perfect decisions. Every action should maximize expected value across immediate and future turns.
+
+**Current Battlefield Status:**
+- **Player:** {{ combat_state.player.current_hp }}/{{ combat_state.player.max_hp }} HP, {{ combat_state.player.block }} Block, {{ combat_state.player.energy }} Energy
+- **Total Enemy HP:** {{ total_enemy_hp }}
+- **Incoming Damage:** {{ total_incoming_damage }}
+- **Survival Buffer:** {{ combat_state.player.current_hp + combat_state.player.block - total_incoming_damage }} (After enemy attacks)
+
+**Archetype Strategy Context:**
 {% set current_archetypes = archetypes[game_state.class] %}
 {% for build in current_archetypes %}
     {% set build_cards_in_deck = [] %}
-    {% for card in player_deck %}{% if card.id in build.key_cards or card.id in build.payoff_cards %}{{ build_cards_in_deck.append(card.id) }}{% endif %}{% endfor %}
-    {% if build_cards_in_deck | length > 2 %}
-- **{{ build.name }} Combo Detected:**
-    {% if build.name == "Poison Build" %}**TACTICAL EXECUTION:** "If I apply 8 poison now, the enemy takes 8 damage this turn and 8 more next turn (16 total). If I use Catalyst next turn to triple it, that becomes 24 damage next turn. Compare this to playing a 12-damage attack card twice (24 total). The poison path is equivalent but leaves me energy for defense."
-    {% elif build.name == "Strength Build" %}**TACTICAL EXECUTION:** "If I play Inflame (+2 Strength) now, every attack this turn and future turns deals +2 more damage. If I have 3 attacks in hand, that's +6 damage immediately, and exponentially more over time. This is better than a single big attack unless I need immediate lethal."
-    {% elif build.name == "Barricade/Block Build" %}**TACTICAL EXECUTION:** "If I play Barricade, my 12 block becomes permanent. If I can generate 20+ block per turn after this, I become nearly invincible. The investment turn is worth the long-term safety."
-    {% elif build.name == "Shiv Build" %}**TACTICAL EXECUTION:** "Each Shiv triggers my artifacts. If I generate 4 Shivs, that's +4 to all Shuriken/Kunai counters. The value compounds: small immediate damage, but massive scaling benefits."
-    {% endif %}
+    {% for card in player_deck %}{% if card.name in build.key_cards or card.name in build.payoff_cards %}{{ build_cards_in_deck.append(card.name) }}{% endif %}{% endfor %}
+    {% if build_cards_in_deck | length >= 2 %}
+**{{ build.name }} Strategy Active ({{ build_cards_in_deck | length }} synergy cards):**
+- **Core Synergy:** {{ build.core_synergy }}
+- **Current Hand Enablers:** {% for card in combat_state.hand %}{% if card.name in build.key_cards %}{{ card.name }}{% if not loop.last %}, {% endif %}{% endif %}{% endfor %}
+- **Current Hand Payoffs:** {% for card in combat_state.hand %}{% if card.name in build.payoff_cards %}{{ card.name }}{% if not loop.last %}, {% endif %}{% endif %}{% endfor %}
     {% endif %}
 {% endfor %}
 
-**Player State:**
-- **HP:** {{ game_state.combat_state.player.current_hp }} / {{ game_state.combat_state.player.max_hp }}
-- **Block:** {{ game_state.combat_state.player.block }}
-- **Energy:** {{ game_state.combat_state.player.energy }} / {{ game_state.max_hp }}
-- **Hand ({{ game_state.combat_state.hand | length }} cards):**
-  {% for card in game_state.combat_state.hand %}
-  - **{{ card.name }}** ({{ card.cost }} E) | ID: {{ card.id }} | Playable: {{ card.is_playable }}{% if card.has_target %} [TARGETED]{% endif %}{% if card.upgrades > 0 %} (+{{ card.upgrades }}){% endif %}
-    *{{ card.description }}*
-  {% endfor %}
+**Available Resources:**
+- **Hand:** {{ combat_state.hand | length }} cards
+- **Draw Pile:** {{ combat_state.draw_pile | length }} cards  
+- **Energy:** {{ combat_state.player.energy }}
+- **Potions:** {% for potion in game_state.potions %}{% if potion.can_use %}{{ potion.name }} {% endif %}{% endfor %}
 
-**Enemy State & Intent Analysis:**
-{% for enemy in game_state.combat_state.monsters %}
-- **{{ enemy.name }}** ({{ enemy.current_hp }}/{{ enemy.max_hp }} HP)
-  **Intent:** {{ enemy.intent }}
-  **Threat Assessment:** [Analyze immediate danger and action priority]
+**Player Hand Analysis:**
+{% for card in combat_state.hand %}
+- **[{{ loop.index }}] {{ card.name }}**{% if card.upgrades > 0 %}+{{ card.upgrades }}{% endif %} ({{ card.cost }} Energy, {{ card.type }})
+  **Tactical Value:** {% if card.type == "ATTACK" %}Damage: {{ card.cost * 6 }}{% if card.has_target %} (targeted){% endif %}{% elif card.type == "SKILL" %}{% if "block" in card.name.lower() %}Block: {{ card.cost * 5 }}{% else %}Utility{% endif %}{% elif card.type == "POWER" %}Engine/Scaling{% endif %}
+  **Playability:** {% if card.is_playable %}✓ Can Play{% else %}✗ Cannot Play{% endif %}
+  **Synergy:** {% for build in current_archetypes %}{% if card.name in build.key_cards %}[{{ build.name }} Core]{% elif card.name in build.payoff_cards %}[{{ build.name }} Payoff]{% endif %}{% endfor %}
 {% endfor %}
 
-## **ADVANCED TACTICAL DECISION FRAMEWORK:**
+**Enemy Analysis & Threat Assessment:**
+{% for enemy in combat_state.monsters %}
+- **{{ enemy.name }}** ({{ enemy.current_hp }}/{{ enemy.max_hp }} HP, {{ enemy.block }} Block)
+  **Intent:** {{ enemy.intent }}{% if enemy.move_adjusted_damage %} - {{ enemy.move_adjusted_damage }} dmg{% if enemy.move_hits > 1 %} x{{ enemy.move_hits }}{% endif %}{% endif %}
+  **Threat Level:** {% if enemy.intent == "ATTACK" and enemy.move_adjusted_damage >= 20 %}CRITICAL{% elif enemy.intent == "ATTACK" %}HIGH{% elif enemy.intent == "BUFF" %}MEDIUM{% else %}LOW{% endif %}
+  **Powers:** {% for power in enemy.powers %}{{ power.name }}({{ power.amount }}) {% endfor %}
+  **Priority:** {% if enemy.current_hp <= 20 and enemy.intent == "ATTACK" %}LETHAL FIRST{% elif enemy.intent == "BUFF" %}INTERRUPT{% else %}STANDARD{% endif %}
+{% endfor %}
 
-**Turn Planning Matrix:**
+**Resource Piles Overview:**
+- **Draw Pile (Next {{ [combat_state.draw_pile | length, 5] | min }} cards):** {% for card in combat_state.draw_pile[:5] %}{{ card.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+- **Discard Pile:** {% for card in combat_state.discard_pile %}{{ card.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+- **Exhaust Pile:** {% for card in combat_state.exhaust_pile %}{{ card.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+
+## **TREE OF THOUGHTS COMBAT FRAMEWORK:**
+
+### **Branch 1: Immediate Lethal Analysis**
+**Lethal Damage Required:** {{ total_enemy_hp }}
+**Available Damage Sources:**
+{% set potential_damage = 0 %}
+{% for card in combat_state.hand %}
+    {% if card.type == "ATTACK" and card.is_playable %}
+        {% set card_damage = card.cost * 6 %}
+        {% set potential_damage = potential_damage + card_damage %}
+- {{ card.name }}: ~{{ card_damage }} damage ({{ card.cost }} energy)
+    {% endif %}
+{% endfor %}
+**Total Potential Damage:** ~{{ potential_damage }}
+**Lethal Assessment:** {% if potential_damage >= total_enemy_hp %}✓ LETHAL POSSIBLE{% else %}✗ Need {{ total_enemy_hp - potential_damage }} more damage{% endif %}
+
+### **Branch 2: Survival Analysis** 
+**Incoming Damage:** {{ total_incoming_damage }}
+**Current Defense:** {{ combat_state.player.block }}
+**Damage After Block:** {{ total_incoming_damage - combat_state.player.block }}
+**Available Block Sources:**
+{% for card in combat_state.hand %}
+    {% if card.type == "SKILL" and "block" in card.name.lower() and card.is_playable %}
+- {{ card.name }}: ~{{ card.cost * 5 }} block ({{ card.cost }} energy)
+    {% endif %}
+{% endfor %}
+**Survival Status:** {% if combat_state.player.current_hp + combat_state.player.block > total_incoming_damage %}✓ SAFE{% else %}⚠ DANGER - Need {{ total_incoming_damage - combat_state.player.current_hp - combat_state.player.block }} more defense{% endif %}
+
+### **Branch 3: Setup/Scaling Analysis**
+**Power Cards Available:**
+{% for card in combat_state.hand %}
+    {% if card.type == "POWER" and card.is_playable %}
+- {{ card.name }} ({{ card.cost }} energy): Long-term scaling benefit
+    {% endif %}
+{% endfor %}
+
+**Synergy Combo Potential:**
+{% for build in current_archetypes %}
+    {% set combo_cards_in_hand = [] %}
+    {% for card in combat_state.hand %}{% if card.name in build.key_cards or card.name in build.payoff_cards %}{{ combo_cards_in_hand.append(card.name) }}{% endif %}{% endfor %}
+    {% if combo_cards_in_hand | length >= 2 %}
+**{{ build.name }} Combo Available:**
+- **Combo Cards:** {{ combo_cards_in_hand | join(", ") }}
+- **Expected Value:** {{ build.core_synergy }}
+    {% endif %}
+{% endfor %}
+
+### **Branch 4: Multi-Turn Planning**
+**Turn Sequence Analysis:**
+1. **This Turn:** {{ combat_state.player.energy }} energy, {{ combat_state.hand | length }} cards
+2. **Next Turn:** Draw {{ [5, combat_state.draw_pile | length] | min }} cards, {{ combat_state.player.energy }} energy
+3. **Resource Cycle:** {% if combat_state.discard_pile | length > 0 %}{{ combat_state.discard_pile | length }} cards will reshuffle{% else %}No shuffle needed{% endif %}
+
+### **Multi-Step Decision Process:**
+
+**Step 1 - Immediate Threat Evaluation:**
+"Can I survive this turn with current resources? Priority: Lethal > Defense > Setup"
+
+**Step 2 - Win Condition Assessment:**  
+"What's my path to victory? This turn kill vs Multi-turn strategy vs Resource accumulation"
+
+**Step 3 - Resource Optimization:**
+"How do I maximize energy efficiency? Which card sequence gives best energy-to-value ratio?"
+
+**Step 4 - Risk-Reward Calculation:**
+"What's the downside if my plan fails? Is there a safer alternative with similar upside?"
+
+**Step 5 - Future Turn Planning:**
+"How does this turn set up my next turn? Am I building toward a stronger position?"
+
+### **Decision Matrix:**
 ```
-Current Turn Analysis:
-├── Lethal Check: "Can I deal {{ total_enemy_hp }} damage with my {{ game_state.combat_state.player.energy }} energy?"
-├── Survival Check: "Enemy deals {{ total_incoming_damage }} damage. I have {{ game_state.combat_state.player.block }} block + {{ max_possible_block }} potential block."
-├── Setup Analysis: "If I set up combo pieces this turn, what's my killing potential next turn?"
-└── Resource Management: "What's the energy/card efficiency of each possible play sequence?"
+IMMEDIATE LETHAL: {{ "Available" if potential_damage >= total_enemy_hp else "Not Available" }}
+├── If Available: Prioritize damage cards, ignore defense
+└── If Not: Proceed to survival check
+
+SURVIVAL CHECK: {{ "Safe" if combat_state.player.current_hp + combat_state.player.block > total_incoming_damage else "Danger" }}
+├── If Danger: Prioritize block/defense cards
+└── If Safe: Consider setup/scaling options
+
+SETUP OPPORTUNITY: {{ "Available" if combat_state.hand | selectattr("type", "equalto", "POWER") | list | length > 0 else "Limited" }}
+├── If Available: Evaluate long-term value vs immediate needs
+└── If Limited: Focus on resource efficiency
 ```
 
-**Multi-Turn Scenario Planning:**
-1. **Immediate Lethal Path:**
-   - "If I play [card sequence], I deal [X] damage for [Y] energy."
-   - "Enemy dies this turn = combat ends, all future threats irrelevant."
-   - "This path succeeds if [conditions]. Risk: [failure consequences]."
+### **Advanced Tactical Decisions:**
 
-2. **Defensive Survival Path:**
-   - "If I block for [X], I take [Y] damage, leaving me at [Z] HP."
-   - "This keeps me alive, but next turn I face [next enemy intent]."
-   - "Can I handle the next turn threat with my remaining cards/energy?"
+**Energy Efficiency Analysis:**
+{% for card in combat_state.hand %}
+    {% if card.is_playable %}
+- {{ card.name }}: {{ "High" if card.cost <= 1 else "Medium" if card.cost == 2 else "Low" }} efficiency ({{ card.cost }} cost)
+    {% endif %}
+{% endfor %}
 
-3. **Setup/Scaling Path:**
-   - "If I play setup cards this turn, next turn I can [enhanced capability]."
-   - "This delays immediate value for exponential future value."
-   - "Comparison: Setup path total value over 2 turns vs. aggressive path value."
+**Sequence Optimization:**
+1. **Play Order Matters:** Powers first → Setup cards → Damage/Block
+2. **Energy Conservation:** Save 1 energy for reactive cards if possible
+3. **Card Draw Timing:** Draw effects early to maximize options
 
-**Energy Efficiency Calculations:**
-- **For each possible card combination:**
-  - "Option A: [Cards] for [Energy] = [Damage/Block ratio]"
-  - "Option B: [Different cards] for [Same energy] = [Different ratio]"
-  - "Option A is superior because [mathematical reasoning]."
+### **Final Combat Decision Template:**
+"I will execute the following sequence:
+1. **Primary Action:** [Card/sequence] for [energy cost] to achieve [specific goal]
+2. **Secondary Action:** [If energy remains] play [card] for [additional benefit]
+3. **Reasoning:** This maximizes [damage/defense/setup] while maintaining [safety/scaling/efficiency]
+4. **Alternative Rejected:** [Other approach] because [specific limitation/inferior outcome]
+5. **Next Turn Setup:** This leaves me positioned to [next turn plan]"
 
-**Risk-Adjusted Decision Making:**
-- **High-certainty plays:** "This guarantees [outcome] with [probability]."
-- **High-variance plays:** "This could result in [best case] but risks [worst case]."
-- **Context consideration:** "Given my current HP/deck state, [safer/riskier] approach is optimal because [contextual reasoning]."
-
-**Final Decision Template:**
-"I will play [specific card sequence] because:
-- **Immediate effect:** [What happens this turn]
-- **Strategic value:** [How this advances my win condition]  
-- **Alternative rejected:** [Other option] because [specific inferior aspect]
-- **Risk mitigation:** [How I'm handling potential downsides]"
-
-## **EXECUTION COMMANDS:**
-- `play X` (for non-targeted cards, where X is 1-10)
-- `play X Y` (for targeted cards, where X is card index 1-10, Y is monster index 0-2)
-- `end` (to finish turn)
-- `potion use X` or `potion discard X` (where X is potion slot 0-4)
-- `potion use X Y` (for targeted potions, Y is monster index 0-2)
+**Execute Commands:**
+- `play X` (for card position 1-10, non-targeted)
+- `play X Y` (for targeted cards, Y = monster index 0-{{ combat_state.monsters | length - 1 }})
+- `end` (finish turn)
+- `potion use X` or `potion use X Y` (for potions)

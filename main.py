@@ -1,51 +1,72 @@
+#!/usr/bin/env python3
+
 import sys
+import logging
+from src.graph.builder import sts_agent
 
-try:
-    from IPython.display import Image, display
-    IPYTHON_AVAILABLE = True
-except ImportError:
-    IPYTHON_AVAILABLE = False
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('sts_agent.log'),
+        logging.StreamHandler(sys.stderr)
+    ]
+)
 
-from agent.agent_graph import create_graph, AgentState
+logger = logging.getLogger(__name__)
 
-def run_agent():
+def main():
     """
-    Initializes and runs the Slay the Spire agent.
+    Main entry point for the STS Agent.
+    
+    This agent communicates with the CommunicationMod through stdin/stdout:
+    - Receives JSON game state from stdin
+    - Sends commands to stdout
+    - Logs to stderr and sts_agent.log file
     """
-    # 1. Signal readiness to CommunicationMod
-    # This handshake is critical for the mod to start sending game states.
-    # It should be the VERY FIRST thing the agent does.
-    print("ready", flush=True)
-    print("start THE_SILENT", flush=True)
-
-    # 2. Create the compiled LangGraph agent from the graph definition
-    app = create_graph()
-
-    # 3. (Optional) Visualize the graph if running in a compatible environment
-    if IPYTHON_AVAILABLE:
-        try:
-            # This will generate and display a diagram of the agent's workflow
-            print("Visualizing agent graph...", file=sys.stderr)
-        except Exception as e:
-            # Mermaid/graphviz might not be installed or configured
-            print(f"Graph visualization failed: {e}", file=sys.stderr)
-
-    # 4. Define the initial state for the graph
-    initial_state = AgentState(game_state_json_str="", final_command="")
-
-    # 5. Run the agent in a continuous loop
-    # The stream will block and wait for input from stdin (the game)
-    # and process each state change as it comes in.
-    print("Agent is running. Waiting for game states...", file=sys.stderr)
+    logger.info("Starting STS Agent...")
+    
     try:
-        app.invoke()
+        # Create initial state
+        initial_state = {
+            "game_state_json": None,
+            "thinking_process": None,
+            "final_command": None,
+            "command_success": None,
+            "error_message": None,
+            "is_game_over": None,
+            "state_valid": None,
+            "validation_result": None,
+            "fallback_command": None
+        }
+        
+        # Configuration for the agent run
+        config = {
+            "configurable": {
+                "thread_id": "sts_session_1"
+            }
+        }
+        
+        logger.info("Agent initialized, starting game loop...")
+        
+        for state_dict in sts_agent.stream(initial_state, config=config):
+            for node_name, state in state_dict.items():
+                if hasattr(state, 'error_message') and state.error_message:
+                    logger.error(f"Agent error: {state.error_message}")
+                    return
+                
+                if hasattr(state, 'is_game_over') and state.is_game_over:
+                    logger.info("Game over detected, agent stopping")
+                    return
+                
     except KeyboardInterrupt:
-        print("\nAgent stopped by user.", file=sys.stderr)
+        logger.info("Agent stopped by user (Ctrl+C)")
     except Exception as e:
-        print(f"\nAn unexpected error occurred: {e}", file=sys.stderr)
-    finally:
-        print("\nAgent shutting down.", file=sys.stderr)
-
+        logger.error(f"Unexpected error: {e}", exc_info=True)
+        sys.exit(1)
+    
+    logger.info("STS Agent terminated")
 
 if __name__ == "__main__":
-    run_agent()
+    main()

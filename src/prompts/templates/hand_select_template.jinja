@@ -1,87 +1,203 @@
-## [HAND SELECTION - DEEP ANALYSIS]
-**Objective:** {{ screen_state.prompt }} (Select up to {{ screen_state.max_cards }} card(s))
-**Strategic Imperative:** Every card selection should be a calculated decision with clear reasoning about immediate and future consequences.
+## [HAND SELECTION - ADVANCED TREE OF THOUGHTS]
+**Objective:** Select optimal card(s) from your hand (Max: {{ screen_state.max_cards }}, Can pick zero: {{ screen_state.can_pick_zero }})
+**Core Philosophy:** Every hand selection should maximize strategic value while considering immediate effects and long-term consequences.
 
-{% set prompt_text = screen_state.prompt | lower %}
+**Current Context:**
+- **Hand Size:** {{ screen_state.hand | length }} cards
+- **Selection Limit:** {{ screen_state.max_cards }} cards maximum
+- **Zero Selection:** {{ "Allowed" if screen_state.can_pick_zero else "Not Allowed" }}
+- **Current HP:** {{ game_state.current_hp }}/{{ game_state.max_hp }}
+- **Act {{ game_state.act }} - Floor {{ game_state.floor }}**
 
-{# --- SCENARIO 1: DISCARDING cards (e.g., Gambler's Brew, Calculated Gamble) --- #}
-{% if "discard" in prompt_text %}
-**Strategic Goal:** Transform the discard requirement into a tactical advantage.
+**Archetype Context:**
+{% set current_archetypes = archetypes[game_state.class] %}
+{% for build in current_archetypes %}
+    {% set build_cards_in_deck = [] %}
+    {% for card in game_state.deck %}{% if card.name in build.key_cards or card.name in build.payoff_cards %}{{ build_cards_in_deck.append(card.name) }}{% endif %}{% endfor %}
+    {% if build_cards_in_deck | length >= 2 %}
+**{{ build.name }} Strategy Active:**
+- **Core Synergy:** {{ build.core_synergy }}
+- **Hand Synergies:** {% for card in screen_state.hand %}{% if card.name in build.key_cards or card.name in build.payoff_cards %}{{ card.name }}{% if not loop.last %}, {% endif %}{% endif %}{% endfor %}
+    {% endif %}
+{% endfor %}
 
-**Deep Analysis Framework for Discard Decisions:**
-**Step 1:** Identify cards with **positive discard effects** (highest priority)
-**Step 2:** Identify **harmful cards** that you want to remove (curses, statuses)
-**Step 3:** Compare **opportunity costs** among remaining cards
+## **SCENARIO IDENTIFICATION & ANALYSIS:**
 
-**Discard Priority Analysis:**
-1.  **Positive Discard Effects (BEST CHOICE):**
-   - `Tactician`: "If I discard this, I gain 1 energy. This energy could let me play an extra card worth more value than Tactician itself."
-   - `Reflex`: "If I discard this, I draw 2 cards. This replaces the lost card AND gives me an extra card, making it pure value."
-   
-2.  **Harmful Cards (SECOND PRIORITY):**
-   - Curses: "Discarding a Curse permanently removes a dead draw from my deck."
-   - Status cards: "These provide no value, so discarding them costs me nothing."
-   
-3.  **Opportunity Cost Comparison (CAREFUL ANALYSIS REQUIRED):**
-   - **Example Deep Reasoning:** "If I discard Strike (4 damage), I lose 4 damage potential. If I discard Defend (5 block), I lose 5 block potential. But if I keep my Catalyst and discard Strike instead, I can multiply my poison next turn for potentially 20+ damage. The Strike is less valuable than the future Catalyst play."
-   - **Another Example:** "I could discard Card A for 1 energy, or discard Card B which costs 2 energy to play. If I discard Card A, I net +1 energy. If I discard Card B, I save 2 energy I would have spent. Discarding Card B gives me more effective energy."
+{# Determine scenario based on selection parameters #}
+{% if screen_state.max_cards > (screen_state.hand | length // 2) and screen_state.can_pick_zero %}
+{% set scenario = "DISCARD" %}
+**SCENARIO: DISCARD SELECTION** (Remove cards from hand)
+**Strategic Goal:** Transform discard requirement into tactical advantage by removing low-value cards while keeping high-impact ones.
 
-{# --- SCENARIO 2: RETAINING cards (e.g., end of turn with Equilibrium, Well-Laid Plans) --- #}
-{% elif "retain" in prompt_text or "end of turn" in prompt_text %}
-**Strategic Goal:** Optimize next turn's potential by keeping the most valuable cards.
+{% elif screen_state.max_cards < (screen_state.hand | length) and not screen_state.can_pick_zero %}
+{% set scenario = "RETAIN" %}
+**SCENARIO: RETENTION SELECTION** (Keep best cards)
+**Strategic Goal:** Optimize future turn potential by retaining the most valuable cards for next turn or future use.
+
+{% elif screen_state.max_cards == 1 and not screen_state.can_pick_zero %}
+{% set scenario = "SINGLE_TARGET" %}
+**SCENARIO: SINGLE CARD SELECTION** (Choose one specific card)
+**Strategic Goal:** Identify the single card that provides maximum value in the current context.
+
+{% else %}
+{% set scenario = "GENERAL" %}
+**SCENARIO: GENERAL SELECTION** (Strategic choice)
+**Strategic Goal:** Make optimal selections based on current game state and strategic needs.
+{% endif %}
+
+**Your Hand - Detailed Strategic Analysis:**
+{% for card in screen_state.hand %}
+- **[{{ loop.index0 }}] {{ card.name }}**{% if card.upgrades > 0 %}+{{ card.upgrades }}{% endif %} ({{ card.cost }} Energy, {{ card.type }})
+
+  **Immediate Value Assessment:**
+  {% if card.type == "ATTACK" %}
+  - **Damage Potential:** {{ card.cost * 6 }} damage (estimated)
+  - **Energy Efficiency:** {{ "High" if card.cost <= 1 else "Medium" if card.cost == 2 else "Low" }}
+  {% elif card.type == "SKILL" %}
+  - **Utility Value:** {% if "block" in card.name.lower() %}{{ card.cost * 5 }} block (estimated){% else %}Support/Setup{% endif %}
+  - **Versatility:** {{ "High" if card.cost <= 1 else "Medium" }}
+  {% elif card.type == "POWER" %}
+  - **Scaling Potential:** Long-term engine building
+  - **Investment Cost:** {{ card.cost }} energy for permanent benefit
+  {% endif %}
+
+  **Scenario-Specific Value:**
+  {% if scenario == "DISCARD" %}
+  **Discard Priority:** {% if card.name in ["Tactician", "Reflex"] %}NEVER (Positive discard effects){% elif "Curse" in card.type or card.cost == -2 %}ALWAYS (Dead draws){% elif card.name in ["Strike", "Defend"] %}HIGH (Basic cards){% elif card.cost >= 3 %}MEDIUM (Expensive){% else %}LOW (Useful card){% endif %}
+  {% elif scenario == "RETAIN" %}
+  **Retention Value:** {% if card.type == "POWER" %}VERY HIGH (Setup for next turn){% elif card.cost >= 2 %}HIGH (Hard to play otherwise){% elif card.name in ["Catalyst", "Limit Break"] %}VERY HIGH (Combo pieces){% else %}MEDIUM (Standard value){% endif %}
+  {% elif scenario == "SINGLE_TARGET" %}
+  **Selection Priority:** {% if card.type == "POWER" %}HIGH (Long-term value){% elif card.cost <= 1 %}MEDIUM (Easy to play){% elif card.name in current_archetypes[0].key_cards if current_archetypes else [] %}VERY HIGH (Archetype core){% else %}LOW (Generic value){% endif %}
+  {% else %}
+  **General Value:** Based on current strategic needs
+  {% endif %}
+
+  **Archetype Synergy:**
+  {% for build in current_archetypes %}
+      {% set build_cards_in_deck = [] %}
+      {% for deck_card in game_state.deck %}{% if deck_card.name in build.key_cards or deck_card.name in build.payoff_cards %}{{ build_cards_in_deck.append(deck_card.name) }}{% endif %}{% endfor %}
+      {% if build_cards_in_deck | length >= 2 %}
+          {% if card.name in build.key_cards %}**{{ build.name }} ENABLER** - Core strategy card
+          {% elif card.name in build.payoff_cards %}**{{ build.name }} PAYOFF** - High value with setup
+          {% endif %}
+      {% endif %}
+  {% endfor %}
+
+  **Risk Assessment:** {% if card.ethereal %}High (Ethereal - use or lose){% elif card.cost == -2 %}High (Unplayable){% else %}Low (Standard card){% endif %}
+{% endfor %}
+
+## **TREE OF THOUGHTS DECISION FRAMEWORK:**
+
+### **Branch 1: Scenario-Specific Strategy**
+
+{% if scenario == "DISCARD" %}
+**DISCARD OPTIMIZATION:**
+1. **Priority 1 - Positive Discard Effects:** Cards that benefit from being discarded
+2. **Priority 2 - Dead Cards:** Curses, unplayable cards, status effects
+3. **Priority 3 - Deck Bloat:** Basic cards that dilute hand quality
+4. **Priority 4 - Situational Cards:** Cards not useful in current context
+
+**Discard Value Calculation:**
+{% for card in screen_state.hand %}
+    {% if card.name in ["Tactician", "Reflex"] %}
+- {{ card.name }}: POSITIVE VALUE (Gains resources when discarded)
+    {% elif "Curse" in card.type or card.cost == -2 %}
+- {{ card.name }}: NEGATIVE VALUE (Dead draw removal)
+    {% elif card.name in ["Strike", "Defend"] %}
+- {{ card.name }}: LOW VALUE (Basic card removal)
+    {% endif %}
+{% endfor %}
+
+{% elif scenario == "RETAIN" %}
+**RETENTION OPTIMIZATION:**
+1. **Priority 1 - Setup Cards:** Powers and combo enablers for future turns
+2. **Priority 2 - Expensive Cards:** Hard-to-play cards that need specific timing
+3. **Priority 3 - Situational Power:** Cards perfect for upcoming challenges
+4. **Priority 4 - Resource Generation:** Cards that provide energy/card draw
 
 **Retention Value Analysis:**
-1.  **Setup Cards for Combos:**
-   - "If I retain Catalyst, I can triple my poison damage next turn. If I don't retain it, I lose the opportunity for a massive damage spike."
-   - "If I retain this expensive Power card, I guarantee I can play it next turn with full energy, rather than risk drawing it at an awkward time."
+{% for card in screen_state.hand %}
+    {% if card.type == "POWER" %}
+- {{ card.name }}: HIGH RETENTION (Setup for future dominance)
+    {% elif card.cost >= 3 %}
+- {{ card.name }}: MEDIUM RETENTION (Expensive, needs planning)
+    {% elif card.name in ["Catalyst", "Limit Break", "Entrench"] %}
+- {{ card.name }}: VERY HIGH RETENTION (Combo multiplier)
+    {% endif %}
+{% endfor %}
 
-2.  **High-Cost, High-Impact Cards:**
-   - "This 3-cost card is hard to play with other cards. If I retain it, I can plan my entire next turn around it."
-   - "If I don't retain this expensive card, I might draw it when I only have 1 energy left."
-
-3.  **Situational Power Cards:**
-   - "This card is perfect for the next enemy phase. If I retain it, I guarantee the perfect counter. If I discard it, I might not redraw it when I need it."
-
-{# --- SCENARIO 3: EXHAUSTING cards (e.g., Second Wind) --- #}
-{% elif "exhaust" in prompt_text %}
-**Strategic Goal:** Turn the exhaust requirement into a deck improvement opportunity.
-
-**Exhaust Value Calculation:**
-1.  **Synergistic Exhaustion:**
-   - "With Feel No Pain active, exhausting any card gives me 3 block. Even exhausting a Strike nets me value."
-   - "With Dead Branch, exhausting this card will generate a random card, potentially more valuable than what I'm losing."
-
-2.  **Deck Pollution Removal:**
-   - "Exhausting this Curse/Status permanently improves my deck quality. This is better than card removal at a shop."
-   - "If I exhaust this basic Strike, my future draws become statistically better."
-
-{# --- SCENARIO 4: UPGRADING a card in hand (e.g., Armaments) --- #}
-{% elif "upgrade" in prompt_text %}
-**Strategic Goal:** Maximize the power increase from the upgrade investment.
-
-**Upgrade Impact Analysis:**
-1.  **Cost Reduction Upgrades:**
-   - "Upgrading this 2-cost card to 1-cost effectively gives me +1 energy every time I draw it for the rest of the run."
-   
-2.  **Archetype Enablers:**
-   - "Upgrading Catalyst from double to triple poison transforms my entire damage output. This upgrade could be worth 50+ damage per use."
+{% elif scenario == "SINGLE_TARGET" %}
+**SINGLE SELECTION OPTIMIZATION:**
+**Decision Matrix:** Choose the ONE card that provides maximum value
+1. **Immediate Impact:** Will this solve current problems?
+2. **Long-term Value:** Does this enable future powerful turns?
+3. **Opportunity Cost:** What am I giving up by not choosing others?
+4. **Risk Mitigation:** Does this provide the safest path forward?
 
 {% endif %}
 
-**Your Hand (Detailed Analysis):**
-{% for card in screen_state.hand %}
-- **[Option {{ loop.index0 }}] {{ card.name }}**{% if card.upgrades > 0 %} (+{{ card.upgrades }}){% endif %}
-  *{{ card.description }}*
-  **Value Assessment:** [Analyze this card's immediate value vs. alternative choices]
+### **Branch 2: Multi-Card Combination Analysis**
+{% if screen_state.max_cards > 1 %}
+**Portfolio Selection Strategy:**
+1. **Synergy Maximization:** Choose cards that work together
+2. **Risk Distribution:** Balance safe choices with high-upside options
+3. **Value Optimization:** Maximize total strategic benefit
+4. **Flexibility Preservation:** Maintain options for future decisions
+
+**Combination Scenarios:**
+- **Conservative Portfolio:** Low-risk cards that guarantee value
+- **Aggressive Portfolio:** High-upside cards that enable big plays
+- **Balanced Portfolio:** Mix of safety and potential
+{% endif %}
+
+### **Branch 3: Archetype-Focused Analysis**
+{% for build in current_archetypes %}
+    {% set build_cards_in_hand = [] %}
+    {% for card in screen_state.hand %}{% if card.name in build.key_cards or card.name in build.payoff_cards %}{{ build_cards_in_hand.append(card.name) }}{% endif %}{% endfor %}
+    {% if build_cards_in_hand | length >= 1 %}
+**{{ build.name }} Strategy Considerations:**
+- **Available Synergy Cards:** {{ build_cards_in_hand | join(", ") }}
+- **Optimal Selection:** {% if scenario == "DISCARD" %}Keep synergy cards, discard non-synergy{% elif scenario == "RETAIN" %}Retain combo pieces for future{% else %}Choose archetype enablers{% endif %}
+    {% endif %}
 {% endfor %}
 
-**Decision Framework:**
-1.  **Map out consequences:** "If I choose Card X, then..."
-2.  **Compare alternatives:** "Instead of X, if I choose Y, then..."
-3.  **Consider timing:** "Is this the optimal time to make this choice?"
-4.  **Evaluate setup:** "Does this enable a more powerful follow-up action?"
+### **Multi-Step Decision Process:**
 
-**Final Decision Format:** 
-"I choose [card] because [immediate benefit] and [strategic benefit], while rejecting [alternative] because [specific reason why it's inferior]."
+**Step 1 - Context Recognition:**
+"What type of selection am I making? Discard vs. Retention vs. Single choice vs. General"
 
-**Execute Command:** `choose X` (where X is the card index 0-9)
+**Step 2 - Value Hierarchy:**
+"Which cards provide the most value in this specific context?"
+
+**Step 3 - Synergy Evaluation:**
+"Do any cards work better together? Are there archetype considerations?"
+
+**Step 4 - Risk Assessment:**
+"What are the consequences of each choice? What could go wrong?"
+
+**Step 5 - Opportunity Cost Analysis:**
+"What am I giving up with each selection? Is there a better combination?"
+
+### **Advanced Selection Scenarios:**
+
+**Zero Cards Scenario** (if allowed):
+- **When Optimal:** All cards are bad, want to preserve hand size, or specific card effects
+- **Strategic Value:** Sometimes the best choice is no choice
+
+**Maximum Cards Scenario:**
+- **When Optimal:** Want to affect as many cards as possible
+- **Strategic Consideration:** Quantity vs. quality trade-off
+
+### **Final Selection Decision Template:**
+"I select card(s) [INDICES] because:
+1. **Primary Reasoning:** [Why these cards maximize value in current scenario]
+2. **Synergy Benefits:** [How selections work together or support archetype]
+3. **Immediate Impact:** [What this achieves right now]
+4. **Future Setup:** [How this positions for upcoming turns/challenges]
+5. **Alternatives Rejected:** [Other options] because [specific limitations]
+6. **Risk Mitigation:** [How this choice handles potential downsides]"
+
+**Execute Command:** 
+- `choose [index]` for single selection (e.g., `choose 0`)
+- `choose [index1] [index2]` for multiple selections (e.g., `choose 0 3`)
+{% if screen_state.can_pick_zero %}- `choose` with no indices to select zero cards{% endif %}

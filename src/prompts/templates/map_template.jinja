@@ -10,7 +10,7 @@
 **Node Hierarchy (General):** Elites > Campfires > Shops > ? Rooms (Act 2) > Monster Fights > ? Rooms (Act 1).
 
 **Available Paths:**
-{% for node in screen_state.nodes %}
+{% for node in screen_state.next_nodes %}
 - **Go to ({{ node.x }}, {{ node.y }}) - Room Type: {{ node.symbol }}**
 {% endfor %}
 - M: Monster (Builds deck early)

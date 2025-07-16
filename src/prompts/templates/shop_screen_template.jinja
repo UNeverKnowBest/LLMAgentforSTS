@@ -1,97 +1,180 @@
-## [MERCHANT SHOP - ECONOMIC ANALYSIS]
-**Core Principle:** Gold is a finite resource that must be optimally allocated. Every purchase should provide maximum run-advancing value.
-**Current Economic State:** {{ game_state.gold }}g available
+## [SHOP SCREEN - ADVANCED ECONOMIC TREE OF THOUGHTS]
+**Core Philosophy:** Gold is a finite resource requiring optimal allocation. Every purchase must provide maximum run-advancing value through careful economic analysis.
 
-## **PURCHASE VALUE ANALYSIS FRAMEWORK:**
+**Economic Status:**
+- **Current Gold:** {{ game_state.gold }}g
+- **Act {{ game_state.act }} - Floor {{ game_state.floor }}**
+- **Upcoming Boss:** {{ game_state.act_boss }}
+- **Current HP:** {{ game_state.current_hp }}/{{ game_state.max_hp }} ({{ (game_state.current_hp / game_state.max_hp * 100) | round(1) }}%)
 
-**Investment Priority Matrix:**
-```
-Priority Tier 1: Card Removal ({{ screen_state.purge_cost }}g)
-├── Value: Improves every future hand for the entire run
-├── ROI: ~5-10% deck improvement per removal
-└── Cost Analysis: "Is {{ screen_state.purge_cost }}g worth making every future hand slightly better?"
-
-Priority Tier 2: Synergistic Relics
-├── Value: Permanent passive benefits that compound
-├── ROI: Depends on synergy with current deck
-└── Cost Analysis: "Does this relic enable new strategies worth its gold cost?"
-
-Priority Tier 3: Key Missing Cards  
-├── Value: Fills critical gaps in deck strategy
-├── ROI: Enables deck archetype completion
-└── Cost Analysis: "Is this card essential enough to justify the gold expenditure?"
-
-Priority Tier 4: Tactical Potions
-├── Value: Solves immediate upcoming challenges
-├── ROI: Survival value for next difficult fight
-└── Cost Analysis: "Is surviving the next fight worth this gold?"
-```
-
-**Deep Economic Decision Framework:**
-
-**For Each Potential Purchase:**
-1. **Immediate Value Calculation:**
-   - "If I spend [X]g on [item], I get [specific benefit]"
-   - "This costs [percentage]% of my total gold"
-   - "Remaining gold: [remaining amount] for future opportunities"
-
-2. **Opportunity Cost Analysis:**
-   - "If I don't buy this now, what else could I buy later with this gold?"
-   - "Are there better shops coming up based on my map path?"
-   - "What's the probability I'll find a better use for this gold?"
-
-3. **Strategic Fit Assessment:**
-   - "How well does this item advance my deck's primary win condition?"
-   - "Does this solve a critical weakness or amplify a strength?"
-   - "What's the expected value boost to my overall run success?"
-
-**Specific Purchase Scenarios:**
-
-**Card Removal Decision Tree:**
-- "{{ screen_state.purge_cost }}g for removal vs. keeping gold"
-- **If I remove a basic Strike:** "Every future hand has a [percentage]% better chance of containing useful cards"
-- **If I remove a Curse:** "I permanently eliminate a dead draw that hurts every shuffle"
-- **Economic comparison:** "This improvement lasts the entire run. Is long-term consistency worth {{ screen_state.purge_cost }}g now?"
-
-**Relic Purchase Analysis:**
-{% for relic in screen_state.relics %}
-- **{{ relic.name }} ({{ relic.price }}g):**
-  **Value Proposition Analysis:**
-  - "This relic costs {{ relic.price }}g out of my {{ game_state.gold }}g total ({{ (relic.price / game_state.gold * 100) | round(1) }}%)"
-  - "Expected benefit: [Analyze based on current deck and game state]"
-  - "Synergy rating: [High/Medium/Low] with my current strategy"
-  - "Alternative use: I could instead buy [other options] with this gold"
+**Deck Archetype Analysis:**
+{% set current_archetypes = archetypes[game_state.class] %}
+{% for build in current_archetypes %}
+    {% set build_cards_in_deck = [] %}
+    {% for card in game_state.deck %}{% if card.name in build.key_cards or card.name in build.payoff_cards %}{{ build_cards_in_deck.append(card.name) }}{% endif %}{% endfor %}
+    {% if build_cards_in_deck | length >= 2 %}
+**{{ build.name }} Strategy Active ({{ build_cards_in_deck | length }} synergy cards):**
+- **Core Synergy:** {{ build.core_synergy }}
+- **Missing Key Cards:** {% for key_card in build.key_cards %}{% if key_card not in build_cards_in_deck %}{{ key_card }}{% if not loop.last %}, {% endif %}{% endif %}{% endfor %}
+- **Needed Payoffs:** {% for payoff in build.payoff_cards %}{% if payoff not in build_cards_in_deck %}{{ payoff }}{% if not loop.last %}, {% endif %}{% endif %}{% endfor %}
+    {% endif %}
 {% endfor %}
 
-**Card Purchase Analysis:**
+**Current Shop Inventory & Analysis:**
+
+**CARD REMOVAL OPTION:**
+{% if screen_state.purge_available %}
+- **Cost:** {{ screen_state.purge_cost }}g ({{ (screen_state.purge_cost / game_state.gold * 100) | round(1) }}% of total gold)
+- **Value Analysis:** Permanent deck improvement - every future hand benefits
+- **Priority Removal Targets:** Basic Strikes/Defends, Curses, Dead cards
+- **Expected Value:** ~5-10% deck improvement per removal
+- **ROI Assessment:** {{ "High" if screen_state.purge_cost <= 75 else "Medium" if screen_state.purge_cost <= 120 else "Low" }} (Cost efficiency)
+{% else %}
+- **Not Available** - Deck cannot be improved through removal here
+{% endif %}
+
+**CARDS FOR SALE:**
 {% for card in screen_state.cards %}
-- **{{ card.name }} ({{ card.price }}g):**
-  **Strategic Investment Evaluation:**
-  - "This fills the gap: [specific deck weakness it addresses]"
-  - "Without this card: [consequence of not having it]"
-  - "With this card: [enhanced capability it provides]"
-  - "Cost efficiency: [card power] for {{ card.price }}g vs. [alternative uses]"
+- **{{ card.name }}**{% if card.upgrades > 0 %}+{{ card.upgrades }}{% endif %} - **{{ card.price }}g** ({{ (card.price / game_state.gold * 100) | round(1) }}% of gold)
+  **Strategic Value Assessment:**
+  {% set is_archetype_card = false %}
+  {% for build in current_archetypes %}
+      {% set build_cards_in_deck = [] %}
+      {% for deck_card in game_state.deck %}{% if deck_card.name in build.key_cards or deck_card.name in build.payoff_cards %}{{ build_cards_in_deck.append(deck_card.name) }}{% endif %}{% endfor %}
+      {% if build_cards_in_deck | length >= 2 %}
+          {% if card.name in build.key_cards %}
+              {% set is_archetype_card = true %}
+**VERY HIGH** - {{ build.name }} CORE ENABLER
+          {% elif card.name in build.payoff_cards %}
+              {% set is_archetype_card = true %}
+**HIGH** - {{ build.name }} PAYOFF CARD
+          {% endif %}
+      {% endif %}
+  {% endfor %}
+  {% if not is_archetype_card %}
+      {% if card.rarity == "RARE" %}**MEDIUM-HIGH** - Rare card with unique effects
+      {% elif card.type == "POWER" %}**MEDIUM** - Scaling potential
+      {% elif card.cost <= 1 and card.type == "ATTACK" %}**MEDIUM** - Low-cost efficiency
+      {% else %}**LOW-MEDIUM** - Generic value
+      {% endif %}
+  {% endif %}
+  **Deck Fit:** {% if card.cost <= 1 %}High (Low cost, easy to play){% elif card.cost == 2 %}Medium (Moderate cost){% else %}Low (High cost, difficult to play){% endif %}
+  **Boss Preparation:** {% if card.type == "ATTACK" and game_state.act_boss in ["Hexaghost", "Slime Boss"] %}High (AoE damage needed){% elif card.type == "SKILL" and "block" in card.name.lower() and game_state.act_boss in ["Guardian", "Champ"] %}High (Defense needed){% else %}Standard{% endif %}
 {% endfor %}
 
-**Multi-Purchase Scenarios:**
-- **Combination A:** "Remove card ({{ screen_state.purge_cost }}g) + Buy [item] ([price]g) = [total]g"
-- **Combination B:** "Buy [different item] ([price]g) only, save [remaining]g"
-- **Analysis:** "Combination A gives [benefits] but leaves [remaining gold]. Combination B gives [different benefits] but preserves more economic flexibility."
+**RELICS FOR SALE:**
+{% for relic in screen_state.relics %}
+- **{{ relic.name }}** - **{{ relic.price }}g** ({{ (relic.price / game_state.gold * 100) | round(1) }}% of gold)
+  **Power Level Assessment:**
+  {% if relic.price >= 300 %}**VERY HIGH** - Premium relic with run-changing effects
+  {% elif relic.price >= 200 %}**HIGH** - Strong passive benefits
+  {% elif relic.price >= 100 %}**MEDIUM** - Solid utility value
+  {% else %}**LOW-MEDIUM** - Basic improvements
+  {% endif %}
+  **Synergy Potential:** {% if relic.name in ["Dead Branch", "Corruption"] %}Very High (Combo enabler){% elif "Energy" in relic.name %}Very High (Resource scaling){% else %}Variable (Depends on deck){% endif %}
+{% endfor %}
 
-**Future Planning Considerations:**
-- **Upcoming Path Analysis:** "Based on my map, I expect [X shops/events] coming up"
-- **Boss Preparation:** "{{ game_state.act_boss }} requires [specific counters]. Do I need to buy preparation now?"
-- **Act Transition:** "If this is Act {{ game_state.act }}, what will I need for Act {{ game_state.act + 1 }}?"
+## **TREE OF THOUGHTS ECONOMIC FRAMEWORK:**
 
-**Final Economic Decision Template:**
-"I will spend [amount]g on [purchase] because:
-- **Immediate value:** [What I gain right now]
-- **Long-term value:** [How this helps for the rest of the run]
-- **Opportunity cost:** [What I'm giving up] is worth it because [reasoning]
-- **Alternative rejected:** [Other option] because [specific economic reasoning]"
+### **Branch 1: Removal Priority Analysis**
+{% if screen_state.purge_available %}
+**Removal Cost-Benefit:**
+- **Investment:** {{ screen_state.purge_cost }}g
+- **Lifetime Value:** Every future hand improved
+- **Break-Even:** Justified if improves deck consistency by >{{ (screen_state.purge_cost / 10) | round(0) }}%
+- **Alternative Cost:** Could buy {{ (game_state.gold / screen_state.purge_cost) | round(1) }} removals OR other items
 
-## **EXECUTION COMMANDS:**
-- `choose [card_name]` - Purchase specific card by name (e.g., "choose strike")
-- `choose [relic_name]` - Purchase specific relic by name (e.g., "choose bag of preparation")  
-- `choose purge` - Remove a card for {{ screen_state.purge_cost }}g
-- `leave` - Exit shop without purchases
+**Decision Logic:**
+- **High Priority (Buy):** Have bad cards (Strikes/Curses), plenty of gold (>150g), early in run
+- **Medium Priority (Consider):** Moderate bad cards, limited gold, mid-run
+- **Low Priority (Skip):** Clean deck, low gold, late in run
+{% endif %}
+
+### **Branch 2: Card Purchase Analysis**
+**Strategic Card Evaluation Matrix:**
+
+{% for card in screen_state.cards %}
+**{{ card.name }} ({{ card.price }}g):**
+- **Immediate Value:** Fills deck gap / Enables combos / Boss preparation
+- **Long-term Value:** Scaling potential / Archetype completion
+- **Opportunity Cost:** {{ card.price }}g could buy: removal ({{ (card.price / screen_state.purge_cost) | round(1) }}x) or save for future shops
+- **Risk Assessment:** {{ "Low" if card.rarity in ["COMMON", "UNCOMMON"] else "High" }} (Unproven in deck)
+- **Purchase Recommendation:** {% if card.price <= (game_state.gold * 0.3) %}CONSIDER{% elif card.price <= (game_state.gold * 0.6) %}EVALUATE{% else %}EXPENSIVE{% endif %}
+{% endfor %}
+
+### **Branch 3: Relic Investment Analysis**
+{% for relic in screen_state.relics %}
+**{{ relic.name }} ({{ relic.price }}g):**
+- **Passive Value:** Permanent benefit for entire run
+- **Scaling Factor:** {% if "Energy" in relic.name or relic.name in ["Kunai", "Shuriken"] %}Exponential (Compound benefits){% else %}Linear (Fixed improvement){% endif %}
+- **Synergy Multiplier:** {% if relic.name == "Dead Branch" %}10x with exhaust cards{% elif "draw" in relic.name.lower() %}3x with large deck{% else %}Standard{% endif %}
+- **Investment Horizon:** {{ relic.price }}g pays off over {{ ((relic.price / 50) | round(0)) }} combats
+{% endfor %}
+
+### **Branch 4: Economic Optimization**
+**Portfolio Strategy:**
+1. **Conservative (70% scenarios):** Buy removal + cheap value cards
+2. **Balanced (20% scenarios):** Medium relic + selective cards  
+3. **Aggressive (10% scenarios):** Expensive game-changer relic
+
+**Gold Allocation Priority:**
+```
+TIER 1: Card Removal ({{ screen_state.purge_cost }}g) - Guaranteed value
+TIER 2: Archetype Enablers - High synergy cards
+TIER 3: Value Relics - Cost-effective permanent benefits  
+TIER 4: Premium Items - Game-changing but expensive
+TIER 5: Generic Cards - Filler options
+```
+
+### **Multi-Step Economic Decision Process:**
+
+**Step 1 - Necessity Assessment:**
+"What does my deck critically need? Missing win conditions vs. defensive gaps vs. consistency issues"
+
+**Step 2 - Budget Allocation:**
+"With {{ game_state.gold }}g, what's the optimal spending distribution? All-in vs. diversified portfolio"
+
+**Step 3 - Opportunity Cost Evaluation:**  
+"Is this the best use of gold compared to future shops/events? What am I giving up?"
+
+**Step 4 - Risk-Return Analysis:**
+"What's the expected value of each purchase? High-certainty improvements vs. high-upside gambles"
+
+**Step 5 - Future Planning:**
+"How much gold should I save for upcoming shops, events, and emergency purchases?"
+
+### **Advanced Economic Scenarios:**
+
+**High Gold Scenarios (>200g):**
+- **Strategy:** Make multiple purchases, prioritize game-changers
+- **Options:** Expensive relic + removal, Multiple archetype cards
+
+**Medium Gold Scenarios (100-200g):**
+- **Strategy:** Choose 1-2 high-value items
+- **Options:** Key archetype card + removal, Medium relic
+
+**Low Gold Scenarios (<100g):**
+- **Strategy:** Maximum efficiency, essential only
+- **Options:** Removal only, Single critical card
+
+### **Purchase Decision Matrix:**
+```
+DECK STRENGTH vs GOLD AVAILABLE:
+                 Low Gold    Medium Gold    High Gold
+Strong Deck      Removal     Luxury Items   Game Changers  
+Medium Deck      Core Cards  Core + Removal Value Package
+Weak Deck        Essentials  Foundation     Full Rebuild
+```
+
+### **Final Economic Decision Template:**
+"My optimal purchase strategy:
+1. **Primary Purchase:** [Item] for [cost] because [specific strategic need]
+2. **Secondary Purchase:** [If budget allows] [item] for [additional benefit]  
+3. **Economic Reasoning:** This allocates {{ (100 * total_cost / game_state.gold) | round(1) }}% of gold for [expected return]
+4. **Alternative Rejected:** [Other option] because [inferior cost-benefit ratio]
+5. **Remaining Budget:** {{ game_state.gold - total_cost }}g reserved for [future opportunities]"
+
+**Execute Commands:**
+- `choose [item_name]` - Purchase specific item (e.g., "choose strike", "choose bag of preparation")
+- `choose purge` - Remove a card for {{ screen_state.purge_cost }}g (requires follow-up card selection)
+- `leave` - Exit without purchases (save gold for future opportunities)

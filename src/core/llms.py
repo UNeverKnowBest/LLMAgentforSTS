@@ -1,12 +1,10 @@
-from langchain_community.chat_models import ChatOllama
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_ollama import ChatOllama
 from pydantic import BaseModel
-import os
 
 from src.config import(
     PRIMARY_MODEL_NAME,
     PRIMARY_MODEL_TEMPERATURE,
-    PRIMARY_MODEL_TYPE
+    PRIMARY_MODEL_TYPE,
 )
 
 class LLMResponse(BaseModel):
@@ -17,13 +15,8 @@ def get_llm():
     if PRIMARY_MODEL_TYPE == 'local':
         return ChatOllama(
             model=PRIMARY_MODEL_NAME,
-            temperature=PRIMARY_MODEL_TEMPERATURE
-        )
-    elif PRIMARY_MODEL_TYPE == 'gemini':
-        return ChatGoogleGenerativeAI(
-            model=PRIMARY_MODEL_NAME,
             temperature=PRIMARY_MODEL_TEMPERATURE,
-            google_api_key=os.getenv("GOOGLE_API_KEY")
+            request_timeout=120.0
         )
     else:
         raise ValueError(f"Unsupported model type: {PRIMARY_MODEL_TYPE}")

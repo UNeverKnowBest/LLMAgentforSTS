@@ -8,8 +8,8 @@
 **Description:** {{ screen_state.body_text }}
 
 **Choices:**
-{% for choice in screen_state.choices %}
-- {{ choice.text }}
+{% for option in screen_state.options %}
+- {{ option.text }}
 {% endfor %}
 
 **Strategic Guidance for Key Events:**

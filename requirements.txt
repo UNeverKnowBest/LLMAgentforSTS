@@ -2,6 +2,10 @@ langchain
 langgraph
 langchain-community
 langchain-core
+langchain-google-genai
+langchain-ollama
+langsmith
+pydantic
 typing-extensions
 ipython
 tavily-python

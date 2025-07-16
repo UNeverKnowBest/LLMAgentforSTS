@@ -1,49 +1,135 @@
-## [GRID SELECTION]
-**Objective:** {{ screen_state.prompt }}
-**Analysis:** You must select a card from a grid. The optimal choice depends entirely on the reason for the selection.
+## [GRID SELECTION - TREE OF THOUGHTS ANALYSIS]
+**Objective:** Select {{ screen_state.num_cards }} card(s) with optimal strategic value.
+**Core Philosophy:** Every card selection should advance your deck's primary win condition while considering immediate and long-term consequences.
 
-{% set prompt_text = screen_state.prompt | lower %}
+**Current Deck Context:**
+- **Deck Size:** {{ game_state.deck | length }} cards
+- **Current HP:** {{ game_state.current_hp }}/{{ game_state.max_hp }}
+- **Act {{ game_state.act }} - Floor {{ game_state.floor }}**
+- **Boss:** {{ game_state.act_boss }}
 
-{# --- SCENARIO 1: UPGRADING a card (e.g., at a Rest Site, from an Event) --- #}
-{% if "upgrade" in prompt_text %}
-**Strategic Goal:** Upgrade the card that provides the greatest increase in power for your deck.
-**Upgrade Priority List:**
-1.  **Archetype Payoffs:** Upgrade cards that are central to your win condition (e.g., `Catalyst` to triple poison, `Body Slam` to gain damage).
-2.  **Cost Reduction:** Upgrade cards whose energy cost is reduced (e.g., `Corruption`, `Eruption`). This is a massive power boost.
-3.  **Functionality Change:** Upgrade cards whose core function improves dramatically (e.g., `Bash` applies more Vulnerable, `Noxious Fumes` becomes innate).
-4.  **Most Played Cards:** If none of the above apply, upgrade a powerful Attack or Skill card that you play frequently.
-*(Note: Almost never upgrade a basic Strike or Defend unless forced to.)*
+**Selection Context:**
+{% if screen_state.for_upgrade %}- **UPGRADE:** These cards will be permanently improved for the entire run.{% endif %}
+{% if screen_state.for_transform %}- **TRANSFORM:** These cards will be replaced with random cards of the same rarity.{% endif %}
+{% if screen_state.for_purge %}- **REMOVE:** These cards will be permanently deleted from your deck.{% endif %}
 
-{# --- SCENARIO 2: REMOVING a card (e.g., at a Shop, from an Event) --- #}
-{% elif "remove" in prompt_text %}
-**Strategic Goal:** Improve deck consistency by removing the weakest, most situational, or most harmful card.
-**Removal Priority List:**
-1.  **Curses:** Always remove any Curse cards first. They provide no benefit and are purely negative.
-2.  **Basic Strikes:** Your starting Strikes are the weakest damage cards. Removing them makes you more likely to draw your better attacks.
-3.  **Basic Defends:** After removing Strikes, starting Defends are the next priority to improve deck quality.
-4.  **Non-Synergistic Cards:** Remove cards that do not fit your established deck archetype.
-
-{# --- SCENARIO 3: RETRIEVING a card (e.g., Headbutt, Hologram) --- #}
-{% elif "add to your hand" in prompt_text or "put into your hand" in prompt_text %}
-**Strategic Goal:** Choose a card from the discard/draw pile that provides the most immediate tactical advantage.
-**Retrieval Priority List:**
-1.  **Immediate Lethal/Survival:** Can a specific card win the fight *this turn* or prevent lethal damage? (e.g., grabbing a `Body Slam` with high block, or a key defensive card).
-2.  **Combo Execution:** Select a card that completes a powerful combo (e.g., retrieving `Catalyst` to use again, grabbing `Limit Break` after playing `Inflame`).
-3.  **Archetype Engine:** Select a card that powers your deck's main strategy (e.g., a card that draws more cards, a key Power).
-4.  **Best General Value:** If none of the above, pick the strongest standalone card available.
-
-{# --- DEFAULT SCENARIO --- #}
-{% else %}
-**Strategic Goal:** Follow the prompt's instructions and choose the card that best fits your overall strategy.
-{% endif %}
-
-**Card Choices (from Grid):**
+**Available Cards with Strategic Analysis:**
 {% for card in screen_state.cards %}
-- **[Option {{ loop.index0 }}] {{ card.name }}**{% if card.upgrades > 0 %} (+{{ card.upgrades }}){% endif %}
-  *{{ card.description }}*
+- **[{{ loop.index0 }}] {{ card.name }}**{% if card.upgrades > 0 %}+{{ card.upgrades }}{% endif %} (Cost: {{ card.cost }}, {{ card.type }}, {{ card.rarity }})
+
+  {% if screen_state.for_upgrade %}
+  **Upgrade Value Analysis:**
+  {% if card.cost >= 2 %}**VERY HIGH** - Cost reduction from {{ card.cost }} to {{ card.cost - 1 }} (Massive playability improvement)
+  {% elif card.name in ["Catalyst", "Limit Break", "Entrench", "Double Tap", "Corruption", "Demon Form", "Echo Form"] %}**VERY HIGH** - Core scaling/engine card with exponential value
+  {% elif card.name in ["Bash", "Inflame", "Anger", "Flex", "Shrug It Off"] %}**HIGH** - Significant effect improvement
+  {% elif card.type == "ATTACK" and card.cost <= 1 %}**MEDIUM** - Damage scaling benefit
+  {% elif card.type == "SKILL" and card.cost <= 1 %}**MEDIUM** - Effect enhancement
+  {% elif card.name in ["Strike", "Defend"] %}**VERY LOW** - Minimal improvement, avoid unless no options
+  {% else %}**LOW** - Minor benefit{% endif %}
+  
+  {% elif screen_state.for_purge %}
+  **Removal Priority Analysis:**
+  {% if "Curse" in card.type or card.cost == -2 %}**VERY HIGH** - Dead draw, always remove
+  {% elif card.name in ["Strike", "Defend"] %}**HIGH** - Basic cards dilute deck consistency
+  {% elif card.cost >= 3 and card.name not in ["Catalyst", "Offering", "Whirlwind"] %}**MEDIUM** - Expensive cards that don't scale well
+  {% elif card.type == "STATUS" %}**HIGH** - Status cards provide no benefit
+  {% else %}**LOW** - Useful card, avoid removing unless deck is overcrowded{% endif %}
+  
+  {% elif screen_state.for_transform %}
+  **Transform Value Analysis:**
+  {% if card.name in ["Strike", "Defend"] %}**HIGH** - Basic cards rarely useful, transform for potential power
+  {% elif card.rarity == "COMMON" and card.name not in ["Anger", "Pommel Strike", "True Grit"] %}**MEDIUM** - Common cards have ceiling, rare potential upside
+  {% elif card.rarity == "RARE" %}**LOW** - Rare cards already powerful, risky to transform
+  {% else %}**VARIABLE** - Depends on current deck needs{% endif %}
+  {% endif %}
+
+  **Archetype Synergy:**
+  {% set current_archetypes = archetypes[game_state.class] %}
+  {% for build in current_archetypes %}
+      {% set build_cards_in_deck = [] %}
+      {% for deck_card in game_state.deck %}{% if deck_card.name in build.key_cards or deck_card.name in build.payoff_cards %}{{ build_cards_in_deck.append(deck_card.name) }}{% endif %}{% endfor %}
+      {% if build_cards_in_deck | length >= 2 %}
+          {% if card.name in build.key_cards %}**{{ build.name }} CORE** - Essential enabler card
+          {% elif card.name in build.payoff_cards %}**{{ build.name }} PAYOFF** - High value with synergies{% endif %}
+      {% endif %}
+  {% endfor %}
+  
 {% endfor %}
 
-**Instructions:**
-1.  Identify the scenario (Upgrade, Remove, Retrieve, etc.) from the prompt.
-2.  Follow the prioritized list for that scenario to determine the best card.
-3.  Formulate the command: `choose X` (where X is card index 0-based).
+## **TREE OF THOUGHTS DECISION FRAMEWORK:**
+
+### **Branch 1: Single Card Scenarios** ({{ screen_state.num_cards }} == 1)
+{% if screen_state.num_cards == 1 %}
+**Decision Tree:**
+1. **Identify Highest Value Card:** Based on context (upgrade/remove/transform)
+2. **Consider Deck Balance:** Will this choice improve overall deck consistency?
+3. **Evaluate Timing:** Is this the optimal moment for this choice?
+4. **Compare Alternatives:** What's the opportunity cost of not choosing other cards?
+
+**Ranking Logic:**
+{% if screen_state.for_upgrade %}
+Priority: Cost reduction > Scaling effects > Core archetype cards > High-use cards > Basic improvements
+{% elif screen_state.for_purge %}
+Priority: Curses/Status > Basic cards > Expensive non-scalers > Deck bloat > Useful cards
+{% elif screen_state.for_transform %}
+Priority: Basic cards > Bad commons > Situational cards > Good rares (risky)
+{% endif %}
+{% endif %}
+
+### **Branch 2: Multiple Card Scenarios** ({{ screen_state.num_cards }} > 1)
+{% if screen_state.num_cards > 1 %}
+**Strategic Combinations:**
+1. **Synergy Maximization:** Choose cards that work together
+2. **Risk Distribution:** Balance safe choices with high-upside picks
+3. **Deck Archetype Focus:** Strengthen primary strategy vs. shore up weaknesses
+4. **Resource Efficiency:** Maximize total value across all selections
+
+**Portfolio Approach:**
+- **Core Pick:** One guaranteed high-value choice
+- **Synergy Pick:** Card that amplifies existing strategy
+- **Flexibility Pick:** Card that covers weaknesses or enables new options
+{% endif %}
+
+### **Branch 3: Archetype-Specific Analysis**
+{% set current_archetypes = archetypes[game_state.class] %}
+{% for build in current_archetypes %}
+    {% set build_cards_in_deck = [] %}
+    {% for deck_card in game_state.deck %}{% if deck_card.name in build.key_cards or deck_card.name in build.payoff_cards %}{{ build_cards_in_deck.append(deck_card.name) }}{% endif %}{% endfor %}
+    {% if build_cards_in_deck | length >= 2 %}
+**{{ build.name }} Strategy ({{ build_cards_in_deck | length }} synergy cards):**
+{% if screen_state.for_upgrade %}
+- **Priority Upgrades:** Look for {{ build.key_cards | join(", ") }} to enhance core engine
+{% elif screen_state.for_purge %}
+- **Safe Removals:** Cards that don't support {{ build.name }} strategy
+{% elif screen_state.for_transform %}
+- **Transform Targets:** Non-synergy cards to potentially gain {{ build.name }} enablers
+{% endif %}
+    {% endif %}
+{% endfor %}
+
+### **Multi-Step Reasoning Process:**
+**Step 1 - Immediate Value Assessment:**
+"Which card(s) provide the most direct benefit in the current context?"
+
+**Step 2 - Long-term Impact Evaluation:**
+"How does this selection affect my deck's power level for the rest of the run?"
+
+**Step 3 - Opportunity Cost Analysis:**
+"What am I giving up by not selecting other options?"
+
+**Step 4 - Synergy Calculation:**
+"Do my selections work together to create compound benefits?"
+
+**Step 5 - Risk-Reward Balance:**
+"What's the best case vs. worst case outcome of these choices?"
+
+### **Final Decision Framework:**
+"I select card(s) [NUMBERS] because:
+- **Primary reasoning:** [Why this choice maximizes strategic value]
+- **Secondary benefits:** [Additional advantages gained]
+- **Synergy consideration:** [How this fits with my deck archetype]
+- **Alternatives rejected:** [Other options] because [specific limitations]
+- **Expected outcome:** [How this advances my win condition]"
+
+**Execute Command:** `choose [index]` {% if screen_state.num_cards > 1 %}or `choose [index1] [index2]` for multiple cards{% endif %}
+

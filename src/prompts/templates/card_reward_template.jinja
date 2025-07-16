@@ -1,55 +1,23 @@
-## [CARD REWARD SELECTION - ARCHETYPE ALIGNMENT]
-**The Golden Rule:** Build the deck the Spire gives you. Adapt to your relics and offered cards. Commit to a powerful archetype when possible.
+## [CARD REWARD]
+You are on a card reward screen. You must choose one of the following cards or skip.
 
-### **Deck Archetype Analysis**
-Below are the powerful builds for a {{ game_state.class }}. Let's see which one your deck is closest to.
-
-{% set build_scores = {} %}
-{% set current_archetypes = archetypes[game_state.class] %}
-{% for build in current_archetypes %}
-    {% set score = 0 %}
-    {% for card in player_deck %}
-        {% if card.id in build.key_cards %}{% set score = score + 2 %}{% endif %}
-        {% if card.id in build.payoff_cards %}{% set score = score + 3 %}{% endif %}
-    {% endfor %}
-    {% set _ = build_scores.update({build.name: score}) %}
-{% endfor %}
-
-{% set sorted_builds = build_scores | dictsort(by='value', reverse=true) %}
-{% set primary_build_score = (sorted_builds[0][1] if sorted_builds else 0) %}
-
-**Strategic Direction:**
-{% for build_name, score in sorted_builds %}
-- **{{ build_name }}:** Match Score: {{ score }}
-{% endfor %}
-
-{% if primary_build_score > 6 %}
-**<p style="color:green;">DECISION FOCUS: Your deck is strongly committed to the '{{ sorted_builds[0][0] }}' archetype. Your top priority is to pick cards that complete this build. Actively ignore cards from other archetypes to maintain focus. Skipping is better than diluting your strategy.</p>**
-{% elif primary_build_score > 2 %}
-**<p style="color:orange;">DECISION LEANING: Your deck is starting to form a '{{ sorted_builds[0][0] }}' archetype. You should prioritize cards that fit this build. However, generically powerful cards are still strong considerations.</p>**
-{% else %}
-**<p style="color:blue;">DECISION OPEN: Your deck has no clear archetype yet. Focus on solving immediate problems (Damage for Act 1, AoE for Act 2) or select a key card that can be the foundation of a powerful build.</p>**
-{% endif %}
-
-**Card Choices:**
+**Cards Offered:**
 {% for card in screen_state.cards %}
-- **[Option {{ loop.index0 }}] {{ card.name }}** ({{ card.cost }} E) | {{ card.rarity }} {{ card.type }}{% if card.upgrades > 0 %} (+{{ card.upgrades }}){% endif %}
-  *{{ card.description }}*
-  **Archetype Fit:**
-  {% for build in current_archetypes %}
-    {% if card.id in build.key_cards or card.id in build.payoff_cards %}
-    *Fits into: **{{ build.name }}***
-    {% endif %}
-  {% endfor %}
+- **Option {{ loop.index0 }}:** `{{ card.name }}`{% if card.upgrades|default(0) > 0 %}+{{ card.upgrades }}{% endif %} (Cost: {{ card.cost }}, Type: {{ card.type }})
 {% endfor %}
-{% if screen_state.skip_available %}
-- **[Option skip] Skip Card:** **Crucial for avoiding deck bloat.** If no card strongly supports your chosen archetype or solves a pressing problem, **SKIP**.
-{% endif %}
 
-**Instructions:**
-1.  **Review Strategic Direction:** Which archetype am I building?
-2.  **Evaluate Card Fit:** Does any offered card fit my primary archetype? Is it a key card or a payoff card?
-3.  **If No Fit, Solve a Problem:** If no card fits, does it solve a critical problem (AoE, Block, Draw)?
-4.  **When in Doubt, Skip:** If you are committed to a build and no offered card helps it, skipping is the best choice.
-5.  **Execute:** Use `choose X` (where X is card index 0-2) or `choose skip`.
+**Strategic Considerations:**
+1.  **Deck Synergy:** Does this card fit into my existing deck strategy or enable a new one?
+2.  **Immediate Power:** Does this card solve a current problem, like a lack of damage or defense?
+3.  **Future Value:** Is this a card that will become stronger over time or with more supporting cards?
+4.  **Skipping:** If none of the cards significantly improve your deck, skipping is a strong option.
+
+**Decision-Making Process:**
+1.  **Analyze Each Card**
+2.  **Compare to Skipping**
+3.  **Make a Choice**
+
+## [ACTION GUIDELINES]
+- To choose a card, use `choose [index]`.
+- To skip, use `skip`.
 

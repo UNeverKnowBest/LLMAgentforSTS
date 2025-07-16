@@ -9,3 +9,5 @@ class GameState(BaseModel):
     error_message: Optional[str] = None
     is_game_over: Optional[bool] = None
     state_valid: Optional[bool] = None
+    validation_result: Optional[Dict[str, Any]] = None
+    fallback_command: Optional[str] = None

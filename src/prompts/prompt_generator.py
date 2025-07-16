@@ -4,57 +4,34 @@ import os
 from src.game.game_constants import ScreenType
 
 class PromptGenerator:
-    """
-    Prompt生成器类，负责根据游戏状态生成LLM上下文
-    使用Jinja2模板系统为不同的游戏场景生成专业化的prompt
-    """
-    
     def __init__(self, game_state_json: Dict) -> None:
-        """
-        初始化PromptGenerator
-        
-        Args:
-            game_state_json: 完整的游戏状态JSON数据，包含game_state和available_commands
-        """
         self.game_state_json = game_state_json
         self.game_state = game_state_json.get("game_state", {})
         
-        # 初始化Jinja2模板环境
         template_dir = os.path.join(os.path.dirname(__file__), 'templates')
         self.env = Environment(loader=FileSystemLoader(template_dir))
         
-        # 简单命令映射 - 不需要复杂prompt的场景
         self.simple_command_map: Dict[ScreenType, str] = {
-            ScreenType.CHEST: "choose open",        # 宝箱 - 直接打开
-            ScreenType.SHOP_ROOM: "choose shop",    # 商店房间 - 进入商店
-            ScreenType.COMPLETE: "proceed",         # 完成状态 - 继续
-            ScreenType.GAME_OVER: "end",           # 游戏结束 - 结束
+            ScreenType.CHEST: "choose open",        
+            ScreenType.SHOP_ROOM: "choose shop",    
+            ScreenType.COMPLETE: "proceed",         
+            ScreenType.GAME_OVER: "end",           
         }
         
-        # 需要使用模板生成prompt的复杂场景
         self.template_screens = {
-            ScreenType.COMBAT,          # 战斗
-            ScreenType.MAP,             # 地图选择
-            ScreenType.CARD_REWARD,     # 卡牌奖励
-            ScreenType.REST,            # 休息点
-            ScreenType.SHOP_SCREEN,     # 商店界面
-            ScreenType.EVENT,           # 事件
-            ScreenType.BOSS_REWARD,     # Boss奖励
-            ScreenType.GRID,            # 网格选择
-            ScreenType.HAND_SELECT,     # 手牌选择
-            ScreenType.COMBAT_REWARD,   # 战斗奖励
+            ScreenType.COMBAT,          
+            ScreenType.MAP,             
+            ScreenType.CARD_REWARD,     
+            ScreenType.REST,            
+            ScreenType.SHOP_SCREEN,    
+            ScreenType.EVENT,           
+            ScreenType.BOSS_REWARD,     
+            ScreenType.GRID,            
+            ScreenType.HAND_SELECT,     
+            ScreenType.COMBAT_REWARD,   
         }
 
     def get_command_or_prompt(self) -> Tuple[Optional[str], Optional[str]]:
-        """
-        根据当前游戏状态返回简单命令或生成的prompt
-        
-        Returns:
-            Tuple[Optional[str], Optional[str]]: (command, prompt) - 只有一个会有值
-            - 如果是简单场景，返回(command, None)
-            - 如果是复杂场景，返回(None, prompt)
-            - 如果无法识别场景，返回("state", None)
-        """
         screen_type = self._get_effective_screen_type()
         
         # 检查是否有简单命令
@@ -156,22 +133,3 @@ class PromptGenerator:
             list: 当前可用的命令列表
         """
         return self.game_state_json.get("available_commands", [])
-    
-    def debug_info(self) -> Dict:
-        """
-        获取调试信息
-        
-        Returns:
-            Dict: 包含当前状态的调试信息
-        """
-        return {
-            "screen_type": self.get_screen_type().value,
-            "has_simple_command": self.has_simple_command(),
-            "needs_prompt": self.needs_prompt(),
-            "available_commands": self.get_available_commands(),
-            "room_phase": self.game_state.get("room_phase"),
-            "act": self.game_state.get("act"),
-            "floor": self.game_state.get("floor")
-        }
-    
-    
