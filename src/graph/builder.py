@@ -19,6 +19,10 @@ def create_agent():
             return END
         
         game_state = game_state_json.get("game_state", {})
+        # 确保game_state不为None
+        if game_state is None:
+            game_state = {}
+            
         if game_state.get("screen_type") == "GAME_OVER":
             return "advice_on_command"
             
@@ -34,6 +38,9 @@ def create_agent():
     def after_command_execution(state: GameState):
         game_state_json = state.game_state_json or {}
         game_state = game_state_json.get("game_state", {})
+        # 确保game_state不为None
+        if game_state is None:
+            game_state = {}
         
         if game_state.get("screen_type") == "GAME_OVER":
             return END

@@ -6,7 +6,9 @@ from src.game.game_constants import ScreenType
 class PromptGenerator:
     def __init__(self, game_state_json: Dict) -> None:
         self.game_state_json = game_state_json
-        self.game_state = game_state_json.get("game_state", {})
+        # 确保game_state不为None
+        game_state = game_state_json.get("game_state", {})
+        self.game_state = game_state if game_state is not None else {}
         
         template_dir = os.path.join(os.path.dirname(__file__), 'templates')
         self.env = Environment(loader=FileSystemLoader(template_dir))
@@ -53,6 +55,10 @@ class PromptGenerator:
         Returns:
             ScreenType: 当前有效的屏幕类型
         """
+        # 处理game_state为None的情况
+        if self.game_state is None:
+            return ScreenType.NONE
+            
         screen_type = self.game_state.get("screen_type", "NONE")
         room_phase = self.game_state.get("room_phase")
 

@@ -35,7 +35,7 @@ def read_state(state: GameState):
     except json.JSONDecodeError as e:
         print(f"JSON decode error: {e}", file=sys.stderr)
         print(f"Raw input was: {line[:100]}...", file=sys.stderr)
-        return {"game_state_json": {}}
+        return {"game_state_json": None}
     except Exception as e:
         print(f"Unexpected error reading state: {e}", file=sys.stderr)
         return {"game_state_json": None}
@@ -100,7 +100,7 @@ def execute_command(state: GameState):
         print("Warning: Empty command, sent 'state' instead", file=sys.stderr)
 
     else:
-        clean_command = final_command.strip().replace('\n', ' ').replace('\r', ' ')
+        clean_command = final_command.strip().replace('\n', '').replace('\r', '')
         print(clean_command, flush=True)
         print(f"Sent command: {clean_command}", file=sys.stderr)
     
@@ -399,6 +399,6 @@ def generate_fallback_command(screen_type: str, original_command: str, errors: l
 
 def execute_fallback_command(state: GameState):
     fallback_command = state.fallback_command or "state"
-    print(f"Executing fallback command: {fallback_command}", flush=True)
+    print(f"{fallback_command}", flush=True)
     time.sleep(0.1)
     return {}
