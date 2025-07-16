@@ -1,76 +1,109 @@
 import sys
 import json
-import time
 import re
+import time
 
 from .states import GameState
-from src.config import PRIMARY_CHARACTER
 from src.core.llms import llm
 from src.core.tracing import get_tracing_manager
 from src.prompts.prompt_generator import PromptGenerator
 from src.game.game_constants import ScreenType
+from src.config import PRIMARY_CHARACTER
 
 def initial_game(state: GameState):
     print("ready", flush=True)
     time.sleep(1)
-    print(f"start {PRIMARY_CHARACTER}", flush=True)
-    time.sleep(3)
+    print(f"start {PRIMARY_CHARACTER}")
     return {}
 
 def read_state(state: GameState):
     try:
         line = sys.stdin.readline()
+        
+        if not line:
+            print("EOF received from stdin, terminating", file=sys.stderr)
+            return {"game_state_json": None}
+        
+        line = line.strip()
+        if not line:
+            print("Empty line received, skipping", file=sys.stderr)
+            return {"game_state_json": {}}
+        
         game_state_json = json.loads(line)
         return {"game_state_json": game_state_json}
-    except (json.JSONDecodeError, UnicodeDecodeError) as e:
-        print(f"Error reading or parsing game state: {e}", file=sys.stderr)
-        return {}
+        
+    except json.JSONDecodeError as e:
+        print(f"JSON decode error: {e}", file=sys.stderr)
+        print(f"Raw input was: {line[:100]}...", file=sys.stderr)
+        return {"game_state_json": {}}
+    except Exception as e:
+        print(f"Unexpected error reading state: {e}", file=sys.stderr)
+        return {"game_state_json": None}
 
 def advice_on_command(state: GameState):
     game_state_json = state.game_state_json 
-    prompt_generator = PromptGenerator(game_state_json)
-    command, prompt = prompt_generator.get_command_or_prompt()
     
-    if command:
-        return {"final_command": command}
-    elif prompt:
-        try:
-            print("--- Invoking LLM ---", file=sys.stderr, flush=True)
-            tracing_manager = get_tracing_manager()
-            if game_state_json and "game_state" in game_state_json:
-                gs = game_state_json["game_state"]
-                metadata = tracing_manager.create_run_metadata(
-                    screen_type=gs.get("screen_type", "UNKNOWN"),
-                    floor=gs.get("floor", 0),
-                    act=gs.get("act", 0)
-                )
+    if not game_state_json:
+        print("No game state received, sending state command", file=sys.stderr)
+        return {"final_command": "state"}
+    
+    try:
+        prompt_generator = PromptGenerator(game_state_json)
+        command, prompt = prompt_generator.get_command_or_prompt()
+        
+        if command:
+            print(f"Using simple command: {command}", file=sys.stderr)
+            return {"final_command": command}
+            
+        elif prompt:
+            try:
+                print("--- Invoking LLM ---", file=sys.stderr, flush=True)
+                tracing_manager = get_tracing_manager()
                 
-                config = {"metadata": metadata}
-                response = llm.invoke([("human", prompt)], config=config)
-            else:
-                response = llm.invoke([("human", prompt)])
+                if game_state_json and "game_state" in game_state_json:
+                    gs = game_state_json["game_state"]
+                    metadata = tracing_manager.create_run_metadata(
+                        screen_type=gs.get("screen_type", "UNKNOWN"),
+                        floor=gs.get("floor", 0),
+                        act=gs.get("act", 0)
+                    )
+                    config = {"metadata": metadata}
+                    response = llm.invoke([("human", prompt)], config=config)
+                else:
+                    response = llm.invoke([("human", prompt)])
 
-            print("--- LLM invocation complete ---", file=sys.stderr, flush=True)
-            return {
-                "thinking_process": response.think,
-                "final_command": response.command
-            }
-        except Exception as e:
-            print(f"Error invoking LLM or parsing response: {e}", file=sys.stderr)
+                print("--- LLM invocation complete ---", file=sys.stderr, flush=True)
+                
+                final_command = response.command.strip() if response.command else "state"
+                
+                return {
+                    "thinking_process": response.think,
+                    "final_command": final_command
+                }
+                
+            except Exception as e:
+                print(f"LLM invocation error: {e}", file=sys.stderr)
+                return {"final_command": "state"}
+        else:
+            print("No command or prompt generated, using state", file=sys.stderr)
             return {"final_command": "state"}
-    else:
+            
+    except Exception as e:
+        print(f"Error in advice_on_command: {e}", file=sys.stderr)
         return {"final_command": "state"}
 
 def execute_command(state: GameState):
     final_command = state.final_command
-    if final_command:
-        print(final_command, flush=True)
-        time.sleep(0.1)
-    return {}
+    
+    if not final_command:
+        print("state", flush=True)
+        print("Warning: Empty command, sent 'state' instead", file=sys.stderr)
 
-def request_state_update(state: GameState):
-    print("state", flush=True)
-    time.sleep(0.1)
+    else:
+        clean_command = final_command.strip().replace('\n', ' ').replace('\r', ' ')
+        print(clean_command, flush=True)
+        print(f"Sent command: {clean_command}", file=sys.stderr)
+    
     return {}
 
 def validate_command(state: GameState):
@@ -94,9 +127,6 @@ def validate_command(state: GameState):
         validation_result["errors"].append("Command too long")
         return {"validation_result": validation_result}
     
-    if not re.match(r'^[a-zA-Z0-9\s\-_,.:;!?()[\]{}]+$', final_command):
-        validation_result["warnings"].append("Command contains special characters, may be invalid")
-    
     try:
         prompt_generator = PromptGenerator(game_state_json)
         current_screen_type = prompt_generator.get_screen_type()
@@ -106,18 +136,11 @@ def validate_command(state: GameState):
     
     available_commands = game_state_json.get("available_commands", [])
     if available_commands:
-        if final_command in available_commands:
-            validation_result["is_valid"] = True
+        command_base = final_command.split()[0].lower()
+        if any(cmd.lower() == command_base for cmd in available_commands):
+            validation_result["warnings"].append(f"Command base '{command_base}' found in available commands")
         else:
-            partial_match = False
-            for cmd in available_commands:
-                if final_command.startswith(cmd):
-                    partial_match = True
-                    validation_result["warnings"].append(f"Command may match: {cmd}")
-                    break
-            
-            if not partial_match:
-                validation_result["errors"].append(f"Command not in available commands: {available_commands}")
+            validation_result["warnings"].append(f"Command base '{command_base}' not explicitly in available commands: {available_commands}")
     
     tokens = final_command.split()
     if not tokens:
@@ -135,17 +158,28 @@ def validate_command(state: GameState):
     if command_word not in valid_commands:
         validation_result["errors"].append(f"Unknown command: {command_word}")
         return {"validation_result": validation_result}
-    
+
     if command_word == "play":
         if len(tokens) < 2:
             validation_result["errors"].append("play command missing card index")
         elif not tokens[1].isdigit():
             validation_result["errors"].append("play command card index must be a number")
-        elif len(tokens) == 3 and not tokens[2].isdigit():
-            validation_result["errors"].append("play command target index must be a number")
-        elif len(tokens) > 3:
-            validation_result["errors"].append("play command has too many arguments")
         else:
+            card_index = int(tokens[1])
+            if card_index == 0:
+                validation_result["warnings"].append("Card index 0 will be treated as 10")
+            elif card_index < 0:
+                validation_result["errors"].append("play command card index must be non-negative")
+            
+            if len(tokens) == 3:
+                if not tokens[2].isdigit():
+                    validation_result["errors"].append("play command target index must be a number")
+                elif int(tokens[2]) < 0:
+                    validation_result["errors"].append("play command target index must be non-negative")
+            elif len(tokens) > 3:
+                validation_result["errors"].append("play command has too many arguments")
+        
+        if not validation_result["errors"]:
             validation_result["is_valid"] = True
     
     elif command_word == "end":
@@ -158,12 +192,7 @@ def validate_command(state: GameState):
         if len(tokens) < 2:
             validation_result["errors"].append("choose command missing choice parameter")
         else:
-            choice_arg = " ".join(tokens[1:])
-            if choice_arg.isdigit() or any(choice_arg.lower() in cmd.lower() for cmd in available_commands):
-                validation_result["is_valid"] = True
-            else:
-                validation_result["warnings"].append(f"choose command parameter may be invalid: {choice_arg}")
-                validation_result["is_valid"] = True
+            validation_result["is_valid"] = True
     
     elif command_word == "potion":
         if len(tokens) < 3:
@@ -172,8 +201,12 @@ def validate_command(state: GameState):
             validation_result["errors"].append("potion command second parameter must be 'use' or 'discard'")
         elif not tokens[2].isdigit():
             validation_result["errors"].append("potion command potion index must be a number")
+        elif int(tokens[2]) < 0:
+            validation_result["errors"].append("potion command potion index must be non-negative")
         elif len(tokens) == 4 and not tokens[3].isdigit():
             validation_result["errors"].append("potion command target index must be a number")
+        elif len(tokens) == 4 and int(tokens[3]) < 0:
+            validation_result["errors"].append("potion command target index must be non-negative")
         elif len(tokens) > 4:
             validation_result["errors"].append("potion command has too many arguments")
         else:
@@ -194,17 +227,35 @@ def validate_command(state: GameState):
     elif command_word == "start":
         if len(tokens) < 2:
             validation_result["errors"].append("start command missing character parameter")
-        elif tokens[1].lower() not in ["ironclad", "the_silent", "silent", "defect", "watcher"]:
-            validation_result["errors"].append("start command character parameter invalid")
-        elif len(tokens) >= 3 and not tokens[2].isdigit():
-            validation_result["errors"].append("start command ascension level must be a number")
-        elif len(tokens) >= 4 and not re.match(r'^[A-Z0-9]+$', tokens[3].upper()):
-            validation_result["errors"].append("start command seed format invalid")
-        elif len(tokens) > 4:
-            validation_result["errors"].append("start command has too many arguments")
         else:
+            character = tokens[1].lower()
+            valid_characters = [
+                "ironclad", "the_silent", "silent", "defect", "watcher",
+                "the_ironclad", "the_defect", "the_watcher"
+            ]
+            
+            if character not in valid_characters:
+                validation_result["warnings"].append(f"Character '{tokens[1]}' may not be recognized by CommunicationMod")
+            
+            if len(tokens) >= 3:
+                try:
+                    ascension_level = int(tokens[2])
+                    if ascension_level < 0 or ascension_level > 20:
+                        validation_result["errors"].append("start command ascension level must be between 0 and 20")
+                except ValueError:
+                    validation_result["errors"].append("start command ascension level must be a number")
+            
+            if len(tokens) >= 4:
+                seed = tokens[3].upper()
+                if not re.match(r'^[A-Z0-9]+$', seed):
+                    validation_result["errors"].append("start command seed must be alphanumeric")
+            
+            if len(tokens) > 4:
+                validation_result["errors"].append("start command has too many arguments")
+        
+        if not validation_result["errors"]:
             validation_result["is_valid"] = True
-    
+
     elif command_word == "state":
         if len(tokens) > 1:
             validation_result["errors"].append("state command does not need arguments")
@@ -216,19 +267,29 @@ def validate_command(state: GameState):
             validation_result["errors"].append("key command missing key parameter")
         else:
             valid_keys = {
-                "confirm", "cancel", "map", "deck", "draw_pile", "discard_pile", 
-                "exhaust_pile", "end_turn", "up", "down", "left", "right", 
-                "drop_card", "card_1", "card_2", "card_3", "card_4", "card_5",
-                "card_6", "card_7", "card_8", "card_9", "card_10"
+                "CONFIRM", "CANCEL", "MAP", "DECK", "DRAW_PILE", "DISCARD_PILE", 
+                "EXHAUST_PILE", "END_TURN", "UP", "DOWN", "LEFT", "RIGHT", 
+                "DROP_CARD", "CARD_1", "CARD_2", "CARD_3", "CARD_4", "CARD_5",
+                "CARD_6", "CARD_7", "CARD_8", "CARD_9", "CARD_10"
             }
-            if tokens[1].upper() not in [k.upper() for k in valid_keys]:
+            
+            key_name = tokens[1].upper()
+            if key_name not in valid_keys:
                 validation_result["errors"].append(f"key command key invalid: {tokens[1]}")
-            elif len(tokens) >= 3 and not tokens[2].isdigit():
-                validation_result["errors"].append("key command timeout must be a number")
-            elif len(tokens) > 3:
+            
+            if len(tokens) >= 3:
+                try:
+                    timeout = int(tokens[2])
+                    if timeout < 0:
+                        validation_result["errors"].append("key command timeout must be non-negative")
+                except ValueError:
+                    validation_result["errors"].append("key command timeout must be a number")
+            
+            if len(tokens) > 3:
                 validation_result["errors"].append("key command has too many arguments")
-            else:
-                validation_result["is_valid"] = True
+        
+        if not validation_result["errors"]:
+            validation_result["is_valid"] = True
     
     elif command_word == "click":
         if len(tokens) < 4:
@@ -237,39 +298,52 @@ def validate_command(state: GameState):
             validation_result["errors"].append("click command button parameter must be 'left' or 'right'")
         else:
             try:
-                float(tokens[2])
-                float(tokens[3])
-                if len(tokens) >= 5 and not tokens[4].isdigit():
-                    validation_result["errors"].append("click command timeout must be a number")
-                elif len(tokens) > 5:
+                x = float(tokens[2])
+                y = float(tokens[3])
+                
+                if x < 0 or x > 1920:
+                    validation_result["warnings"].append("X coordinate outside standard range (0-1920)")
+                if y < 0 or y > 1080:
+                    validation_result["warnings"].append("Y coordinate outside standard range (0-1080)")
+                
+                if len(tokens) >= 5:
+                    try:
+                        timeout = int(tokens[4])
+                        if timeout < 0:
+                            validation_result["errors"].append("click command timeout must be non-negative")
+                    except ValueError:
+                        validation_result["errors"].append("click command timeout must be a number")
+                
+                if len(tokens) > 5:
                     validation_result["errors"].append("click command has too many arguments")
-                else:
-                    validation_result["is_valid"] = True
+                
             except ValueError:
                 validation_result["errors"].append("click command coordinates must be numbers")
+        
+        if not validation_result["errors"]:
+            validation_result["is_valid"] = True
     
     elif command_word == "wait":
         if len(tokens) < 2:
             validation_result["errors"].append("wait command missing time parameter")
-        elif not tokens[1].isdigit():
-            validation_result["errors"].append("wait command time must be a number")
-        elif len(tokens) > 2:
-            validation_result["errors"].append("wait command has too many arguments")
         else:
+            try:
+                timeout = int(tokens[1])
+                if timeout < 0:
+                    validation_result["errors"].append("wait command time must be non-negative")
+            except ValueError:
+                validation_result["errors"].append("wait command time must be a number")
+            
+            if len(tokens) > 2:
+                validation_result["errors"].append("wait command has too many arguments")
+        
+        if not validation_result["errors"]:
             validation_result["is_valid"] = True
-    
-    # If there are errors, command is invalid
-    if validation_result["errors"]:
-        validation_result["is_valid"] = False
-    # If no errors and not yet marked as valid, it might be valid
-    elif not validation_result["is_valid"]:
-        validation_result["warnings"].append("Command format unknown, but may be valid")
-        validation_result["is_valid"] = True
     
     validation_result["screen_type"] = current_screen_type.value if current_screen_type else "UNKNOWN"
     
     return {"validation_result": validation_result}
-
+ 
 def handle_validation_failure(state: GameState):
     validation_result = state.validation_result or {}
     final_command = state.final_command or ""

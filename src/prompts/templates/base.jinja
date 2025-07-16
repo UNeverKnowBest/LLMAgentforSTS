@@ -132,8 +132,35 @@ Your objective is to analyze the following detailed context and select the optim
 {%- endblock -%}
 
 # [AVAILABLE ACTIONS]
-You must choose one of the following commands to execute:
-`{{ game_state_json.available_commands | join(', ') }}`
+## **Currently Available Commands:**
+{% for cmd in game_state_json.available_commands %}
+- **`{{ cmd }}`**
+{% endfor %}
+
+## **Command Format Reference:**
+{% if "play" in game_state_json.available_commands %}
+- **`play X`** - Play card at position X (1-indexed) from your hand
+- **`play X Y`** - Play targeted card at position X, targeting enemy Y (0-indexed)
+{% endif %}
+{% if "choose" in game_state_json.available_commands %}
+- **`choose X`** - Make choice X (can be index number or choice text)
+{% endif %}
+{% if "end" in game_state_json.available_commands %}
+- **`end`** - End your current turn (combat only)
+{% endif %}
+{% if "potion" in game_state_json.available_commands %}
+- **`potion use X`** - Use potion at slot X (0-indexed)
+- **`potion use X Y`** - Use targeted potion at slot X on enemy Y
+- **`potion discard X`** - Discard potion at slot X
+{% endif %}
+{% if "proceed" in game_state_json.available_commands or "confirm" in game_state_json.available_commands %}
+- **`proceed`** / **`confirm`** - Confirm current action and proceed
+{% endif %}
+{% if "skip" in game_state_json.available_commands or "cancel" in game_state_json.available_commands or "leave" in game_state_json.available_commands %}
+- **`skip`** / **`cancel`** / **`leave`** - Cancel current action or leave screen
+{% endif %}
+
+**⚠️ CRITICAL: You MUST use only the commands listed above. Using unavailable commands will result in an error.**
 
 # [INSTRUCTIONS]
 ## **STRATEGIC DECISION FRAMEWORK (Tree of Thoughts Analysis):**

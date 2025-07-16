@@ -15,7 +15,7 @@
 
 **Available Cards with Strategic Analysis:**
 {% for card in screen_state.cards %}
-- **[{{ loop.index0 }}] {{ card.name }}**{% if card.upgrades > 0 %}+{{ card.upgrades }}{% endif %} (Cost: {{ card.cost }}, {{ card.type }}, {{ card.rarity }})
+- **[{{ loop.index0 }}] {{ card.name }}**{% if card.upgrades|default(0) > 0 %}+{{ card.upgrades|default(0) }}{% endif %} (Cost: {{ card.cost }}, {{ card.type }}, {{ card.rarity }})
 
   {% if screen_state.for_upgrade %}
   **Upgrade Value Analysis:**
@@ -131,5 +131,8 @@ Priority: Basic cards > Bad commons > Situational cards > Good rares (risky)
 - **Alternatives rejected:** [Other options] because [specific limitations]
 - **Expected outcome:** [How this advances my win condition]"
 
-**Execute Command:** `choose [index]` {% if screen_state.num_cards > 1 %}or `choose [index1] [index2]` for multiple cards{% endif %}
+**Grid Selection Context:**
+- **Card Indices:** Grid cards are indexed from 0 upward
+- **Selection Rules:** Choose {{ screen_state.num_cards }} card(s) from the grid
+- **Command Format:** Use `choose` with appropriate indices from available commands above
 

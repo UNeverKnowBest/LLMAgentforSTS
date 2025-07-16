@@ -37,7 +37,7 @@
 
 **Player Hand Analysis:**
 {% for card in combat_state.hand %}
-- **[{{ loop.index }}] {{ card.name }}**{% if card.upgrades > 0 %}+{{ card.upgrades }}{% endif %} ({{ card.cost }} Energy, {{ card.type }})
+- **[{{ loop.index }}] {{ card.name }}**{% if card.upgrades|default(0) > 0 %}+{{ card.upgrades|default(0) }}{% endif %} ({{ card.cost }} Energy, {{ card.type }})
   **Tactical Value:** {% if card.type == "ATTACK" %}Damage: {{ card.cost * 6 }}{% if card.has_target %} (targeted){% endif %}{% elif card.type == "SKILL" %}{% if "block" in card.name.lower() %}Block: {{ card.cost * 5 }}{% else %}Utility{% endif %}{% elif card.type == "POWER" %}Engine/Scaling{% endif %}
   **Playability:** {% if card.is_playable %}✓ Can Play{% else %}✗ Cannot Play{% endif %}
   **Synergy:** {% for build in current_archetypes %}{% if card.name in build.key_cards %}[{{ build.name }} Core]{% elif card.name in build.payoff_cards %}[{{ build.name }} Payoff]{% endif %}{% endfor %}
@@ -46,8 +46,8 @@
 **Enemy Analysis & Threat Assessment:**
 {% for enemy in combat_state.monsters %}
 - **{{ enemy.name }}** ({{ enemy.current_hp }}/{{ enemy.max_hp }} HP, {{ enemy.block }} Block)
-  **Intent:** {{ enemy.intent }}{% if enemy.move_adjusted_damage %} - {{ enemy.move_adjusted_damage }} dmg{% if enemy.move_hits > 1 %} x{{ enemy.move_hits }}{% endif %}{% endif %}
-  **Threat Level:** {% if enemy.intent == "ATTACK" and enemy.move_adjusted_damage >= 20 %}CRITICAL{% elif enemy.intent == "ATTACK" %}HIGH{% elif enemy.intent == "BUFF" %}MEDIUM{% else %}LOW{% endif %}
+  **Intent:** {{ enemy.intent }}{% if enemy.move_adjusted_damage|default(0) > 0 %} - {{ enemy.move_adjusted_damage|default(0) }} dmg{% if enemy.move_hits|default(1) > 1 %} x{{ enemy.move_hits|default(1) }}{% endif %}{% endif %}
+  **Threat Level:** {% if enemy.intent == "ATTACK" and enemy.move_adjusted_damage|default(0) >= 20 %}CRITICAL{% elif enemy.intent == "ATTACK" %}HIGH{% elif enemy.intent == "BUFF" %}MEDIUM{% else %}LOW{% endif %}
   **Powers:** {% for power in enemy.powers %}{{ power.name }}({{ power.amount }}) {% endfor %}
   **Priority:** {% if enemy.current_hp <= 20 and enemy.intent == "ATTACK" %}LETHAL FIRST{% elif enemy.intent == "BUFF" %}INTERRUPT{% else %}STANDARD{% endif %}
 {% endfor %}
@@ -164,8 +164,8 @@ SETUP OPPORTUNITY: {{ "Available" if combat_state.hand | selectattr("type", "equ
 4. **Alternative Rejected:** [Other approach] because [specific limitation/inferior outcome]
 5. **Next Turn Setup:** This leaves me positioned to [next turn plan]"
 
-**Execute Commands:**
-- `play X` (for card position 1-10, non-targeted)
-- `play X Y` (for targeted cards, Y = monster index 0-{{ combat_state.monsters | length - 1 }})
-- `end` (finish turn)
-- `potion use X` or `potion use X Y` (for potions)
+**Combat-Specific Command Context:**
+{% if combat_state.monsters | length > 1 %}
+- **Target Selection:** When using targeted cards, enemy indices are: {% for enemy in combat_state.monsters %}{{ loop.index0 }}={{ enemy.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+{% endif %}
+- **Hand Position Reference:** Your hand cards are numbered 1-{{ combat_state.hand | length }} from left to right

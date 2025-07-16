@@ -1,5 +1,5 @@
 from langchain_ollama import ChatOllama
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from src.config import(
     PRIMARY_MODEL_NAME,
@@ -8,8 +8,8 @@ from src.config import(
 )
 
 class LLMResponse(BaseModel):
-    think: str
-    command: str
+    think: str = Field(description="Step-by-step reasoning process for the decision")
+    command: str = Field(description="Exact game command to execute (e.g. 'play 1', 'end', 'choose 2')")
 
 def get_llm():
     if PRIMARY_MODEL_TYPE == 'local':

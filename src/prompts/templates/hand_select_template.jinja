@@ -47,7 +47,7 @@
 
 **Your Hand - Detailed Strategic Analysis:**
 {% for card in screen_state.hand %}
-- **[{{ loop.index0 }}] {{ card.name }}**{% if card.upgrades > 0 %}+{{ card.upgrades }}{% endif %} ({{ card.cost }} Energy, {{ card.type }})
+- **[{{ loop.index0 }}] {{ card.name }}**{% if card.upgrades|default(0) > 0 %}+{{ card.upgrades|default(0) }}{% endif %} ({{ card.cost }} Energy, {{ card.type }})
 
   **Immediate Value Assessment:**
   {% if card.type == "ATTACK" %}
@@ -197,7 +197,7 @@
 5. **Alternatives Rejected:** [Other options] because [specific limitations]
 6. **Risk Mitigation:** [How this choice handles potential downsides]"
 
-**Execute Command:** 
-- `choose [index]` for single selection (e.g., `choose 0`)
-- `choose [index1] [index2]` for multiple selections (e.g., `choose 0 3`)
-{% if screen_state.can_pick_zero %}- `choose` with no indices to select zero cards{% endif %}
+**Hand Selection Context:**
+- **Card Indices:** Cards are indexed 0-{{ screen_state.hand | length - 1 }} from left to right
+- **Selection Rules:** {{ screen_state.num_cards }} card(s) {% if screen_state.can_pick_zero %}(or zero){% endif %} can be selected
+- **Command Format:** Use `choose` with appropriate indices from available commands above

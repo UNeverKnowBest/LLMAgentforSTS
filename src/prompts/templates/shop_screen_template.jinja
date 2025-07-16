@@ -35,7 +35,7 @@
 
 **CARDS FOR SALE:**
 {% for card in screen_state.cards %}
-- **{{ card.name }}**{% if card.upgrades > 0 %}+{{ card.upgrades }}{% endif %} - **{{ card.price }}g** ({{ (card.price / game_state.gold * 100) | round(1) }}% of gold)
+- **{{ card.name }}**{% if card.upgrades|default(0) > 0 %}+{{ card.upgrades|default(0) }}{% endif %} - **{{ card.price }}g** ({{ (card.price / game_state.gold * 100) | round(1) }}% of gold)
   **Strategic Value Assessment:**
   {% set is_archetype_card = false %}
   {% for build in current_archetypes %}
@@ -174,7 +174,7 @@ Weak Deck        Essentials  Foundation     Full Rebuild
 4. **Alternative Rejected:** [Other option] because [inferior cost-benefit ratio]
 5. **Remaining Budget:** {{ game_state.gold - total_cost }}g reserved for [future opportunities]"
 
-**Execute Commands:**
-- `choose [item_name]` - Purchase specific item (e.g., "choose strike", "choose bag of preparation")
-- `choose purge` - Remove a card for {{ screen_state.purge_cost }}g (requires follow-up card selection)
-- `leave` - Exit without purchases (save gold for future opportunities)
+**Shop-Specific Context:**
+- **Purge Cost:** {{ screen_state.purge_cost }}g per card removal
+- **Item Selection:** Use exact item names or indices when choosing
+- **Budget Planning:** {{ game_state.gold }}g available, consider future needs
