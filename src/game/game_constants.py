@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class ScreenType(str, Enum):
     MAP = "MAP"
     CARD_REWARD = "CARD_REWARD"
@@ -16,6 +17,7 @@ class ScreenType(str, Enum):
     SHOP_ROOM = "SHOP_ROOM"
     NONE = "NONE"
     COMBAT = "COMBAT"
+
 
 class RoomPhase(str, Enum):
     COMBAT = "COMBAT"

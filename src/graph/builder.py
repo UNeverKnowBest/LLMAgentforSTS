@@ -8,8 +8,9 @@ from .nodes import (
     execute_command,
     validate_command,
     handle_validation_failure,
-    execute_fallback_command
+    execute_fallback_command,
 )
+
 
 def create_agent():
 
@@ -17,36 +18,36 @@ def create_agent():
         game_state_json = state.game_state_json
         if game_state_json is None:
             return END
-        
+
         game_state = game_state_json.get("game_state", {})
         # 确保game_state不为None
         if game_state is None:
             game_state = {}
-            
+
         if game_state.get("screen_type") == "GAME_OVER":
             return "advice_on_command"
-            
+
         return "advice_on_command"
-    
+
     def route_after_validation(state: GameState):
         validation_result = state.validation_result or {}
         if validation_result.get("is_valid", False):
             return "execute_command"
         else:
             return "handle_validation_failure"
-    
+
     def after_command_execution(state: GameState):
         game_state_json = state.game_state_json or {}
         game_state = game_state_json.get("game_state", {})
         # 确保game_state不为None
         if game_state is None:
             game_state = {}
-        
+
         if game_state.get("screen_type") == "GAME_OVER":
             return END
         else:
             return "read_state"
-        
+
     workflow = StateGraph(GameState)
     workflow.add_node("initial_game", initial_game)
     workflow.add_node("read_state", read_state)
@@ -61,10 +62,7 @@ def create_agent():
     workflow.add_conditional_edges(
         "read_state",
         should_process_state,
-        {
-            "advice_on_command": "advice_on_command",
-            END: END
-        }
+        {"advice_on_command": "advice_on_command", END: END},
     )
 
     workflow.add_edge("advice_on_command", "validate_command")
@@ -73,32 +71,27 @@ def create_agent():
         route_after_validation,
         {
             "execute_command": "execute_command",
-            "handle_validation_failure": "handle_validation_failure"
-        }
+            "handle_validation_failure": "handle_validation_failure",
+        },
     )
-    
+
     workflow.add_conditional_edges(
         "execute_command",
         after_command_execution,
-        {
-            "read_state": "read_state",
-            END: END
-        }
+        {"read_state": "read_state", END: END},
     )
 
     workflow.add_edge("handle_validation_failure", "execute_fallback_command")
-    
+
     workflow.add_conditional_edges(
         "execute_fallback_command",
         after_command_execution,
-        {
-            "read_state": "read_state",
-            END: END
-        }
+        {"read_state": "read_state", END: END},
     )
-    
+
     agent = workflow.compile()
-    
+
     return agent
 
-agent = create_agent() 
+
+agent = create_agent()

@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Dict, Optional, Any
 
+
 class GameState(BaseModel):
     game_state_json: Optional[Dict[str, Any]] = None
     thinking_process: Optional[str] = None
