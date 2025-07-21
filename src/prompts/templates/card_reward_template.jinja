@@ -4,6 +4,7 @@ You are on a card reward screen. You must choose one of the following cards or s
 **Cards Offered:**
 {% for card in screen_state.cards %}
 - **Option {{ loop.index0 }}:** `{{ card.name }}`{% if card.upgrades|default(0) > 0 %}+{{ card.upgrades }}{% endif %} (Cost: {{ card.cost }}, Type: {{ card.type }})
+  {% if card.name in card_info %}**Card Details:** {{ card_info[card.name].description }}{% endif %}
 {% endfor %}
 
 **Strategic Considerations:**

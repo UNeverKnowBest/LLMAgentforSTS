@@ -24,7 +24,7 @@
 
 **CARD REMOVAL OPTION:**
 {% if screen_state.purge_available %}
-- **Cost:** {{ screen_state.purge_cost }}g ({{ (screen_state.purge_cost / game_state.gold * 100) | round(1) }}% of total gold)
+- **Cost:** {{ screen_state.purge_cost }}g ({{ (screen_state.purge_cost / (game_state.gold|default(1)) * 100) | round(1) }}% of total gold)
 - **Value Analysis:** Permanent deck improvement - every future hand benefits
 - **Priority Removal Targets:** Basic Strikes/Defends, Curses, Dead cards
 - **Expected Value:** ~5-10% deck improvement per removal
@@ -35,7 +35,8 @@
 
 **CARDS FOR SALE:**
 {% for card in screen_state.cards %}
-- **{{ card.name }}**{% if card.upgrades|default(0) > 0 %}+{{ card.upgrades|default(0) }}{% endif %} - **{{ card.price }}g** ({{ (card.price / game_state.gold * 100) | round(1) }}% of gold)
+- **{{ card.name }}**{% if card.upgrades|default(0) > 0 %}+{{ card.upgrades }}{% endif %} - **{{ card.price }}g** ({{ (card.price / (game_state.gold|default(1)) * 100) | round(1) }}% of gold)
+  {% if card.name in card_info %}**Card Details:** {{ card_info[card.name].description }}{% endif %}
   **Strategic Value Assessment:**
   {% set is_archetype_card = false %}
   {% for build in current_archetypes %}
@@ -64,7 +65,7 @@
 
 **RELICS FOR SALE:**
 {% for relic in screen_state.relics %}
-- **{{ relic.name }}** - **{{ relic.price }}g** ({{ (relic.price / game_state.gold * 100) | round(1) }}% of gold)
+- **{{ relic.name }}** - **{{ relic.price }}g** ({{ (relic.price / (game_state.gold|default(1)) * 100) | round(1) }}% of gold)
   **Power Level Assessment:**
   {% if relic.price >= 300 %}**VERY HIGH** - Premium relic with run-changing effects
   {% elif relic.price >= 200 %}**HIGH** - Strong passive benefits
@@ -170,9 +171,9 @@ Weak Deck        Essentials  Foundation     Full Rebuild
 "My optimal purchase strategy:
 1. **Primary Purchase:** [Item] for [cost] because [specific strategic need]
 2. **Secondary Purchase:** [If budget allows] [item] for [additional benefit]  
-3. **Economic Reasoning:** This allocates {{ (100 * total_cost / game_state.gold) | round(1) }}% of gold for [expected return]
+3. **Economic Reasoning:** This allocates [calculated percentage]% of gold for [expected return]
 4. **Alternative Rejected:** [Other option] because [inferior cost-benefit ratio]
-5. **Remaining Budget:** {{ game_state.gold - total_cost }}g reserved for [future opportunities]"
+5. **Remaining Budget:** [remaining gold] reserved for [future opportunities]"
 
 **Shop-Specific Context:**
 - **Purge Cost:** {{ screen_state.purge_cost }}g per card removal

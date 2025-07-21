@@ -1,0 +1,360 @@
+page_content,name,character,cost,rarity,type
+Deal 6 damage. || Upgraded: Deal 9 damage.,Strike,All,1,Basic,Attack
+Gain 5 Block. || Upgraded: Gain 8 Block.,Defend,All,1,Basic,Skill
+Deal 8 damage. Apply 2 Vulnerable. || Upgraded: Deal 10 damage. Apply 3 Vulnerable.,Bash,Ironclad,2,Basic,Attack
+Deal 3 damage. Apply 1 Weak. || Upgraded: Deal 4 damage. Apply 2 Weak.,Neutralize,Silent,0,Basic,Attack
+Gain 8 Block. Discard 1 card. || Upgraded: Gain 11 Block. Discard 1 card.,Survivor,Silent,1,Basic,Skill
+Channel 1 Lightning. || Upgraded: Channel 1 Lightning. Costs 0.,Zap,Defect,1,Basic,Skill
+Evoke your next Orb. || Upgraded: Evoke your next Orb twice.,Dualcast,Defect,1,Basic,Skill
+Deal 9 damage. Enter Wrath. || Upgraded: Costs 1. Deal 9 damage. Enter Wrath.,Eruption,Watcher,2,Basic,Attack
+Enter Calm. Gain 8 Block. || Upgraded: Enter Calm. Gain 12 Block.,Vigilance,Watcher,2,Basic,Skill
+Deal 6 damage. Add a copy of this card to your discard pile. || Upgraded: Deal 8 damage. Add a copy of this card to your discard pile.,Anger,Ironclad,0,Common,Attack
+Gain 5 Block. Upgrade a card in your hand for the rest of combat. || Upgraded: Gain 5 Block. Upgrade ALL cards in your hand for the rest of combat.,Armaments,Ironclad,1,Common,Skill
+Deal damage equal to your Block. || Upgraded: Deal damage equal to your Block. Costs 0.,Body Slam,Ironclad,1,Common,Attack
+Can only be played if every card in your hand is an Attack. Deal 14 damage. || Upgraded: Can only be played if every card in your hand is an Attack. Deal 18 damage.,Clash,Ironclad,0,Common,Attack
+Deal 8 damage to ALL enemies. || Upgraded: Deal 11 damage to ALL enemies.,Cleave,Ironclad,1,Common,Attack
+Deal 12 damage. Apply 2 Weak. || Upgraded: Deal 14 damage. Apply 3 Weak.,Clothesline,Ironclad,2,Common,Attack
+Gain 2 Strength. At the end of your turn, lose 2 Strength. || Upgraded: Gain 4 Strength. At the end of your turn, lose 4 Strength.,Flex,Ironclad,0,Common,Skill
+Play the top card of your draw pile and Exhaust it. || Upgraded: Play the top card of your draw pile and Exhaust it. Costs 0.,Havoc,Ironclad,1,Common,Skill
+Deal 9 damage. Put a card from your discard pile on top of your draw pile. || Upgraded: Deal 12 damage. Put a card from your discard pile on top of your draw pile.,Headbutt,Ironclad,1,Common,Attack
+Deal 14 damage. Strength affects Heavy Blade 3 times. || Upgraded: Deal 14 damage. Strength affects Heavy Blade 5 times.,Heavy Blade,Ironclad,2,Common,Attack
+Gain 5 Block. Deal 5 damage. || Upgraded: Gain 7 Block. Deal 7 damage.,Iron Wave,Ironclad,1,Common,Attack
+Deal 6 damage. Deals an additional 2 damage for ALL of your cards containing "Strike". || Upgraded: Deal 6 damage. Deals an additional 3 damage for ALL of your cards containing "Strike".,Perfected Strike,Ironclad,2,Common,Attack
+Deal 9 damage. Draw 1 card. || Upgraded: Deal 10 damage. Draw 2 cards.,Pommel Strike,Ironclad,1,Common,Attack
+Gain 8 Block. Draw 1 card. || Upgraded: Gain 11 Block. Draw 1 card.,Shrug It Off,Ironclad,1,Common,Skill
+Deal 3 damage to a random enemy 3 times. || Upgraded: Deal 3 damage to a random enemy 4 times.,Sword Boomerang,Ironclad,1,Common,Attack
+Deal 4 damage and apply 1 Vulnerable to ALL enemies. || Upgraded: Deal 7 damage and apply 1 Vulnerable to ALL enemies.,Thunderclap,Ironclad,1,Common,Attack
+Gain 7 Block. Exhaust a random card from your hand. || Upgraded: Gain 9 Block. Exhaust a card from your hand.,True Grit,Ironclad,1,Common,Skill
+Deal 5 damage twice. || Upgraded: Deal 7 damage twice.,Twin Strike,Ironclad,1,Common,Attack
+Draw 1 card. Place a card from your hand on top of your draw pile. || Upgraded: Draw 2 cards. Place a card from your hand on top of your draw pile.,War Cry,Ironclad,0,Common,Skill
+Deal 12 damage. Shuffle a Wound into your draw pile. || Upgraded: Deal 17 damage. Shuffle a Wound into your draw pile.,Wild Strike,Ironclad,1,Common,Attack
+Draw 3 cards. You cannot draw additional cards this turn. || Upgraded: Draw 4 cards. You cannot draw additional cards this turn.,Battle Trance,Ironclad,0,Uncommon,Skill
+Costs 1 less for each time you lose HP this combat. Deal 18 damage. || Upgraded: Costs 1 less for each time you lose HP this combat. Deal 22 damage.,Blood for Blood,Ironclad,4,Uncommon,Attack
+Lose 3 HP. Gain 2 Energy. || Upgraded: Lose 3 HP. Gain 3 Energy.,Bloodletting,Ironclad,0,Uncommon,Skill
+Exhaust 1 card. Draw 2 cards. || Upgraded: Exhaust 1 card. Draw 3 cards.,Burning Pact,Ironclad,1,Uncommon,Skill
+Ethereal. Deal 20 damage. || Upgraded: Ethereal. Deal 28 damage.,Carnage,Ironclad,2,Uncommon,Attack
+At the end of your turn, lose 1 HP and deal 5 damage to ALL enemies. || Upgraded: At the end of your turn, lose 1 HP and deal 7 damage to ALL enemies.,Combust,Ironclad,1,Uncommon,Power
+Whenever a card is Exhausted, draw 1 card. || Upgraded: Costs 1. Whenever a card is Exhausted, draw 1 card.,Dark Embrace,Ironclad,2,Uncommon,Power
+Enemy loses 2 Strength. Exhaust. || Upgraded: Enemy loses 3 Strength. Exhaust.,Disarm,Ironclad,1,Uncommon,Skill
+Deal 5 damage. If the enemy is Vulnerable, gain 1 Energy and draw 1 card. || Upgraded: Deal 8 damage. If the enemy is Vulnerable, gain 1 Energy and draw 1 card.,Dropkick,Ironclad,1,Uncommon,Attack
+Create a copy of an Attack or Power card in your hand. || Upgraded: Create 2 copies of an Attack or Power card in your hand.,Dual Wield,Ironclad,1,Uncommon,Skill
+Double your current Block. || Upgraded: Costs 1. Double your current Block.,Entrench,Ironclad,2,Uncommon,Skill
+Whenever you draw a Status, draw 1 card. || Upgraded: Whenever you draw a Status, draw 2 cards.,Evolve,Ironclad,1,Uncommon,Power
+Whenever a card is Exhausted, gain 3 Block. || Upgraded: Whenever a card is Exhausted, gain 4 Block.,Feel No Pain,Ironclad,1,Uncommon,Power
+Whenever you draw a Status or Curse card, deal 6 damage to all enemies. || Upgraded: Whenever you draw a Status or Curse card, deal 10 damage to all enemies.,Fire Breathing,Ironclad,1,Uncommon,Power
+Gain 12 Block. Whenever you are attacked this turn, deal 4 damage back. || Upgraded: Gain 16 Block. Whenever you are attacked this turn, deal 6 damage back.,Flame Barrier,Ironclad,2,Uncommon,Skill
+Ethereal. Gain 10 Block. || Upgraded: Ethereal. Gain 13 Block.,Ghostly Armor,Ironclad,1,Uncommon,Skill
+Lose 2 HP. Deal 15 damage. || Upgraded: Lose 2 HP. Deal 20 damage.,Hemokinesis,Ironclad,1,Uncommon,Attack
+Add a random Attack to your hand. It costs 0 this turn. Exhaust. || Upgraded: Costs 0. Add a random Attack to your hand. It costs 0 this turn. Exhaust.,Infernal Blade,Ironclad,1,Uncommon,Skill
+Gain 2 Strength. || Upgraded: Gain 3 Strength.,Inflame,Ironclad,1,Uncommon,Power
+Apply 1 Weak to ALL enemies. Exhaust. || Upgraded: Apply 2 Weak to ALL enemies. Exhaust.,Intimidate,Ironclad,0,Uncommon,Skill
+At the end of your turn, gain 3 Block. || Upgraded: At the end of your turn, gain 4 Block.,Metallicize,Ironclad,1,Uncommon,Power
+Gain 15 Block. Add 2 Wounds to your hand. || Upgraded: Gain 20 Block. Add 2 Wounds to your hand.,Power Through,Ironclad,1,Uncommon,Skill
+Deal 2 damage 4 times. Exhaust. || Upgraded: Deal 2 damage 5 times. Exhaust.,Pummel,Ironclad,1,Uncommon,Attack
+Whenever you play an Attack this turn, gain 3 Block. || Upgraded: Whenever you play an Attack this turn, gain 5 Block.,Rage,Ironclad,0,Uncommon,Skill
+Deal 8 damage. Increase this card's damage by 5 this combat. || Upgraded: Deal 8 damage. Increase this card's damage by 8 this combat.,Rampage,Ironclad,1,Uncommon,Attack
+Deal 7 damage. Shuffle a Dazed into your draw pile. || Upgraded: Deal 10 damage. Shuffle a Dazed into your draw pile.,Reckless Charge,Ironclad,0,Uncommon,Attack
+Whenever you lose HP from a card, gain 1 Strength. || Upgraded: Whenever you lose HP from a card, gain 2 Strength.,Rupture,Ironclad,1,Uncommon,Power
+Deal 12 damage. Can be upgraded any number of times. || Upgraded: Deal 16 damage. Can be upgraded any number of times.,Searing Blow,Ironclad,2,Uncommon,Attack
+Exhaust all non-Attack cards in your hand. Gain 5 Block for each card Exhausted. || Upgraded: Exhaust all non-Attack cards in your hand. Gain 7 Block for each card Exhausted.,Second Wind,Ironclad,1,Uncommon,Skill
+Gain 2 Energy. Exhaust. || Upgraded: Costs 0. Gain 2 Energy. Exhaust.,Seeing Red,Ironclad,1,Uncommon,Skill
+Gain 5 Block. If this card is Exhausted, gain 2 Energy. || Upgraded: Gain 8 Block. If this card is Exhausted, gain 3 Energy.,Sentinel,Ironclad,1,Uncommon,Skill
+Exhaust all non-Attack cards in your hand. Deal 16 damage. || Upgraded: Exhaust all non-Attack cards in your hand. Deal 22 damage.,Sever Soul,Ironclad,2,Uncommon,Attack
+Apply 3 Weak and Vulnerable to ALL enemies. Exhaust. || Upgraded: Apply 5 Weak and Vulnerable to ALL enemies. Exhaust.,Shockwave,Ironclad,2,Uncommon,Skill
+If the enemy intends to attack, gain 3 Strength. || Upgraded: If the enemy intends to attack, gain 4 Strength.,Spot Weakness,Ironclad,1,Uncommon,Skill
+Deal 13 damage. Apply 1 Weak. Apply 1 Vulnerable. || Upgraded: Deal 13 damage. Apply 2 Weak. Apply 2 Vulnerable.,Uppercut,Ironclad,2,Uncommon,Attack
+Deal 5 damage to ALL enemies X times. || Upgraded: Deal 8 damage to ALL enemies X times.,Whirlwind,Ironclad,X,Uncommon,Attack
+Block is not removed at the start of your turn. || Upgraded: Costs 2. Block is not removed at the start of your turn.,Barricade,Ironclad,3,Rare,Power
+Gain 2 Vulnerable. At the start of your turn, gain 1 Energy. || Upgraded: Gain 1 Vulnerable. At the start of your turn, gain 1 Energy.,Berserk,Ironclad,0,Rare,Power
+Deal 32 damage. || Upgraded: Deal 42 damage.,Bludgeon,Ironclad,3,Rare,Attack
+At the start of your turn, lose 1 HP and draw 1 card. || Upgraded: Innate. At the start of your turn, lose 1 HP and draw 1 card.,Brutality,Ironclad,0,Rare,Power
+Skills cost 0. Whenever you play a Skill, Exhaust it. || Upgraded: Costs 2. Skills cost 0. Whenever you play a Skill, Exhaust it.,Corruption,Ironclad,3,Rare,Power
+At the start of each turn, gain 2 Strength. || Upgraded: At the start of each turn, gain 3 Strength.,Demon Form,Ironclad,3,Rare,Power
+This turn, your next Attack is played twice. || Upgraded: This turn, your next 2 Attacks are played twice.,Double Tap,Ironclad,1,Rare,Skill
+Put a card from your Exhaust pile into your hand. Exhaust. || Upgraded: Costs 0. Put a card from your Exhaust pile into your hand. Exhaust.,Exhume,Ironclad,1,Rare,Skill
+Deal 10 damage. If this kills a non-minion enemy, gain 3 permanent Max HP. Exhaust. || Upgraded: Deal 12 damage. If this kills a non-minion enemy, gain 4 permanent Max HP. Exhaust.,Feed,Ironclad,1,Rare,Attack
+Exhaust all cards in your hand. Deal 7 damage for each Exhausted card. Exhaust. || Upgraded: Exhaust all cards in your hand. Deal 10 damage for each Exhausted card. Exhaust.,Fiend Fire,Ironclad,2,Rare,Attack
+Deal 21 damage to ALL enemies. Add a Burn to your discard pile. || Upgraded: Deal 28 damage to ALL enemies. Add a Burn to your discard pile.,Immolate,Ironclad,2,Rare,Attack
+Gain 30 Block. Exhaust. || Upgraded: Gain 40 Block. Exhaust.,Impervious,Ironclad,2,Rare,Skill
+Whenever you gain Block, deal 5 damage to a random enemy. || Upgraded: Whenever you gain Block, deal 7 damage to a random enemy.,Juggernaut,Ironclad,2,Rare,Power
+Double your Strength. Exhaust. || Upgraded: Double your Strength.,Limit Break,Ironclad,1,Rare,Skill
+Lose 6 HP. Gain 2 Energy. Draw 3 cards. Exhaust. || Upgraded: Lose 6 HP. Gain 2 Energy. Draw 5 cards. Exhaust.,Offering,Ironclad,0,Rare,Skill
+Deal 4 damage to ALL enemies. Heal HP equal to unblocked damage. Exhaust. || Upgraded: Deal 5 damage to ALL enemies. Heal HP equal to unblocked damage. Exhaust.,Reaper,Ironclad,2,Rare,Attack
+Draw 3 cards. Discard 1 card. || Upgraded: Draw 4 cards. Discard 1 card.,Acrobatics,Silent,1,Common,Skill
+Gain 5 Block. Draw 2 cards. || Upgraded: Gain 8 Block. Draw 2 cards.,Backflip,Silent,1,Common,Skill
+Deal 7 damage. If the enemy has Poison, deal 7 more damage. || Upgraded: Deal 10 damage. If the enemy has Poison, deal 10 more damage.,Bane,Silent,1,Common,Attack
+Add 3 Shivs to your hand. || Upgraded: Add 4 Shivs to your hand.,Blade Dance,Silent,1,Common,Skill
+Gain 6 Block. Add 1 Shiv to your hand. || Upgraded: Gain 6 Block. Add 2 Shivs to your hand.,Cloak and Dagger,Silent,1,Common,Skill
+Deal 4 damage to ALL enemies twice. || Upgraded: Deal 6 damage to ALL enemies twice.,Dagger Spray,Silent,1,Common,Attack
+Deal 9 damage. Draw 1 card. Discard 1 card. || Upgraded: Deal 12 damage. Draw 1 card. Discard 1 card.,Dagger Throw,Silent,1,Common,Attack
+Apply 5 Poison. || Upgraded: Apply 7 Poison.,Deadly Poison,Silent,1,Common,Skill
+Gain 4 Block. || Upgraded: Gain 7 Block.,Deflect,Silent,0,Common,Skill
+Gain 4 Block. Next turn, gain 4 Block. || Upgraded: Gain 6 Block. Next turn, gain 6 Block.,Dodge and Roll,Silent,1,Common,Skill
+Deal 8 damage. Next turn, gain 1 Energy. || Upgraded: Deal 11 damage. Next turn, gain 1 Energy.,Flying Knee,Silent,1,Common,Attack
+Next turn, gain 2 Energy. || Upgraded: Next turn, gain 3 Energy.,Outmaneuver,Silent,1,Common,Skill
+ALL enemies lose 6 Strength for 1 turn. Exhaust. || Upgraded: ALL enemies lose 8 Strength for 1 turn. Exhaust.,Piercing Wail,Silent,1,Common,Skill
+Deal 6 damage. Apply 3 Poison. || Upgraded: Deal 8 damage. Apply 4 Poison.,Poisoned Stab,Silent,1,Common,Attack
+Draw 1 card. Discard 1 card. || Upgraded: Draw 2 cards. Discard 2 cards.,Prepared,Silent,0,Common,Skill
+Deal 8 damage. Draw 1 card. || Upgraded: Deal 12 damage. Draw 1 card.,Quick Slash,Silent,1,Common,Attack
+Deal 5 damage. || Upgraded: Deal 8 damage.,Slice,Silent,0,Common,Attack
+Deal 10 damage. If you have discarded a card this turn, gain 2 Energy. || Upgraded: Deal 14 damage. If you have discarded a card this turn, gain 2 Energy.,Sneaky Strike,Silent,2,Common,Attack
+Deal 7 damage. Apply 1 Weak. || Upgraded: Deal 9 damage. Apply 2 Weak.,Sucker Punch,Silent,1,Common,Attack
+Shivs deal 4 additional damage. || Upgraded: Shivs deal 6 additional damage.,Accuracy,Silent,1,Uncommon,Power
+Deal 10 damage to ALL enemies. Discard 1 card at random. || Upgraded: Deal 14 damage to ALL enemies. Discard 1 card at random.,All-Out Attack,Silent,1,Uncommon,Attack
+Innate. Deal 11 damage. Exhaust. || Upgraded: Innate. Deal 15 damage. Exhaust.,Backstab,Silent,0,Uncommon,Attack
+Gain 5 Block. Block is not removed at the start of your next turn. || Upgraded: Gain 8 Block. Block is not removed at the start of your next turn.,Blur,Silent,1,Uncommon,Skill
+Apply 3 Poison to a random enemy 3 times. || Upgraded: Apply 3 Poison to a random enemy 4 times.,Bouncing Flask,Silent,2,Uncommon,Skill
+Cannot draw additional cards this turn. Reduce the cost of cards in your hand to 0 this turn. || Upgraded: Costs 2. Cannot draw additional cards this turn. Reduce the cost of cards in your hand to 0 this turn.,Bullet Time,Silent,3,Uncommon,Skill
+This turn, your next Skill is played twice. || Upgraded: This turn, your next 2 Skills are played twice.,Burst,Silent,1,Uncommon,Skill
+Discard your hand, then draw that many cards. Exhaust. || Upgraded: Discard your hand, then draw that many cards.,Calculated Gamble,Silent,0,Uncommon,Skill
+Whenever you are attacked, deal 3 damage back. || Upgraded: Whenever you are attacked, deal 5 damage back.,Caltrops,Silent,1,Uncommon,Power
+Double an enemy's Poison. Exhaust. || Upgraded: Triple an enemy's Poison. Exhaust.,Catalyst,Silent,1,Uncommon,Skill
+Deal 12 damage. Whenever you play a card this turn, the targeted enemy loses 3 HP. || Upgraded: Deal 12 damage. Whenever you play a card this turn, the targeted enemy loses 5 HP.,Choke,Silent,2,Uncommon,Attack
+Discard 3 cards. Gain 2 Energy. || Upgraded: Discard 2 cards. Gain 2 Energy.,Concentrate,Silent,0,Uncommon,Skill
+Apply 4 Poison and 2 Weak to ALL enemies. Exhaust. || Upgraded: Apply 7 Poison and 2 Weak to ALL enemies. Exhaust.,Crippling Cloud,Silent,2,Uncommon,Skill
+Gain 10 Block. Deal 10 damage. || Upgraded: Gain 13 Block. Deal 13 damage.,Dash,Silent,2,Uncommon,Attack
+Add a random Skill into your hand. It costs 0 this turn. Exhaust. || Upgraded: Costs 0. Add a random Skill into your hand. It costs 0 this turn. Exhaust.,Distraction,Silent,1,Uncommon,Skill
+Whenever you draw this card, add a copy of it to your hand. Deal 4 damage. Exhaust. || Upgraded: Whenever you draw this card, add a copy of it to your hand. Deal 6 damage. Exhaust.,Endless Agony,Silent,0,Uncommon,Attack
+Draw 1 card. If you draw a Skill, gain 3 Block. || Upgraded: Draw 1 card. If you draw a Skill, gain 5 Block.,Escape Plan,Silent,0,Uncommon,Skill
+Costs 1 less for each card discarded this turn. Deal 7 damage 3 times. || Upgraded: Costs 1 less for each card discarded this turn. Deal 9 damage 3 times.,Eviscerate,Silent,3,Uncommon,Attack
+Draw cards until you have 6 cards in your hand. || Upgraded: Draw cards until you have 7 cards in your hand.,Expertise,Silent,1,Uncommon,Skill
+Deal 6 damage for each Attack played this turn. || Upgraded: Deal 8 damage for each Attack played this turn.,Finisher,Silent,1,Uncommon,Attack
+Deal 4 damage for each Skill in your hand. || Upgraded: Deal 6 damage for each Skill in your hand.,Flechettes,Silent,1,Uncommon,Attack
+Gain 2 Dexterity. || Upgraded: Gain 3 Dexterity.,Footwork,Silent,1,Uncommon,Power
+Deal 5 damage. If the enemy is Weak, gain 1 Energy and draw 1 card. || Upgraded: Deal 8 damage. If the enemy is Weak, gain 1 Energy and draw 1 card.,Heel Hook,Silent,1,Uncommon,Attack
+At the start of your turn, add a Shiv to your hand. || Upgraded: Innate. At the start of your turn, add a Shiv to your hand.,Infinite Blades,Silent,1,Uncommon,Power
+Apply 2 Weak. Gain 11 Block. || Upgraded: Apply 3 Weak. Gain 14 Block.,Leg Sweep,Silent,2,Uncommon,Skill
+Costs 1 more for each time you lose HP this combat. Deal 12 damage. || Upgraded: Costs 1 more for each time you lose HP this combat. Deal 16 damage.,Masterful Stab,Silent,0,Uncommon,Attack
+At the start of your turn, apply 2 Poison to ALL enemies. || Upgraded: At the start of your turn, apply 3 Poison to ALL enemies.,Noxious Fumes,Silent,1,Uncommon,Power
+Deal 15 damage. Draw 2 more cards next turn. || Upgraded: Deal 20 damage. Draw 2 more cards next turn.,Predator,Silent,2,Uncommon,Attack
+Unplayable. If this card is discarded from your hand, draw 2 cards. || Upgraded: Unplayable. If this card is discarded from your hand, draw 3 cards.,Reflex,Silent,0,Uncommon,Skill
+Deal 3 damage 5 times. || Upgraded: Deal 4 damage 5 times.,Riddle with Holes,Silent,2,Uncommon,Attack
+Place a card from your hand on top of your draw pile. It costs 0 until it is played. || Upgraded: Costs 0. Place a card from your hand on top of your draw pile. It costs 0 until it is played.,Setup,Silent,1,Uncommon,Skill
+Deal 7 damage X times. || Upgraded: Deal 10 damage X times.,Skewer,Silent,X,Uncommon,Attack
+Unplayable. If this card is discarded from your hand, gain 1 Energy. || Upgraded: Unplayable. If this card is discarded from your hand, gain 2 Energy.,Tactician,Silent,0,Uncommon,Skill
+Apply 99 Vulnerable. Exhaust. || Upgraded: Costs 0. Apply 99 Vulnerable. Exhaust.,Terror,Silent,1,Uncommon,Skill
+At the end of your turn, Retain up to 1 card. || Upgraded: At the end of your turn, Retain up to 2 cards.,Well-Laid Plans,Silent,1,Uncommon,Power
+Whenever you play a card, deal 1 damage to ALL enemies. || Upgraded: Whenever you play a card, deal 2 damage to ALL enemies.,A Thousand Cuts,Silent,2,Rare,Power
+Gain 1 Energy. Draw 2 cards. Exhaust. || Upgraded: Gain 2 Energy. Draw 2 cards. Exhaust.,Adrenaline,Silent,0,Rare,Skill
+Whenever you play a card, gain 1 Block. || Upgraded: Innate. Whenever you play a card, gain 1 Block.,After Image,Silent,1,Rare,Power
+Obtain a random potion. Exhaust. || Upgraded: Costs 0. Obtain a random potion. Exhaust.,Alchemize,Silent,1,Rare,Skill
+Apply 6 Poison. When the enemy dies, deal damage equal to its max HP to ALL enemies. || Upgraded: Apply 9 Poison. When the enemy dies, deal damage equal to its max HP to ALL enemies.,Corpse Explosion,Silent,2,Rare,Skill
+Deal 13 damage to ALL enemies. Exhaust. || Upgraded: Deal 17 damage to ALL enemies. Exhaust.,Die Die Die,Silent,1,Rare,Attack
+Next turn, draw X cards and gain X Energy. Exhaust. || Upgraded: Next turn, draw X+1 cards and gain X+1 Energy. Exhaust.,Doppelganger,Silent,X,Rare,Skill
+Whenever an attack deals unblocked damage, apply 1 Poison. || Upgraded: Costs 1. Whenever an attack deals unblocked damage, apply 1 Poison.,Envenom,Silent,2,Rare,Power
+Deal 8 damage twice. Decrease the damage of this card by 2 this combat. || Upgraded: Deal 12 damage twice. Decrease the damage of this card by 2 this combat.,Glass Knife,Silent,1,Rare,Attack
+Can only be played if there are no cards in your draw pile. Deal 50 damage to ALL enemies. || Upgraded: Can only be played if there are no cards in your draw pile. Deal 60 damage to ALL enemies.,Grand Finale,Silent,0,Rare,Attack
+Enemy loses X Strength. Apply X Weak. Exhaust. || Upgraded: Enemy loses X+1 Strength. Apply X+1 Weak. Exhaust.,Malaise,Silent,X,Rare,Skill
+Choose a card. Next turn, add 3 copies of that card into your hand. Exhaust. || Upgraded: Costs 2. Choose a card. Next turn, add 3 copies of that card into your hand. Exhaust.,Nightmare,Silent,3,Rare,Skill
+Next turn, your Attacks deal double damage. || Upgraded: Costs 0. Next turn, your Attacks deal double damage.,Phantasmal Killer,Silent,1,Rare,Skill
+Discard your hand. Add 1 Shiv to your hand for each card discarded. || Upgraded: Discard your hand. Add 1 Shiv+ to your hand for each card discarded.,Storm of Steel,Silent,1,Rare,Skill
+At the start of your turn, draw 1 card and discard 1 card. || Upgraded: Costs 0. At the start of your turn, draw 1 card and discard 1 card.,Tools of the Trade,Silent,1,Rare,Power
+Deal 14 damage. Discard all non-Attack cards in your hand. || Upgraded: Deal 18 damage. Discard all non-Attack cards in your hand.,Unload,Silent,1,Rare,Attack
+Gain 2 Intangible. At the end of your turn, lose 1 Dexterity. || Upgraded: Gain 3 Intangible. At the end of your turn, lose 1 Dexterity.,Wraith Form,Silent,3,Rare,Power
+Deal 7 damage. Channel 1 Lightning. || Upgraded: Deal 10 damage. Channel 1 Lightning.,Ball Lightning,Defect,1,Common,Attack
+Deal damage for each of your Channeled Orbs. || Upgraded: Deal damage for each of your Channeled Orbs. Hits 4 times.,Barrage,Defect,1,Common,Attack
+Deal 3 damage. Apply 1 Vulnerable. || Upgraded: Deal 4 damage. Apply 2 Vulnerable.,Beam Cell,Defect,0,Common,Attack
+Gain 7 Block. Next turn, gain 1 Energy. || Upgraded: Gain 10 Block. Next turn, gain 1 Energy.,Charge Battery,Defect,1,Common,Skill
+Deal 3 damage. All Claw cards deal 2 additional damage this combat. || Upgraded: Deal 5 damage. All Claw cards deal 2 additional damage this combat.,Claw,Defect,0,Common,Attack
+Deal 6 damage. Channel 1 Frost. || Upgraded: Deal 9 damage. Channel 1 Frost.,Cold Snap,Defect,1,Common,Attack
+Deal 7 damage. Draw 1 card for each unique Orb you have. || Upgraded: Deal 10 damage. Draw 1 card for each unique Orb you have.,Compile Driver,Defect,1,Common,Attack
+Channel 1 Frost. Draw 1 card. || Upgraded: Channel 1 Frost. Draw 2 cards.,Coolheaded,Defect,1,Common,Skill
+Deal 3 damage. If the enemy intends to attack, apply 1 Weak. || Upgraded: Deal 4 damage. If the enemy intends to attack, apply 2 Weak.,Go for the Eyes,Defect,0,Common,Attack
+Gain 3 Block. Return a card from your discard pile to your hand. || Upgraded: Gain 5 Block. Return a card from your discard pile to your hand.,Hologram,Defect,1,Common,Skill
+Gain 9 Block. || Upgraded: Gain 12 Block.,Leap,Defect,1,Common,Skill
+Deal 9 damage. Put the next card you play this turn on top of your draw pile. || Upgraded: Deal 12 damage. Put the next card you play this turn on top of your draw pile.,Rebound,Defect,1,Common,Attack
+Evoke your next Orb. Channel the Orb that was just Evoked. || Upgraded: Costs 0. Evoke your next Orb. Channel the Orb that was just Evoked.,Recursion,Defect,1,Common,Skill
+Gain Block equal to the number of cards in your discard pile. || Upgraded: Gain Block equal to the number of cards in your discard pile + 3.,Stack,Defect,1,Common,Skill
+Gain 6 Block. Decrease this card's Block by 1 this combat. || Upgraded: Gain 8 Block. Decrease this card's Block by 1 this combat.,Steam Barrier,Defect,0,Common,Skill
+Deal 15 damage. Whenever you play this card, reduce its cost by 1 for this combat. || Upgraded: Deal 20 damage. Whenever you play this card, reduce its cost by 1 for this combat.,Streamline,Defect,2,Common,Attack
+Deal 6 damage to ALL enemies. Draw 1 card. || Upgraded: Deal 9 damage to ALL enemies. Draw 1 card.,Sweeping Beam,Defect,1,Common,Attack
+Gain 2 Energy. Add a Void to your discard pile. || Upgraded: Gain 3 Energy. Add a Void to your discard pile.,TURBO,Defect,0,Common,Skill
+Gain Energy equal to the number of cards in your draw pile divided by 5. || Upgraded: Gain Energy equal to the number of cards in your draw pile divided by 4.,Aggregate,Defect,1,Uncommon,Skill
+If you have no Block, gain 11 Block. || Upgraded: If you have no Block, gain 15 Block.,Auto-Shields,Defect,1,Uncommon,Skill
+Deal damage equal to 2 times the number of Frost Channeled this combat to ALL enemies. || Upgraded: Deal damage equal to 3 times the number of Frost Channeled this combat to ALL enemies.,Blizzard,Defect,1,Uncommon,Attack
+Innate. Gain 10 Block. Exhaust. || Upgraded: Innate. Gain 13 Block. Exhaust.,Boot Sequence,Defect,0,Uncommon,Skill
+Deal 8 damage. Apply 2 Lock-On. || Upgraded: Deal 11 damage. Apply 3 Lock-On.,Bullseye,Defect,1,Uncommon,Attack
+Gain 2 Orb slots. || Upgraded: Gain 3 Orb slots.,Capacitor,Defect,1,Uncommon,Power
+Channel 1 random Orb. || Upgraded: Channel 2 random Orbs.,Chaos,Defect,1,Uncommon,Skill
+Channel 1 Frost for each enemy in combat. Exhaust. || Upgraded: Innate. Channel 1 Frost for each enemy in combat. Exhaust.,Chill,Defect,0,Uncommon,Skill
+Gain 2 Focus. Lose 1 Orb slot. || Upgraded: Gain 3 Focus. Lose 1 Orb slot.,Consume,Defect,2,Uncommon,Skill
+Channel 1 Dark. || Upgraded: Channel 1 Dark. Triggers the passive ability of all Dark orbs.,Darkness,Defect,1,Uncommon,Skill
+Gain 1 Focus. || Upgraded: Gain 2 Focus.,Defragment,Defect,1,Uncommon,Power
+Deal 10 damage to ALL enemies. Channel 1 Dark. || Upgraded: Deal 14 damage to ALL enemies. Channel 1 Dark.,Doom and Gloom,Defect,2,Uncommon,Attack
+Double your Energy. Exhaust. || Upgraded: Double your Energy.,Double Energy,Defect,1,Uncommon,Skill
+Gain 13 Block. Retain your hand this turn. || Upgraded: Gain 16 Block. Retain your hand this turn.,Equilibrium,Defect,2,Uncommon,Skill
+Deal 5 damage. If you have played less than 3 cards this turn, draw 1 card. || Upgraded: Deal 6 damage. If you have played less than 4 cards this turn, draw 1 card.,FTL,Defect,0,Uncommon,Attack
+Costs 1 less for each Power card played this combat. Gain 12 Block. || Upgraded: Costs 1 less for each Power card played this combat. Gain 16 Block.,Force Field,Defect,4,Uncommon,Skill
+Channel 1 Plasma. || Upgraded: Costs 1. Channel 1 Plasma.,Fusion,Defect,2,Uncommon,Skill
+Gain 1 Block. Permanently increase this card's Block by 2. Exhaust. || Upgraded: Gain 1 Block. Permanently increase this card's Block by 3. Exhaust.,Genetic Algorithm,Defect,1,Uncommon,Skill
+Gain 7 Block. Channel 2 Frost. || Upgraded: Gain 10 Block. Channel 2 Frost.,Glacier,Defect,2,Uncommon,Skill
+Whenever you play a Power card, draw 1 card. || Upgraded: Whenever you play a Power card, draw 2 cards.,Heatsinks,Defect,1,Uncommon,Power
+At the start of your turn, add a random Common card to your hand. || Upgraded: Innate. At the start of your turn, add a random Common card to your hand.,Hello World,Defect,1,Uncommon,Power
+At the start of your turn, your rightmost Orb triggers its passive an additional time. || Upgraded: At the start of your turn, your rightmost Orb triggers its passive an additional time.,Loop,Defect,1,Uncommon,Power
+Remove all Block from an enemy. Deal 10 damage. || Upgraded: Remove all Block from an enemy. Deal 14 damage.,Melter,Defect,1,Uncommon,Attack
+Draw 2 cards. Add a Burn to your discard pile. || Upgraded: Draw 3 cards. Add a Burn to your discard pile.,Overclock,Defect,0,Uncommon,Skill
+Exhaust a card. Gain Energy equal to its cost. || Upgraded: Costs 0. Exhaust a card. Gain Energy equal to its cost.,Recycle,Defect,1,Uncommon,Skill
+Gain 7 Block X times. || Upgraded: Gain 9 Block X times.,Reinforced Body,Defect,X,Uncommon,Skill
+Lose 1 Focus. Gain 1 Strength and 1 Dexterity. || Upgraded: Lose 2 Focus. Gain 2 Strength and 2 Dexterity.,Reprogram,Defect,1,Uncommon,Skill
+Deal 7 damage to a random enemy twice. || Upgraded: Deal 9 damage to a random enemy twice.,Rip and Tear,Defect,1,Uncommon,Attack
+Deal 7 damage. Draw 4 cards. Discard all cards drawn that are not 0-cost. || Upgraded: Deal 10 damage. Draw 4 cards. Discard all cards drawn that are not 0-cost.,Scrape,Defect,1,Uncommon,Attack
+At the end of combat, heal 7 HP. || Upgraded: At the end of combat, heal 10 HP.,Self Repair,Defect,1,Uncommon,Power
+Draw 3 cards. || Upgraded: Draw 4 cards.,Skim,Defect,1,Uncommon,Skill
+Whenever you take attack damage, Channel 1 Lightning. || Upgraded: Whenever you take attack damage, Channel 2 Lightning.,Static Discharge,Defect,1,Uncommon,Power
+Whenever you play a Power card, Channel 1 Lightning. || Upgraded: Innate. Whenever you play a Power card, Channel 1 Lightning.,Storm,Defect,1,Uncommon,Power
+Deal 24 damage. If this kills an enemy, gain 3 Energy. || Upgraded: Deal 32 damage. If this kills an enemy, gain 3 Energy.,Sunder,Defect,3,Uncommon,Attack
+Channel X Lightning. Exhaust. || Upgraded: Channel X+1 Lightning. Exhaust.,Tempest,Defect,X,Uncommon,Skill
+Add a random Power to your hand. It costs 0 this turn. Exhaust. || Upgraded: Costs 0. Add a random Power to your hand. It costs 0 this turn. Exhaust.,White Noise,Defect,1,Uncommon,Skill
+Deal 10 damage. Put all cost 0 cards from your discard pile into your hand. || Upgraded: Deal 14 damage. Put all cost 0 cards from your discard pile into your hand.,All for One,Defect,2,Rare,Attack
+This turn, your next Power is played twice. || Upgraded: This turn, your next 2 Powers are played twice.,Amplify,Defect,1,Rare,Skill
+Gain 4 Focus. At the start of each turn, lose 1 Focus. || Upgraded: Gain 5 Focus. At the start of each turn, lose 1 Focus.,Biased Cognition,Defect,1,Rare,Power
+Prevent the next time you would lose HP. || Upgraded: Prevent the next 2 times you would lose HP.,Buffer,Defect,2,Rare,Power
+Deal 11 damage. Gain 1 Artifact. Exhaust. || Upgraded: Deal 15 damage. Gain 1 Artifact. Exhaust.,Core Surge,Defect,1,Rare,Attack
+At the start of each turn, add a random Power card to your hand. || Upgraded: Costs 2. At the start of each turn, add a random Power card to your hand.,Creative AI,Defect,3,Rare,Power
+Ethereal. The first card you play each turn is played twice. || Upgraded: The first card you play each turn is played twice.,Echo Form,Defect,3,Rare,Power
+Lightning now hits ALL enemies. Channel 2 Lightning. || Upgraded: Lightning now hits ALL enemies. Channel 3 Lightning.,Electrodynamics,Defect,2,Rare,Power
+Remove all your Orbs. Gain Energy and draw 1 card for each Orb removed. Exhaust. || Upgraded: Costs 0. Remove all your Orbs. Gain Energy and draw 1 card for each Orb removed. Exhaust.,Fission,Defect,1,Rare,Skill
+Deal 26 damage to ALL enemies. Lose 3 Focus. || Upgraded: Deal 34 damage to ALL enemies. Lose 3 Focus.,Hyperbeam,Defect,2,Rare,Attack
+At the start of your turn, draw 1 additional card. || Upgraded: Innate. At the start of your turn, draw 1 additional card.,Machine Learning,Defect,1,Rare,Power
+Deal 24 damage. Channel 3 Plasma. || Upgraded: Deal 30 damage. Channel 3 Plasma.,Meteor Strike,Defect,5,Rare,Attack
+Evoke your next Orb X times. || Upgraded: Evoke your next Orb X+1 times.,Multi-Cast,Defect,X,Rare,Skill
+Channel 1 Lightning, 1 Frost, and 1 Dark. || Upgraded: Channel 1 Lightning, 1 Frost, and 1 Dark. Upgrade all of them.,Rainbow,Defect,2,Rare,Skill
+Shuffle all cards in your hand into your draw pile. Draw 4 cards. || Upgraded: Shuffle all cards in your hand into your draw pile. Draw 6 cards.,Reboot,Defect,0,Rare,Skill
+Choose a card from your draw pile and place it into your hand. Exhaust. || Upgraded: Choose 2 cards from your draw pile and place them into your hand. Exhaust.,Seek,Defect,0,Rare,Skill
+Deal 7 damage to a random enemy for each Lightning Channeled this combat. || Upgraded: Deal 9 damage to a random enemy for each Lightning Channeled this combat.,Thunder Strike,Defect,3,Rare,Attack
+Deal 7 damage for each enemy in combat. || Upgraded: Deal 10 damage for each enemy in combat.,Bowling Bash,Watcher,1,Common,Attack
+Deal 5 damage to ALL enemies. || Upgraded: Deal 8 damage to ALL enemies.,Consecrate,Watcher,0,Common,Attack
+Retain. Enter Wrath. Exhaust. || Upgraded: Retain. Enter Wrath.,Crescendo,Watcher,1,Common,Skill
+Deal 8 damage. If the previous card played was a Skill, apply 1 Vulnerable. || Upgraded: Deal 10 damage. If the previous card played was a Skill, apply 2 Vulnerable.,Crush Joints,Watcher,1,Common,Attack
+Deal 7 damage. Scry 2. Draw 1 card. || Upgraded: Deal 9 damage. Scry 3. Draw 1 card.,Cut Through Fate,Watcher,1,Common,Attack
+Gain 7 Block. Exit your Stance. || Upgraded: Gain 10 Block. Exit your Stance.,Empty Body,Watcher,1,Common,Skill
+Deal 9 damage. Exit your Stance. || Upgraded: Deal 14 damage. Exit your Stance.,Empty Fist,Watcher,1,Common,Attack
+Gain 6 Block. Shuffle an Insight into your draw pile. || Upgraded: Gain 10 Block. Shuffle an Insight into your draw pile.,Evaluate,Watcher,1,Common,Skill
+Deal 4 damage. Whenever you change Stances, return this from your discard pile to your hand. || Upgraded: Deal 6 damage. Whenever you change Stances, return this from your discard pile to your hand.,Flurry of Blows,Watcher,0,Common,Attack
+Retain. Deal 4 damage twice. || Upgraded: Retain. Deal 6 damage twice.,Flying Sleeves,Watcher,1,Common,Attack
+Deal 7 damage. If the previous card played was an Attack, gain 1 Energy. || Upgraded: Deal 11 damage. If the previous card played was an Attack, gain 1 Energy.,Follow-Up,Watcher,1,Common,Attack
+Gain 3 Block. Wrath affects this card. || Upgraded: Gain 4 Block. Wrath affects this card.,Halt,Watcher,0,Common,Skill
+Scry 1. Deal 3 damage. Gain 2 Block. || Upgraded: Scry 2. Deal 4 damage. Gain 3 Block.,Just Lucky,Watcher,0,Common,Attack
+Apply 8 Mark. ALL enemies lose HP equal to their Mark. || Upgraded: Apply 11 Mark. ALL enemies lose HP equal to their Mark.,Pressure Points,Watcher,1,Common,Skill
+Gain 2 Mantra. Gain 4 Block. || Upgraded: Gain 3 Mantra. Gain 6 Block.,Prostrate,Watcher,0,Common,Skill
+Retain. Gain 12 Block. || Upgraded: Retain. Gain 16 Block.,Protect,Watcher,2,Common,Skill
+Deal 8 damage. If the last card played was an Attack, apply 1 Weak. || Upgraded: Deal 10 damage. If the last card played was an Attack, apply 2 Weak.,Sash Whip,Watcher,1,Common,Attack
+Gain 7 Block. Scry 3. || Upgraded: Gain 10 Block. Scry 5.,Third Eye,Watcher,1,Common,Skill
+Retain. Enter Calm. Exhaust. || Upgraded: Retain. Enter Calm.,Tranquility,Watcher,1,Common,Skill
+At the end of your turn, add a Smite to your hand. || Upgraded: Innate. At the end of your turn, add a Smite to your hand.,Battle Hymn,Watcher,1,Uncommon,Power
+Deal 6 damage. Add a Smite to your hand. || Upgraded: Deal 10 damage. Add a Smite to your hand.,Carve Reality,Watcher,0,Uncommon,Attack
+Put an Upgraded Miracle into your hand at the start of your next X turns. Exhaust. || Upgraded: Put an Upgraded Miracle into your hand at the start of your next X+1 turns. Exhaust.,Collect,Watcher,X,Uncommon,Skill
+Deal 12 damage to ALL enemies. End your turn. || Upgraded: Deal 16 damage to ALL enemies. End your turn.,Conclude,Watcher,1,Uncommon,Attack
+Gain 4 Block. Add a Safety to your hand. || Upgraded: Gain 7 Block. Add a Safety to your hand.,Deceive Reality,Watcher,1,Uncommon,Skill
+Draw 2 cards. Exit your Stance. || Upgraded: Draw 3 cards. Exit your Stance.,Empty Mind,Watcher,1,Uncommon,Skill
+Gain 3 Strength. Gain 3 Dexterity. Gain 1 less Energy at the start of each turn. || Upgraded: Gain 4 Strength. Gain 4 Dexterity. Gain 1 less Energy at the start of each turn.,Fasting,Watcher,2,Uncommon,Power
+Deal 8 damage. If the enemy intends to attack, enter Calm. || Upgraded: Deal 11 damage. If the enemy intends to attack, enter Calm.,Fear No Evil,Watcher,1,Uncommon,Attack
+Choose 1 of 3 random Attacks of any color to add to your hand. Exhaust. || Upgraded: Choose 1 of 3 random Attacks of any color to add to your hand. It costs 0 this turn. Exhaust.,Foreign Influence,Watcher,0,Uncommon,Skill
+At the start of your turn, Scry 3. || Upgraded: At the start of your turn, Scry 4.,Foresight,Watcher,1,Uncommon,Power
+If you are in Wrath, apply 3 Vulnerable to ALL enemies. Otherwise, enter Wrath. || Upgraded: If you are in Wrath, apply 5 Vulnerable to ALL enemies. Otherwise, enter Wrath.,Indignation,Watcher,1,Uncommon,Skill
+If you are in Calm, draw 3 cards. Otherwise, enter Calm. || Upgraded: If you are in Calm, draw 4 cards. Otherwise, enter Calm.,Inner Peace,Watcher,1,Uncommon,Skill
+At the end of your turn, if you are in Calm, gain 5 Block. || Upgraded: At the end of your turn, if you are in Calm, gain 7 Block.,Like Water,Watcher,1,Uncommon,Power
+Put 1 card from your discard pile into your hand and Retain it. Enter Calm. End your turn. || Upgraded: Put 2 cards from your discard pile into your hand and Retain them. Enter Calm. End your turn.,Meditate,Watcher,1,Uncommon,Skill
+Whenever you change Stances, gain 4 Block. || Upgraded: Whenever you change Stances, gain 6 Block.,Mental Fortress,Watcher,1,Uncommon,Power
+Whenever you Scry, gain 3 Block. || Upgraded: Whenever you Scry, gain 4 Block.,Nirvana,Watcher,1,Uncommon,Power
+Retain. Gain 5 Block. This turn, this card's Block is increased by 2. || Upgraded: Retain. Gain 7 Block. This turn, this card's Block is increased by 3.,Perseverance,Watcher,1,Uncommon,Skill
+Gain 3 Mantra. Shuffle an Insight into your draw pile. || Upgraded: Gain 4 Mantra. Shuffle an Insight into your draw pile.,Pray,Watcher,1,Uncommon,Skill
+Whenever you enter Wrath, draw 2 cards. || Upgraded: Costs 0. Whenever you enter Wrath, draw 2 cards.,Rushdown,Watcher,1,Uncommon,Power
+Gain 6 Block. If the last card played was a Skill, draw 2 cards. || Upgraded: Gain 9 Block. If the last card played was a Skill, draw 2 cards.,Sanctity,Watcher,1,Uncommon,Skill
+Retain. Deal 20 damage. Every time you Retain this card, lower its cost by 1. || Upgraded: Retain. Deal 26 damage. Every time you Retain this card, lower its cost by 1.,Sands of Time,Watcher,4,Uncommon,Attack
+Can only be played if this is the only Attack in your hand. Deal 30 damage. || Upgraded: Can only be played if this is the only Attack in your hand. Deal 40 damage.,Signature Move,Watcher,2,Uncommon,Attack
+At the start of your next turn, enter Wrath and draw 2 cards. || Upgraded: At the start of your next turn, enter Wrath and draw 3 cards.,Simmering Fury,Watcher,1,Uncommon,Skill
+At the end of your turn, shuffle an Insight into your draw pile. || Upgraded: Costs 1. At the end of your turn, shuffle an Insight into your draw pile.,Study,Watcher,2,Uncommon,Power
+Gain 8 Block. The next Attack you play costs 0. || Upgraded: Gain 11 Block. The next Attack you play costs 0.,Swivel,Watcher,2,Uncommon,Skill
+Deal 5 damage. Whenever you attack this enemy, gain 2 Block. Exhaust. || Upgraded: Deal 7 damage. Whenever you attack this enemy, gain 3 Block. Exhaust.,Talk to the Hand,Watcher,1,Uncommon,Attack
+Deal 3 damage 3 times. Enter Wrath. Shuffle this card into your draw pile. || Upgraded: Deal 3 damage 4 times. Enter Wrath. Shuffle this card into your draw pile.,Tantrum,Watcher,1,Uncommon,Attack
+Deal 9 damage. Gain Block equal to unblocked damage dealt. || Upgraded: Deal 12 damage. Gain Block equal to unblocked damage dealt.,Wallop,Watcher,2,Uncommon,Attack
+Whenever you gain Block this turn, apply 1 Weak to ALL enemies. || Upgraded: Whenever you gain Block this turn, apply 2 Weak to ALL enemies.,Wave of the Hand,Watcher,1,Uncommon,Skill
+Deal 4 damage. Whenever you Scry, return this from your discard pile to your hand. || Upgraded: Deal 6 damage. Whenever you Scry, return this from your discard pile to your hand.,Weave,Watcher,0,Uncommon,Attack
+Deal 15 damage. Draw 2 cards. || Upgraded: Deal 20 damage. Draw 2 cards.,Wheel Kick,Watcher,2,Uncommon,Attack
+Retain. Deal 7 damage. This turn, this card's damage is increased by 4. || Upgraded: Retain. Deal 10 damage. This turn, this card's damage is increased by 5.,Windmill Strike,Watcher,2,Uncommon,Attack
+Gain 5 Mantra. || Upgraded: Retain. Gain 5 Mantra.,Worship,Watcher,1,Uncommon,Skill
+Your next Attack deals 5 additional damage. || Upgraded: Your next Attack deals 8 additional damage.,Wreath of Flame,Watcher,1,Uncommon,Skill
+Shuffle a Beta into your draw pile. || Upgraded: Innate. Shuffle a Beta into your draw pile.,Alpha,Watcher,1,Rare,Skill
+Enter Divinity. Die next turn. Exhaust. || Upgraded: Retain. Enter Divinity. Die next turn. Exhaust.,Blasphemy,Watcher,1,Rare,Skill
+Deal 12 damage. Damage is increased by your Mantra. || Upgraded: Deal 16 damage. Damage is increased by your Mantra.,Brilliance,Watcher,1,Rare,Attack
+Shuffle an Expunger with X(+1) into your draw pile. Exhaust. || Upgraded: Shuffle an Expunger with X(+1) into your draw pile. Exhaust.,Conjure Blade,Watcher,X,Rare,Skill
+At the start of your turn, gain 1 Energy and shuffle an Insight into your draw pile. || Upgraded: Ethereal. At the start of your turn, gain 1 Energy and shuffle an Insight into your draw pile.,Deva Form,Watcher,3,Rare,Power
+At the start of your turn, gain 2 Mantra. || Upgraded: At the start of your turn, gain 3 Mantra.,Devotion,Watcher,1,Rare,Power
+Unplayable. When you draw this card, add 2 Miracles into your hand. Exhaust. || Upgraded: Unplayable. When you draw this card, add 3 Miracles into your hand. Exhaust.,Deus Ex Machina,Watcher,0,Rare,Skill
+Whenever a card is Retained, lower its cost by 1. || Upgraded: Innate. Whenever a card is Retained, lower its cost by 1.,Establishment,Watcher,1,Rare,Power
+If the enemy has 30 or less HP, set their HP to 0. || Upgraded: If the enemy has 40 or less HP, set their HP to 0.,Judgment,Watcher,1,Rare,Attack
+Deal 10 damage. If this kills an enemy, Upgrade a random card in your deck. Exhaust. || Upgraded: Deal 13 damage. If this kills an enemy, Upgrade a random card in your deck. Exhaust.,Lesson Learned,Watcher,2,Rare,Attack
+Whenever a card is created during combat, Upgrade it. || Upgraded: Costs 0. Whenever a card is created during combat, Upgrade it.,Master Reality,Watcher,1,Rare,Power
+Choose a card in your draw pile. Play the chosen card twice and Exhaust it. Exhaust. || Upgraded: Costs 3. Choose a card in your draw pile. Play the chosen card twice and Exhaust it. Exhaust.,Omniscience,Watcher,4,Rare,Skill
+Deal 5 damage to a random enemy 5 times. || Upgraded: Deal 6 damage to a random enemy 6 times.,Ragnarok,Watcher,3,Rare,Attack
+Draw cards until your hand is full. Exhaust. || Upgraded: Costs 0. Draw cards until your hand is full. Exhaust.,Scrawl,Watcher,1,Rare,Skill
+Gain 3 Block for each card in your hand. || Upgraded: Gain 4 Block for each card in your hand.,Spirit Shield,Watcher,2,Rare,Skill
+Take an extra turn after this one. End your turn. Exhaust. || Upgraded: Costs 2. Take an extra turn after this one. End your turn. Exhaust.,Vault,Watcher,3,Rare,Skill
+Choose one: Gain 6 Plated Armor, 3 Strength, or 25 Gold. Exhaust. || Upgraded: Choose one: Gain 8 Plated Armor, 4 Strength, or 30 Gold. Exhaust.,Wish,Watcher,3,Rare,Skill
+Heal 4 HP. Exhaust. || Upgraded: Heal 6 HP. Exhaust.,Bandage Up,Colorless,0,Uncommon,Skill
+Apply 2 Weak. || Upgraded: Apply 2 Weak to ALL enemies.,Blind,Colorless,0,Uncommon,Skill
+Enemy loses 9 Strength this turn. Exhaust. || Upgraded: Enemy loses 15 Strength this turn. Exhaust.,Dark Shackles,Colorless,0,Uncommon,Skill
+Shuffle your discard pile into your draw pile. Draw 1 card. || Upgraded: Shuffle your discard pile into your draw pile. Draw 2 cards.,Deep Breath,Colorless,0,Uncommon,Skill
+Choose 1 of 3 random cards to add to your hand. It costs 0 this turn. Exhaust. || Upgraded: Choose 1 of 3 random cards to add to your hand. It costs 0 this turn.,Discovery,Colorless,1,Uncommon,Skill
+Innate. Deal 6 damage to ALL enemies. Exhaust. || Upgraded: Innate. Deal 8 damage to ALL enemies. Exhaust.,Dramatic Entrance,Colorless,0,Uncommon,Attack
+Reduce the cost of cards in your hand to 1 this turn. || Upgraded: Reduce the cost of cards in your hand to 1 this combat.,Enlightenment,Colorless,0,Uncommon,Skill
+Gain 2 Block. Draw 1 card. || Upgraded: Gain 4 Block. Draw 1 card.,Finesse,Colorless,0,Uncommon,Skill
+Deal 3 damage. Draw 1 card. || Upgraded: Deal 6 damage. Draw 1 card.,Flash of Steel,Colorless,0,Uncommon,Attack
+Gain 6 Block. || Upgraded: Gain 9 Block.,Good Instincts,Colorless,0,Uncommon,Skill
+If you have no Attack cards in your hand, draw 2 cards. || Upgraded: If you have no Attack cards in your hand, draw 3 cards.,Impatience,Colorless,0,Uncommon,Skill
+Add 1 random Colorless card to your hand. Exhaust. || Upgraded: Add 2 random Colorless cards to your hand. Exhaust.,Jack Of All Trades,Colorless,0,Uncommon,Skill
+A random card in your hand costs 0 for the rest of combat. Exhaust. || Upgraded: Costs 0. A random card in your hand costs 0 for the rest of combat. Exhaust.,Madness,Colorless,1,Uncommon,Skill
+Innate. Deal damage equal to the number of cards in your draw pile. || Upgraded: Costs 1. Innate. Deal damage equal to the number of cards in your draw pile.,Mind Blast,Colorless,2,Uncommon,Attack
+Gain 1 Artifact. Exhaust. || Upgraded: Gain 2 Artifact. Exhaust.,Panacea,Colorless,0,Uncommon,Skill
+Gain 30 Block. You cannot gain Block from cards for the next 2 turns. Exhaust. || Upgraded: Gain 40 Block. You cannot gain Block from cards for the next 2 turns. Exhaust.,Panic Button,Colorless,0,Uncommon,Skill
+Exhaust up to 3 cards in your hand. Exhaust. || Upgraded: Exhaust up to 5 cards in your hand. Exhaust.,Purity,Colorless,0,Uncommon,Skill
+Deal 7 damage. || Upgraded: Deal 10 damage.,Swift Strike,Colorless,0,Uncommon,Attack
+Apply 2 Vulnerable. || Upgraded: Apply 2 Vulnerable to ALL enemies.,Trip,Colorless,0,Uncommon,Skill
+Upgrade ALL of your cards for the rest of combat. Exhaust. || Upgraded: Costs 1. Upgrade ALL of your cards for the rest of combat. Exhaust.,Apotheosis,Colorless,2,Rare,Skill
+Shuffle 3 random Skills into your draw pile. They cost 0 this combat. Exhaust. || Upgraded: Shuffle 5 random Skills into your draw pile. They cost 0 this combat. Exhaust.,Chrysalis,Colorless,2,Rare,Skill
+Deal 20 damage. If this kills a non-minion enemy, gain 20 Gold. || Upgraded: Deal 25 damage. If this kills a non-minion enemy, gain 25 Gold.,Hand of Greed,Colorless,2,Rare,Attack
+At the start of your turn, add a random Colorless card to your hand. || Upgraded: Costs 1. At the start of your turn, add a random Colorless card to your hand.,Magnetism,Colorless,2,Rare,Power
+Draw 3 cards. Exhaust. || Upgraded: Draw 4 cards. Exhaust.,Master of Strategy,Colorless,0,Rare,Skill
+At the start of your turn, play the top card of your draw pile. || Upgraded: Costs 1. At the start of your turn, play the top card of your draw pile.,Mayhem,Colorless,2,Rare,Power
+Shuffle 3 random Attacks into your draw pile. They cost 0 this combat. Exhaust. || Upgraded: Shuffle 5 random Attacks into your draw pile. They cost 0 this combat. Exhaust.,Metamorphosis,Colorless,2,Rare,Skill
+Every time you play 5 cards in a single turn, deal 10 damage to ALL enemies. || Upgraded: Every time you play 5 cards in a single turn, deal 14 damage to ALL enemies.,Panache,Colorless,0,Rare,Power
+Whenever you apply a Debuff to an enemy, they take 5 damage. || Upgraded: Whenever you apply a Debuff to an enemy, they take 7 damage.,Sadistic Nature,Colorless,0,Rare,Power
+Put a Skill from your draw pile into your hand. Exhaust. || Upgraded: Put a Skill from your draw pile into your hand.,Secret Technique,Colorless,0,Rare,Skill
+Put an Attack from your draw pile into your hand. Exhaust. || Upgraded: Put an Attack from your draw pile into your hand.,Secret Weapon,Colorless,0,Rare,Skill
+At the end of 3 turns, deal 40 damage to ALL enemies. || Upgraded: At the end of 3 turns, deal 50 damage to ALL enemies.,The Bomb,Colorless,2,Rare,Skill
+Draw 2 cards. Place a card from your hand on top of your draw pile. Exhaust. || Upgraded: Draw 2 cards. Place a card from your hand on top of your draw pile.,Thinking Ahead,Colorless,0,Rare,Skill
+Add X random colorless cards into your hand. They cost 0 this turn. Exhaust. || Upgraded: Add X random Upgraded colorless cards into your hand. They cost 0 this turn. Exhaust.,Transmutation,Colorless,X,Rare,Skill
+Put 3 random Attacks from your draw pile into your hand. Exhaust. || Upgraded: Put 4 random Attacks from your draw pile into your hand. Exhaust.,Violence,Colorless,0,Rare,Skill
+Ethereal. Gain 1 Intangible. Exhaust. || Upgraded: Gain 1 Intangible. Exhaust.,Apparition,Colorless,1,Special,Skill
+Shuffle an Omega into your draw pile. Exhaust. || Upgraded: Costs 1. Shuffle an Omega into your draw pile. Exhaust.,Beta,Colorless,2,Special,Skill
+Deal 7 damage. Heal 2 HP. || Upgraded: Deal 8 damage. Heal 3 HP.,Bite,Colorless,1,Special,Attack
+Deal 7 damage X times. || Upgraded: Deal 9 damage X times.,Expunger,Colorless,1,Special,Attack
+Retain. Draw 2 cards. Exhaust. || Upgraded: Retain. Draw 3 cards. Exhaust.,Insight,Colorless,0,Special,Skill
+Lose 3 HP. Gain 2 Strength. || Upgraded: Lose 3 HP. Gain 3 Strength.,J.A.X.,Colorless,0,Special,Skill
+Retain. Gain 1 Energy. Exhaust. || Upgraded: Retain. Gain 2 Energy. Exhaust.,Miracle,Colorless,0,Special,Skill
+At the end of your turn, deal 50 damage to ALL enemies. || Upgraded: At the end of your turn, deal 60 damage to ALL enemies.,Omega,Colorless,3,Special,Power
+Retain. Gain 12 Block. || Upgraded: Retain. Gain 16 Block.,Safety,Colorless,1,Special,Skill
+Deal 4 damage. Exhaust. || Upgraded: Deal 6 damage. Exhaust.,Shiv,Colorless,0,Special,Attack
+Retain. Deal 12 damage. || Upgraded: Retain. Deal 16 damage.,Smite,Colorless,1,Special,Attack
+Retain. Deal 20 damage. || Upgraded: Retain. Deal 30 damage.,Through Violence,Colorless,0,Special,Attack
+Unplayable. At the end of your turn, take 2 damage.,Burn,Status,,Status
+Unplayable. At the end of your turn, take 4 damage.,Burn+,Status,,Status
+Unplayable. Ethereal.,Dazed,Status,,Status
+Unplayable. Exhaust.,Slimed,Status,,Status
+Unplayable. When drawn, lose 1 Energy. Ethereal.,Void,Status,,Status
+Unplayable.,Wound,Status,,Status
+Unplayable. Ethereal. Cannot be removed from your deck.,Ascender's Bane,Curse,,Curse
+Unplayable. Ethereal.,Clumsy,Curse,,Curse
+Unplayable. Cannot be removed from your deck.,Curse of the Bell,Curse,,Curse
+Unplayable. At the end of your turn, take 2 damage.,Decay,Curse,,Curse
+Unplayable. At the end of your turn, gain 1 Weak.,Doubt,Curse,,Curse
+Unplayable.,Injury,Curse,,Curse
+Unplayable. There is no escape from this Curse.,Necronomicurse,Curse,,Curse
+Unplayable. You cannot play more than 3 cards this turn.,Normality,Curse,,Curse
+Unplayable. While in hand, lose 1 HP when other cards are played.,Pain,Curse,,Curse
+Unplayable. If transformed or removed from your deck, lose 3 Max HP.,Parasite,Curse,,Curse
+Innate. At the end of your turn, put a copy of this card into your hand. Exhaust.,Pride,Curse,,Curse
+Unplayable. At the end of your turn, lose 1 HP for each card in your hand.,Regret,Curse,,Curse
+Unplayable. At the end of your turn, gain 1 Frail.,Shame,Curse,,Curse
+Unplayable. Innate.,Writhe,Curse,,Curse

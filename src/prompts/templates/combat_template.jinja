@@ -3,7 +3,11 @@
 {% set total_incoming_damage = 0 %}
 {% for enemy in combat_state.monsters %}
     {% if enemy.intent == "ATTACK" or enemy.intent == "ATTACK_BUFF" or enemy.intent == "ATTACK_DEBUFF" %}
-        {% set total_incoming_damage = total_incoming_damage + (enemy.move_adjusted_damage|default(0) * enemy.move_hits|default(1)) %}
+        {% set damage = enemy.move_adjusted_damage|default(0) %}
+        {% set hits = enemy.move_hits|default(1) %}
+        {% if damage > 0 %}
+            {% set total_incoming_damage = total_incoming_damage + (damage * hits) %}
+        {% endif %}
     {% endif %}
 {% endfor %}
 
@@ -11,10 +15,10 @@
 **Core Philosophy:** Health is a resource. Perfect information enables perfect decisions. Every action should maximize expected value across immediate and future turns.
 
 **Current Battlefield Status:**
-- **Player:** {{ combat_state.player.current_hp }}/{{ combat_state.player.max_hp }} HP, {{ combat_state.player.block }} Block, {{ combat_state.player.energy }} Energy
-- **Total Enemy HP:** {{ total_enemy_hp }}
-- **Incoming Damage:** {{ total_incoming_damage }}
-- **Survival Buffer:** {{ combat_state.player.current_hp + combat_state.player.block - total_incoming_damage }} (After enemy attacks)
+- **Player:** {{ combat_state.player.current_hp | default(0) }}/{{ combat_state.player.max_hp | default(1) }} HP, {{ combat_state.player.block | default(0) }} Block, {{ combat_state.player.energy | default(0) }} Energy
+- **Total Enemy HP:** {{ total_enemy_hp | default(0) }}
+- **Incoming Damage:** {{ total_incoming_damage | default(0) }}
+- **Survival Buffer:** {{ (combat_state.player.current_hp | default(0)) + (combat_state.player.block | default(0)) - (total_incoming_damage | default(0)) }} (After enemy attacks)
 
 **Archetype Strategy Context:**
 {% set current_archetypes = archetypes[game_state.class] %}
@@ -37,10 +41,11 @@
 
 **Player Hand Analysis:**
 {% for card in combat_state.hand %}
-- **[{{ loop.index }}] {{ card.name }}**{% if card.upgrades|default(0) > 0 %}+{{ card.upgrades|default(0) }}{% endif %} ({{ card.cost }} Energy, {{ card.type }})
+- **[{{ loop.index }}] {{ card.name }}**{% if card.upgrades|default(0) > 0 %}+{{ card.upgrades }}{% endif %} ({{ card.cost }} Energy, {{ card.type }})
   **Tactical Value:** {% if card.type == "ATTACK" %}Damage: {{ card.cost * 6 }}{% if card.has_target %} (targeted){% endif %}{% elif card.type == "SKILL" %}{% if "block" in card.name.lower() %}Block: {{ card.cost * 5 }}{% else %}Utility{% endif %}{% elif card.type == "POWER" %}Engine/Scaling{% endif %}
   **Playability:** {% if card.is_playable %}✓ Can Play{% else %}✗ Cannot Play{% endif %}
   **Synergy:** {% for build in current_archetypes %}{% if card.name in build.key_cards %}[{{ build.name }} Core]{% elif card.name in build.payoff_cards %}[{{ build.name }} Payoff]{% endif %}{% endfor %}
+  {% if card.name in card_info %}**Card Details:** {{ card_info[card.name].description }}{% endif %}
 {% endfor %}
 
 **Enemy Analysis & Threat Assessment:**
@@ -53,9 +58,12 @@
 {% endfor %}
 
 **Resource Piles Overview:**
-- **Draw Pile (Next {{ [combat_state.draw_pile | length, 5] | min }} cards):** {% for card in combat_state.draw_pile[:5] %}{{ card.name }}{% if not loop.last %}, {% endif %}{% endfor %}
-- **Discard Pile:** {% for card in combat_state.discard_pile %}{{ card.name }}{% if not loop.last %}, {% endif %}{% endfor %}
-- **Exhaust Pile:** {% for card in combat_state.exhaust_pile %}{{ card.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+- **Draw Pile (Next {{ [combat_state.draw_pile | length, 5] | min }} cards):** 
+  {% if combat_state.draw_pile %}{% for card in combat_state.draw_pile[:5] %}{{ card.name }}{% if card.name in card_info %} ({{ card_info[card.name].description }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}Empty{% endif %}
+- **Discard Pile:** 
+  {% if combat_state.discard_pile %}{% for card in combat_state.discard_pile %}{{ card.name }}{% if card.name in card_info %} ({{ card_info[card.name].description }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}Empty{% endif %}
+- **Exhaust Pile:** 
+  {% if combat_state.exhaust_pile %}{% for card in combat_state.exhaust_pile %}{{ card.name }}{% if card.name in card_info %} ({{ card_info[card.name].description }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}Empty{% endif %}
 
 ## **TREE OF THOUGHTS COMBAT FRAMEWORK:**
 
@@ -67,7 +75,7 @@
     {% if card.type == "ATTACK" and card.is_playable %}
         {% set card_damage = card.cost * 6 %}
         {% set potential_damage = potential_damage + card_damage %}
-- {{ card.name }}: ~{{ card_damage }} damage ({{ card.cost }} energy)
+- {{ card.name }}: ~{{ card_damage }} damage ({{ card.cost }} energy){% if card.name in card_info %} - {{ card_info[card.name].description }}{% endif %}
     {% endif %}
 {% endfor %}
 **Total Potential Damage:** ~{{ potential_damage }}
@@ -80,7 +88,7 @@
 **Available Block Sources:**
 {% for card in combat_state.hand %}
     {% if card.type == "SKILL" and "block" in card.name.lower() and card.is_playable %}
-- {{ card.name }}: ~{{ card.cost * 5 }} block ({{ card.cost }} energy)
+- {{ card.name }}: ~{{ card.cost * 5 }} block ({{ card.cost }} energy){% if card.name in card_info %} - {{ card_info[card.name].description }}{% endif %}
     {% endif %}
 {% endfor %}
 **Survival Status:** {% if combat_state.player.current_hp + combat_state.player.block > total_incoming_damage %}✓ SAFE{% else %}⚠ DANGER - Need {{ total_incoming_damage - combat_state.player.current_hp - combat_state.player.block }} more defense{% endif %}
@@ -89,7 +97,7 @@
 **Power Cards Available:**
 {% for card in combat_state.hand %}
     {% if card.type == "POWER" and card.is_playable %}
-- {{ card.name }} ({{ card.cost }} energy): Long-term scaling benefit
+- {{ card.name }} ({{ card.cost }} energy): Long-term scaling benefit{% if card.name in card_info %} - {{ card_info[card.name].description }}{% endif %}
     {% endif %}
 {% endfor %}
 

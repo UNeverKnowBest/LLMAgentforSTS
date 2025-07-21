@@ -2,6 +2,7 @@ from typing import Dict, Optional, Tuple
 from jinja2 import Environment, FileSystemLoader
 import os
 from src.game.game_constants import ScreenType
+from .card_info_store import card_info_store
 
 
 class PromptGenerator:
@@ -83,6 +84,9 @@ class PromptGenerator:
             # 加载基础模板
             template = self.env.get_template("base.jinja")
 
+            # 获取当前场景需要的卡牌信息
+            card_info = self._get_cards_info_for_current_scene()
+
             # 渲染模板，传入完整的游戏状态数据
             prompt = template.render(
                 game_state_json=self.game_state_json,
@@ -90,6 +94,7 @@ class PromptGenerator:
                 screen_state=self.game_state.get("screen_state", {}),
                 screen_type=self.game_state.get("screen_type", "NONE"),
                 player_deck=self.game_state.get("deck", []),
+                card_info=card_info,
             )
 
             return prompt.strip()
@@ -140,3 +145,57 @@ class PromptGenerator:
             list: 当前可用的命令列表
         """
         return self.game_state_json.get("available_commands", [])
+
+    def _get_cards_info_for_current_scene(self) -> Dict:
+        screen_type = self._get_effective_screen_type()
+        screen_state = self.game_state.get("screen_state", {})
+        all_card_names = set()
+
+        if screen_type == ScreenType.COMBAT:
+            combat_state = self.game_state.get("combat_state", {})
+
+            for card in combat_state.get("hand", []):
+                all_card_names.add(card.get("name", ""))
+
+            for card in combat_state.get("draw_pile", []):
+                all_card_names.add(card.get("name", ""))
+
+            for card in combat_state.get("discard_pile", []):
+                all_card_names.add(card.get("name", ""))
+
+            for card in combat_state.get("exhaust_pile", []):
+                all_card_names.add(card.get("name", ""))
+
+            for card in combat_state.get("limbo", []):
+                all_card_names.add(card.get("name", ""))
+
+            card_in_play = combat_state.get("card_in_play")
+            if card_in_play:
+                all_card_names.add(card_in_play.get("name", ""))
+
+        elif screen_type == ScreenType.HAND_SELECT:
+            for card in screen_state.get("hand", []):
+                all_card_names.add(card.get("name", ""))
+            for card in screen_state.get("selected", []):
+                all_card_names.add(card.get("name", ""))
+
+        elif screen_type == ScreenType.GRID:
+            for card in screen_state.get("cards", []):
+                all_card_names.add(card.get("name", ""))
+            for card in screen_state.get("selected_cards", []):
+                all_card_names.add(card.get("name", ""))
+
+        elif screen_type == ScreenType.CARD_REWARD:
+            for card in screen_state.get("cards", []):
+                all_card_names.add(card.get("name", ""))
+
+        elif screen_type == ScreenType.SHOP_SCREEN:
+            for card in screen_state.get("cards", []):
+                all_card_names.add(card.get("name", ""))
+
+        elif screen_type == ScreenType.REST:
+            for card in self.game_state.get("deck", []):
+                all_card_names.add(card.get("name", ""))
+
+        all_card_names.discard("")
+        return card_info_store.get_cards_info_for_names(list(all_card_names))

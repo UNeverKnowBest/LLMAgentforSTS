@@ -8,15 +8,21 @@
 - **Upcoming Boss:** {{ game_state.act_boss }}
 
 **Available Options:**
+{% if screen_state.rest_options %}
 {% for option in screen_state.rest_options %}
 - **{{ option.title() }}**{% if option == "rest" %}: Heal for up to 30% of your max HP.{% elif option == "smith" %}: Upgrade a card permanently.{% elif option == "dig" %}: Obtain a random relic (Shovel relic).{% elif option == "lift" %}: Gain permanent strength (Girya relic).{% elif option == "toke" %}: Remove a card from your deck (Peace Pipe relic).{% endif %}
 {% endfor %}
+{% else %}
+- **Rest**: Heal for up to 30% of your max HP.
+- **Smith**: Upgrade a card permanently.
+{% endif %}
 
 **Deck Analysis for Upgrade Consideration:**
 {% if "smith" in screen_state.rest_options %}
 **Key Upgrade Targets in Your Deck:**
 {% for card in game_state.deck %}
-- `{{ card.name }}`{% if card.upgrades|default(0) > 0 %}+{{ card.upgrades|default(0) }}{% endif %} (Cost: {{ card.cost }}) 
+- `{{ card.name }}`{% if card.upgrades|default(0) > 0 %}+{{ card.upgrades }}{% endif %} (Cost: {{ card.cost }}) 
+  {% if card.name in card_info %}**Card Details:** {{ card_info[card.name].description }}{% endif %}
   **Upgrade Value:** {% if card.cost >= 2 %}High (Cost reduction from {{ card.cost }} to {{ card.cost - 1 }}){% elif card.name in ["Catalyst", "Limit Break", "Entrench", "Double Tap"] %}Very High (Core scaling effect){% elif card.type == "ATTACK" and card.cost <= 1 %}Medium (Damage scaling){% elif card.type == "SKILL" and card.cost <= 1 %}Medium (Effect improvement){% else %}Low (Minor improvement){% endif %}
 {% endfor %}
 

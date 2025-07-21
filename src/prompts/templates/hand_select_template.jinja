@@ -3,11 +3,11 @@
 **Core Philosophy:** Every hand selection should maximize strategic value while considering immediate effects and long-term consequences.
 
 **Current Context:**
-- **Hand Size:** {{ screen_state.hand | length }} cards
-- **Selection Limit:** {{ screen_state.max_cards }} cards maximum
+- **Hand Size:** {{ screen_state.hand | length if screen_state.hand else 0 }} cards
+- **Selection Limit:** {{ screen_state.max_cards | default(1) }} cards maximum
 - **Zero Selection:** {{ "Allowed" if screen_state.can_pick_zero else "Not Allowed" }}
-- **Current HP:** {{ game_state.current_hp }}/{{ game_state.max_hp }}
-- **Act {{ game_state.act }} - Floor {{ game_state.floor }}**
+- **Current HP:** {{ game_state.current_hp | default(0) }}/{{ game_state.max_hp | default(1) }}
+- **Act {{ game_state.act | default(1) }} - Floor {{ game_state.floor | default(1) }}**
 
 **Archetype Context:**
 {% set current_archetypes = archetypes[game_state.class] %}
@@ -47,7 +47,8 @@
 
 **Your Hand - Detailed Strategic Analysis:**
 {% for card in screen_state.hand %}
-- **[{{ loop.index0 }}] {{ card.name }}**{% if card.upgrades|default(0) > 0 %}+{{ card.upgrades|default(0) }}{% endif %} ({{ card.cost }} Energy, {{ card.type }})
+- **[{{ loop.index0 }}] {{ card.name }}**{% if card.upgrades|default(0) > 0 %}+{{ card.upgrades }}{% endif %} ({{ card.cost }} Energy, {{ card.type }})
+  {% if card.name in card_info %}**Card Details:** {{ card_info[card.name].description }}{% endif %}
 
   **Immediate Value Assessment:**
   {% if card.type == "ATTACK" %}

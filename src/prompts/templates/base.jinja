@@ -92,11 +92,20 @@
   - **{{ relic.name }}**{% if relic.counter != -1 %} (Counter: {{ relic.counter }}){% endif %}
   {% endfor %}
 - **Potions:**
+  {% if game_state.potions %}
+  {% set has_potions = false %}
   {% for potion in game_state.potions %}
+  {% if potion.name and potion.name != "PotionSlot" %}
+  {% set has_potions = true %}
   - {{ potion.name }} (ID: {{ potion.id }}) | Usable: {{ potion.can_use }}, Discardable: {{ potion.can_discard }}
+  {% endif %}
+  {% endfor %}
+  {% if not has_potions %}
+  - (None)
+  {% endif %}
   {% else %}
   - (None)
-  {% endfor %}
+  {% endif %}
 - **Deck Size:** {{ player_deck | length }} cards
 
 # [CURRENT TASKS]
@@ -146,7 +155,7 @@ Your objective is to analyze the following detailed context and select the optim
 - **`choose X`** - Make choice X (can be index number or choice text)
 {% endif %}
 {% if "end" in game_state_json.available_commands %}
-- **`end`** - End your current turn (combat only)
+- **`end`** - End your current turn (combat only)                           
 {% endif %}
 {% if "potion" in game_state_json.available_commands %}
 - **`potion use X`** - Use potion at slot X (0-indexed)
@@ -160,7 +169,7 @@ Your objective is to analyze the following detailed context and select the optim
 - **`skip`** / **`cancel`** / **`leave`** - Cancel current action or leave screen
 {% endif %}
 
-**⚠️ CRITICAL: You MUST use only the commands listed above. Using unavailable commands will result in an error.**
+**CRITICAL: You MUST use only the commands listed above. Using unavailable commands will result in an error.**
 
 # [INSTRUCTIONS]
 ## **STRATEGIC DECISION FRAMEWORK (Tree of Thoughts Analysis):**

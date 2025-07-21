@@ -20,7 +20,6 @@ def create_agent():
             return END
 
         game_state = game_state_json.get("game_state", {})
-        # 确保game_state不为None
         if game_state is None:
             game_state = {}
 
